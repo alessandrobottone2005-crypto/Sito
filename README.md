@@ -28,4 +28,3 @@ Per una spiegazione dettagliata delle logiche di funzionamento, degli script e d
    ```
 
 Il progetto sarà disponibile su [http://localhost:3000](http://localhost:3000).
-
