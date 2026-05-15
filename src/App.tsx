@@ -103,6 +103,27 @@ export default function App() {
     }
   };
 
+  // Easter Egg Shortcut: Command + 1 to skip to Showreel
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // CMD + 1 (Mac) or CTRL + 1 (Windows/Linux)
+      if ((e.metaKey || e.ctrlKey) && e.key === "1") {
+        e.preventDefault();
+        console.log("Easter Egg: Skipping gamification to showreel...");
+        
+        // Update states to simulate completion
+        setMissionStatus("succeeded");
+        setCompletedCount(5);
+        
+        // Trigger the transition to showreel
+        changePhase("showreel");
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [phase, isTransitioning]); // Include dependencies to ensure we have current state if needed
+
   // Determine if the shared panorama canvas should be visible
   const panoramaPhases: Phase[] = ["batcomputer", "transition1", "armeria", "transition2", "batmobile"];
   const isPanoramaPhase = panoramaPhases.includes(phase);
@@ -116,7 +137,9 @@ export default function App() {
   const isJokerActive = ["batcomputer", "transition1", "armeria", "transition2", "batmobile"].includes(phase) && missionStatus === "active";
 
   return (
-    <div className="bg-black min-h-screen relative overflow-x-hidden flex flex-col">
+    <div className="bg-black min-h-screen relative overflow-x-hidden">
+      {isTransitioning && <div className="fixed top-0 left-0 bg-white text-black z-[10000] p-2 text-xs font-mono">DEBUG: TRANSITION_ACTIVE</div>}
+      <div className="fixed top-0 right-0 bg-red-600 text-white z-[10000] p-2 text-xs font-mono">DEBUG PHASE: {phase}</div>
       <Navbar
         isMuted={isMuted}
         onToggleMute={() => setIsMuted(!isMuted)}
@@ -215,10 +238,10 @@ export default function App() {
           )}
 
           {phase === "showreel" && (
-            <motion.div key="showreel" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="relative">
+            <div key="showreel" className="relative z-10">
               <BatmanCamera onPreorder={() => changePhase("checkout")} />
               <Pricing onPreorder={() => changePhase("checkout")} />
-            </motion.div>
+            </div>
           )}
 
           {phase === "checkout" && (

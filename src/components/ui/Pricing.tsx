@@ -4,7 +4,7 @@ import BatmanButton from "./BatmanButton";
 
 export default function Pricing({ onPreorder }: { onPreorder: () => void }) {
   return (
-    <section id="pricing" className="bg-black py-40 px-6 relative overflow-hidden border-t border-white/5">
+    <section id="pricing" className="bg-black py-40 px-6 relative overflow-hidden border-t border-white/5 z-20">
       {/* Background Decorative Elements */}
       <div className="absolute inset-0 pointer-events-none opacity-20">
         <div className="absolute top-0 left-0 w-full h-full" style={{ backgroundImage: 'radial-gradient(#333 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
