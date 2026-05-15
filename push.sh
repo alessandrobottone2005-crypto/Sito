@@ -9,11 +9,13 @@ echo "🚀 Inizio preparazione commit..."
 git add .
 
 # Esegue il commit
-git commit -m "$MESSAGE"
+# Il commit fallisce se non ci sono modifiche, quindi usiamo || true
+git commit -m "$MESSAGE" || echo "Nessuna modifica da committare."
 
 # Push sul repository
 echo "☁️ Invio dei dati a GitHub..."
-git push
+# Se il push semplice fallisce, prova a impostare l'upstream
+git push || git push -u origin $(git branch --show-current)
 
 if [ $? -eq 0 ]; then
     echo "✅ Successo! Il tuo codice è online."
