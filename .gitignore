@@ -1,0 +1,18 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env*
+!.env.example
+
+# PNG Sequences
+[0-9][0-9][0-9][0-9].png
+
+# Large Root Assets
+*.mp4
+*.png
+!public/*.png
+!public/*.jpg
+!public/*.mp4
