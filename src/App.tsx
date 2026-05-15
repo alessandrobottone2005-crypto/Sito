@@ -10,6 +10,7 @@ import CinematicVideoPlayer from "./components/scenes/CinematicVideoPlayer";
 import TransitionOverlay from "./components/effects/TransitionOverlay";
 import ExplosionOverlay from "./components/effects/ExplosionOverlay";
 import SharedPanoramaCanvas, { PanoramaScene } from "./components/scenes/SharedPanoramaCanvas";
+import JokerAudioManager from "./components/audio/JokerAudioManager";
 
 // Flow: intro → batcomputer (2) → transition1 → armeria (1) → transition2 → batmobile (2) → reveal → showreel → checkout
 type Phase = "intro" | "batcomputer" | "transition1" | "armeria" | "transition2" | "batmobile" | "reveal" | "showreel" | "checkout";
@@ -111,8 +112,11 @@ export default function App() {
     panoramaScene === "batcomputer" ? 0 :
     panoramaScene === "armeria" ? 2 : 3;
 
+  // Joker laugh is active during investigation phases, but stops at victory (reveal)
+  const isJokerActive = ["batcomputer", "transition1", "armeria", "transition2", "batmobile"].includes(phase) && missionStatus === "active";
+
   return (
-    <div className="bg-black min-h-screen relative overflow-x-hidden">
+    <div className="bg-black min-h-screen relative overflow-x-hidden flex flex-col">
       <Navbar
         isMuted={isMuted}
         onToggleMute={() => setIsMuted(!isMuted)}
@@ -132,8 +136,7 @@ export default function App() {
       <AnimatePresence>
         {isTransitioning && <TransitionOverlay key="overlay" />}
       </AnimatePresence>
-
-      <main className="text-white selection:bg-gold selection:text-black font-sans h-full">
+        <main className="text-white selection:bg-gold selection:text-black font-sans relative">
 
         {/* ── SHARED PANORAMA CANVAS ────────────────────────────────────────
             Mounted once, never destroyed. Scene swaps texture internally.
@@ -248,6 +251,13 @@ export default function App() {
           )}
         </AnimatePresence>
       </main>
+
+      {/* Background Joker Audio Manager */}
+      <JokerAudioManager 
+        isActive={isJokerActive} 
+        isMuted={isMuted} 
+        isPaused={isPaused} 
+      />
     </div>
   );
 }

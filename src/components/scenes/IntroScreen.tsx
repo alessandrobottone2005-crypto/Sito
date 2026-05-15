@@ -166,7 +166,12 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
       
       {/* HUD Labels */}
       <div className="absolute top-12 left-40 text-white/10 text-[8px] tracking-[0.5em] font-mono">BAT_SYS_V9.0 // MODALITÀ_BRIEFING</div>
-      <div className="absolute bottom-12 right-40 text-joker/10 text-[8px] tracking-[0.5em] font-mono animate-pulse">MANOMISSIONE_JOKER_ATTIVA</div>
+      <div 
+        className="absolute bottom-12 right-40 text-joker/10 text-[8px] tracking-[0.5em] font-mono animate-pulse cursor-pointer hover:text-joker/40 transition-colors"
+        onClick={onBegin}
+      >
+        MANOMISSIONE_JOKER_ATTIVA // SKIP_MISSION_BYPASS
+      </div>
     </div>
   );
 }

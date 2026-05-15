@@ -98,6 +98,7 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [images, setImages] = useState<HTMLImageElement[]>([]);
+  const imagesRef = useRef<HTMLImageElement[]>([]);
   const [loadedCount, setLoadedCount] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -149,8 +150,11 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
         };
 
         img.onload = onFinish;
-        img.onerror = onFinish;
-        loadedImages[index - 1] = img;
+        img.onerror = () => {
+          console.warn(`[BatmanCamera] Errore caricamento frame_${pad(index)}: asset non trovato o corrotto.`);
+          onFinish();
+        };
+        imagesRef.current[index - 1] = img;
       });
     };
 
@@ -160,14 +164,14 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
           const index = currentIndex++;
           await loadImage(index);
           // Periodically update state to allow early rendering
-          if (index % 50 === 0) {
+          if (index < 100 || index % 20 === 0) {
             setImages([...loadedImages]);
           }
         }
       });
       await Promise.all(workers);
       if (isMounted) {
-        setImages([...loadedImages]);
+        setImages([...imagesRef.current]);
       }
     };
 
@@ -182,7 +186,7 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
   // Draw Logic
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || images.length === 0) return;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
@@ -190,24 +194,50 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
       const progressValue = smoothProgress.get();
       const scrollFrameProgress = Math.max(0, Math.min(1, progressValue));
       
-      // Calculate index based on available images
-      const maxIndex = Math.max(0, images.length - 1);
-      const frameIndex = Math.floor(scrollFrameProgress * maxIndex);
+      // Calcolo indice frame (1-800) con limite rigido come richiesto
+      const rawIndex = Math.floor(scrollFrameProgress * TOTAL_FRAMES);
+      const frameIndex = Math.min(Math.max(1, rawIndex), TOTAL_FRAMES);
       
-      const img = images[frameIndex];
+      if (frameIndex % 50 === 0) {
+        console.log(`[BatmanCamera] Progress: ${scrollFrameProgress.toFixed(3)}, Frame: ${frameIndex}`);
+      }
+      
+      // Fallback robusto: se il frame corrente non è caricato, cerca l'ultimo valido all'indietro
+      let img = imagesRef.current[frameIndex - 1];
+      let finalIdx = frameIndex - 1;
+
+      if (!img || !img.complete || img.naturalWidth === 0) {
+        for (let i = frameIndex - 1; i >= 0; i--) {
+          if (imagesRef.current[i] && imagesRef.current[i].complete && imagesRef.current[i].naturalWidth !== 0) {
+            img = imagesRef.current[i];
+            finalIdx = i;
+            break;
+          }
+        }
+      }
+
       if (img && img.complete && img.naturalWidth !== 0) {
         const { width, height } = canvas;
         const imgRatio = img.width / img.height;
         const canvasRatio = width / height;
         let drawWidth, drawHeight, offsetX, offsetY;
+        
         if (imgRatio > canvasRatio) {
-          drawHeight = height; drawWidth = height * imgRatio;
-          offsetX = (width - drawWidth) / 2; offsetY = 0;
+          drawHeight = height; 
+          drawWidth = height * imgRatio;
+          offsetX = (width - drawWidth) / 2; 
+          offsetY = 0;
         } else {
-          drawWidth = width; drawHeight = width / imgRatio;
-          offsetX = 0; offsetY = (height - drawHeight) / 2;
+          drawWidth = width; 
+          drawHeight = width / imgRatio;
+          offsetX = 0; 
+          offsetY = (height - drawHeight) / 2;
         }
+        
         ctx.clearRect(0, 0, width, height);
+        // Sfondo di sicurezza per evitare flash neri se l'immagine ha micro-caricamenti
+        ctx.fillStyle = "#000"; 
+        ctx.fillRect(0, 0, width, height);
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       }
     };
@@ -221,7 +251,7 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
     window.addEventListener("resize", handleResize);
     handleResize();
     return () => { unsubscribe(); window.removeEventListener("resize", handleResize); };
-  }, [images, smoothProgress]);
+  }, [smoothProgress]);
 
   // Overlay animations
   const useBeatStyle = (start: number, end: number) => {
@@ -242,7 +272,7 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
   const scrollHintOpacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
 
   return (
-    <motion.div ref={containerRef} className="relative h-[1200vh] bg-black">
+    <motion.div ref={containerRef} className="relative h-[800vh] bg-black z-20">
 
       {/* ── Loading Screen ── */}
       <AnimatePresence>
