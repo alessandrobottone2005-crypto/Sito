@@ -13,11 +13,11 @@
     color: #ffffff;
     scrollbar-width: thin;
     scrollbar-color: #FFD700 #000;
-    cursor: url('/batman-cursor.png') 16 12, auto;
+    cursor: url('/assets/images/batman-cursor.png') 16 12, auto;
   }
 
   * {
-    cursor: url('/batman-cursor.png') 16 12, auto !important;
+    cursor: url('/assets/images/batman-cursor.png') 16 12, auto !important;
   }
 
   body {

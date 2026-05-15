@@ -1,21 +1,28 @@
 import { useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import Navbar from "./components/Navbar";
-import BatmanCamera from "./components/BatmanCamera";
-import BatcavePanorama from "./components/BatcavePanorama";
-import BatmobilePanorama from "./components/BatmobilePanorama";
-import Pricing from "./components/Pricing";
-import Checkout from "./components/Checkout";
-import IntroScreen from "./components/IntroScreen";
-import ArmeriaPanorama from "./components/ArmeriaPanorama";
-import FinalReveal from "./components/FinalReveal";
-import CinematicVideoPlayer from "./components/CinematicVideoPlayer";
-import TransitionOverlay from "./components/TransitionOverlay";
-import ExplosionOverlay from "./components/ExplosionOverlay";
+import Navbar from "./components/layout/Navbar";
+import BatmanCamera from "./components/ui/BatmanCamera";
+import Pricing from "./components/ui/Pricing";
+import Checkout from "./components/ui/Checkout";
+import IntroScreen from "./components/scenes/IntroScreen";
+import FinalReveal from "./components/ui/FinalReveal";
+import CinematicVideoPlayer from "./components/scenes/CinematicVideoPlayer";
+import TransitionOverlay from "./components/effects/TransitionOverlay";
+import ExplosionOverlay from "./components/effects/ExplosionOverlay";
+import SharedPanoramaCanvas, { PanoramaScene } from "./components/scenes/SharedPanoramaCanvas";
 
 // Flow: intro → batcomputer (2) → transition1 → armeria (1) → transition2 → batmobile (2) → reveal → showreel → checkout
 type Phase = "intro" | "batcomputer" | "transition1" | "armeria" | "transition2" | "batmobile" | "reveal" | "showreel" | "checkout";
 type MissionStatus = "idle" | "active" | "failed" | "succeeded";
+
+// Map: which panorama scene is "active" for each phase
+const PANORAMA_PHASE_MAP: Partial<Record<Phase, PanoramaScene>> = {
+  batcomputer: "batcomputer",
+  transition1: "batcomputer", // video overlays on top — keep canvas alive
+  armeria: "armeria",
+  transition2: "armeria",     // video overlays on top — keep canvas alive
+  batmobile: "batmobile",
+};
 
 export default function App() {
   const [phase, setPhase] = useState<Phase>("intro");
@@ -25,22 +32,22 @@ export default function App() {
   const [completedCount, setCompletedCount] = useState(0);
   const [missionStatus, setMissionStatus] = useState<MissionStatus>("idle");
   const [timerResetKey, setTimerResetKey] = useState(0);
+  // Track which panorama scene the SharedPanoramaCanvas should display
+  const [panoramaScene, setPanoramaScene] = useState<PanoramaScene>("batcomputer");
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Background Music Logic
   useEffect(() => {
-    const audio = new Audio("/SiglaBatman.wav");
+    const audio = new Audio("/assets/audio/SiglaBatman.wav");
     audio.loop = true;
     audio.volume = 0.4;
-    audio.currentTime = 20;
     audio.muted = isMuted;
     audioRef.current = audio;
 
     const tryPlay = () => {
       audio.play().catch(() => {
         const unlock = () => {
-          audio.currentTime = 20;
-          audio.play();
+          audio.play().catch(() => {});
           window.removeEventListener("click", unlock);
         };
         window.addEventListener("click", unlock);
@@ -67,8 +74,7 @@ export default function App() {
   // Unified phase change with transition overlay
   const changePhase = (newPhase: Phase) => {
     if (isTransitioning) return;
-    
-    // Start mission from intro
+
     if (phase === "intro" && newPhase === "batcomputer") {
       setCompletedCount(0);
       setTimerResetKey(prev => prev + 1);
@@ -80,16 +86,8 @@ export default function App() {
     }
 
     setIsTransitioning(true);
-    
-    // Switch phase mid-transition
-    setTimeout(() => {
-      setPhase(newPhase);
-    }, 400);
-
-    // End transition overlay
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 1000);
+    setTimeout(() => { setPhase(newPhase); }, 400);
+    setTimeout(() => { setIsTransitioning(false); }, 1000);
   };
 
   const handleResetMission = () => {
@@ -97,17 +95,27 @@ export default function App() {
     setPhase("intro");
     setCompletedCount(0);
     setTimerResetKey(prev => prev + 1);
+    setPanoramaScene("batcomputer");
     if (audioRef.current) {
       audioRef.current.pause();
       audioRef.current.currentTime = 20;
     }
   };
 
+  // Determine if the shared panorama canvas should be visible
+  const panoramaPhases: Phase[] = ["batcomputer", "transition1", "armeria", "transition2", "batmobile"];
+  const isPanoramaPhase = panoramaPhases.includes(phase);
+
+  // Base completed counts per scene
+  const baseCompleted =
+    panoramaScene === "batcomputer" ? 0 :
+    panoramaScene === "armeria" ? 2 : 3;
+
   return (
-    <div className="bg-black min-h-screen relative overflow-hidden">
-      <Navbar 
-        isMuted={isMuted} 
-        onToggleMute={() => setIsMuted(!isMuted)} 
+    <div className="bg-black min-h-screen relative overflow-x-hidden">
+      <Navbar
+        isMuted={isMuted}
+        onToggleMute={() => setIsMuted(!isMuted)}
         showBack={phase === "checkout"}
         onBack={() => changePhase("showreel")}
         showPause={["batcomputer", "armeria", "batmobile", "showreel"].includes(phase)}
@@ -126,64 +134,76 @@ export default function App() {
       </AnimatePresence>
 
       <main className="text-white selection:bg-gold selection:text-black font-sans h-full">
-        <AnimatePresence mode="wait">
-          {phase === "intro" && (
-            <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}>
-              <IntroScreen onBegin={() => changePhase("batcomputer")} />
-            </motion.div>
-          )}
 
-          {phase === "batcomputer" && (
-            <motion.div key="batcomputer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <BatcavePanorama 
-                onNext={() => setPhase("transition1")} 
-                onProgress={(count) => setCompletedCount(count)}
-                isPaused={isPaused}
-              />
-            </motion.div>
-          )}
+        {/* ── SHARED PANORAMA CANVAS ────────────────────────────────────────
+            Mounted once, never destroyed. Scene swaps texture internally.
+            The transition videos overlay on top (z-index 500).
+        ────────────────────────────────────────────────────────────────── */}
+        {isPanoramaPhase && (
+          <SharedPanoramaCanvas
+            scene={panoramaScene}
+            onProgress={(count) => setCompletedCount(count)}
+            baseCompleted={baseCompleted}
+            isPaused={isPaused}
+            onNext={() => {
+              if (panoramaScene === "batcomputer") {
+                setPhase("transition1");
+                setTimeout(() => setPanoramaScene("armeria"), 100);
+              } else if (panoramaScene === "armeria") {
+                setPhase("transition2");
+                setTimeout(() => setPanoramaScene("batmobile"), 100);
+              } else if (panoramaScene === "batmobile") {
+                changePhase("reveal");
+              }
+            }}
+          />
+        )}
 
+        {/* ── TRANSITION VIDEOS (overlay above panorama canvas) ── */}
+        <AnimatePresence>
           {phase === "transition1" && (
-            <motion.div key="trans1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[500] bg-black">
-              <CinematicVideoPlayer 
-                src="/BatCaverna_PassaggioBatComputerAArmeria.mp4" 
+            <motion.div
+              key="trans1"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[500] bg-black"
+            >
+              <CinematicVideoPlayer
+                src="/assets/videos/BatCaverna_PassaggioBatComputerAArmeria.mp4"
                 onEnded={() => setPhase("armeria")}
-                label="Spostamento: Armeria..."
-                nextAsset="/BatCaverna360_ArmeriaArea.jpg"
-              />
-            </motion.div>
-          )}
-
-          {phase === "armeria" && (
-            <motion.div key="armeria" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <ArmeriaPanorama 
-                onNext={() => setPhase("transition2")} 
-                onProgress={(count) => setCompletedCount(count)}
-                baseCompleted={2}
-                isPaused={isPaused}
+                label="SPOSTAMENTO: AREA ARMERIA"
+                nextAsset="/assets/textures/BatCaverna360_ArmeriaArea.jpg"
               />
             </motion.div>
           )}
 
           {phase === "transition2" && (
-            <motion.div key="trans2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[500] bg-black">
-              <CinematicVideoPlayer 
-                src="/BatCaverna_PassaggioArmeriaABatMobile.mp4" 
+            <motion.div
+              key="trans2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[500] bg-black"
+            >
+              <CinematicVideoPlayer
+                src="/assets/videos/BatCaverna_PassaggioArmeriaABatMobile.mp4"
                 onEnded={() => setPhase("batmobile")}
-                label="Spostamento: Zona Batmobile..."
-                nextAsset="/BatCaverna360_BatMobileArea.jpg"
+                label="SPOSTAMENTO: ZONA BATMOBILE"
+                nextAsset="/assets/textures/BatCaverna360_BatMobileArea.jpg"
               />
             </motion.div>
           )}
+        </AnimatePresence>
 
-          {phase === "batmobile" && (
-            <motion.div key="batmobile" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              <BatmobilePanorama
-                onNext={() => setPhase("reveal")}
-                onProgress={(count) => setCompletedCount(count)}
-                baseCompleted={3}
-                isPaused={isPaused}
-              />
+        {/* ── OTHER PHASES ──────────────────────────────────────────────── */}
+        <AnimatePresence mode="wait">
+          {phase === "intro" && (
+            <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}>
+              <IntroScreen onBegin={() => {
+                setPanoramaScene("batcomputer");
+                changePhase("batcomputer");
+              }} />
             </motion.div>
           )}
 

@@ -1,0 +1,138 @@
+import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
+
+interface CinematicVideoPlayerProps {
+  src: string;
+  onEnded: () => void;
+  label?: string;
+  nextAsset?: string;
+}
+
+export default function CinematicVideoPlayer({ 
+  src, 
+  onEnded, 
+  label = "Spostamento...", 
+  nextAsset 
+}: CinematicVideoPlayerProps) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  const [videoEnded, setVideoEnded] = useState(false);
+  const [showSkip, setShowSkip] = useState(false);
+  const [isExiting, setIsExiting] = useState(false);
+  const hasTriggeredExit = useRef(false);
+
+  // Preload next asset (silent background load)
+  useEffect(() => {
+    if (!nextAsset) return;
+    const img = new Image();
+    img.src = nextAsset;
+  }, [nextAsset]);
+
+  const markEnded = () => {
+    if (!hasTriggeredExit.current) {
+      hasTriggeredExit.current = true;
+      setVideoEnded(true);
+    }
+  };
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    video.addEventListener("ended", markEnded);
+    
+    // Safety auto-advance if video stalls
+    const safetyTimer = setTimeout(markEnded, 12000);
+
+    const startVideo = async () => {
+      try {
+        video.currentTime = 0;
+        await video.play();
+      } catch (err) {
+        console.warn("Video playback failed:", err);
+        markEnded();
+      }
+    };
+
+    startVideo();
+
+    // Show safety skip after 2.5 seconds
+    const skipTimer = setTimeout(() => setShowSkip(true), 2500);
+
+    return () => {
+      video.removeEventListener("ended", markEnded);
+      clearTimeout(skipTimer);
+      clearTimeout(safetyTimer);
+    };
+  }, [src]);
+
+  // Keep a stable ref to onEnded so we don't need it in effect deps
+  const onEndedRef = useRef(onEnded);
+  useEffect(() => { onEndedRef.current = onEnded; }, [onEnded]);
+
+  // Handle phase transition when video ends — deps ONLY on videoEnded
+  const transitionStarted = useRef(false);
+  useEffect(() => {
+    if (!videoEnded || transitionStarted.current) return;
+    transitionStarted.current = true;
+    setIsExiting(true);
+
+    const t = setTimeout(() => {
+      onEndedRef.current();
+    }, 400);
+
+    return () => clearTimeout(t);
+  }, [videoEnded]);
+
+  return (
+    <div className="fixed inset-0 bg-black flex items-center justify-center z-[500] overflow-hidden">
+      <video
+        ref={videoRef}
+        onPlaying={() => setIsVisible(true)}
+        className={`w-full h-full object-cover transition-opacity duration-700 ${isVisible && !isExiting ? "opacity-100" : "opacity-0"}`}
+        playsInline
+        muted
+        src={src}
+      />
+
+      {/* Cinematic HUD Overlay */}
+      {isVisible && !isExiting && (
+        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center bg-black/10">
+          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-gold text-[10px] tracking-[1em] uppercase font-black mb-2 opacity-60"
+            >
+              {label}
+            </motion.div>
+            <div className="w-48 h-[1px] bg-gold/20 relative overflow-hidden mx-auto">
+              <motion.div 
+                className="absolute inset-y-0 left-0 bg-gold shadow-[0_0_10px_#facd15]"
+                animate={{ left: ["-100%", "100%"] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                style={{ width: "40%" }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subtle Skip Safety */}
+      <AnimatePresence>
+        {showSkip && !isExiting && (
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            whileHover={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={markEnded}
+            className="absolute bottom-8 right-8 z-[600] pointer-events-auto text-[8px] text-white/50 tracking-[0.4em] uppercase border border-white/10 px-4 py-2 hover:bg-white/5 font-mono"
+          >
+            Salta Transizione
+          </motion.button>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
