@@ -48,7 +48,7 @@ export default function App() {
     const tryPlay = () => {
       audio.play().catch(() => {
         const unlock = () => {
-          audio.play().catch(() => {});
+          audio.play().catch(() => { });
           window.removeEventListener("click", unlock);
         };
         window.addEventListener("click", unlock);
@@ -82,7 +82,7 @@ export default function App() {
       setMissionStatus("active");
       if (audioRef.current) {
         audioRef.current.currentTime = 20;
-        audioRef.current.play().catch(() => {});
+        audioRef.current.play().catch(() => { });
       }
     }
 
@@ -110,11 +110,11 @@ export default function App() {
       if ((e.metaKey || e.ctrlKey) && e.key === "1") {
         e.preventDefault();
         console.log("Easter Egg: Skipping gamification to showreel...");
-        
+
         // Update states to simulate completion
         setMissionStatus("succeeded");
         setCompletedCount(5);
-        
+
         // Trigger the transition to showreel
         changePhase("showreel");
       }
@@ -131,7 +131,7 @@ export default function App() {
   // Base completed counts per scene
   const baseCompleted =
     panoramaScene === "batcomputer" ? 0 :
-    panoramaScene === "armeria" ? 2 : 3;
+      panoramaScene === "armeria" ? 2 : 3;
 
   // Joker laugh is active during investigation phases, but stops at victory (reveal)
   const isJokerActive = ["batcomputer", "transition1", "armeria", "transition2", "batmobile"].includes(phase) && missionStatus === "active";
@@ -159,7 +159,7 @@ export default function App() {
       <AnimatePresence>
         {isTransitioning && <TransitionOverlay key="overlay" />}
       </AnimatePresence>
-        <main className="text-white selection:bg-gold selection:text-black font-sans relative">
+      <main className="text-white selection:bg-gold selection:text-black font-sans relative">
 
         {/* ── SHARED PANORAMA CANVAS ────────────────────────────────────────
             Mounted once, never destroyed. Scene swaps texture internally.
@@ -276,10 +276,10 @@ export default function App() {
       </main>
 
       {/* Background Joker Audio Manager */}
-      <JokerAudioManager 
-        isActive={isJokerActive} 
-        isMuted={isMuted} 
-        isPaused={isPaused} 
+      <JokerAudioManager
+        isActive={isJokerActive}
+        isMuted={isMuted}
+        isPaused={isPaused}
       />
     </div>
   );
