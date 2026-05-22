@@ -15,8 +15,7 @@ interface NavbarProps {
   completedCount?: number;
   totalClues?: number;
   missionActive?: boolean;
-  timerResetKey?: number;
-  onTimeUp?: () => void;
+  timeLeft?: number;
 }
 
 
@@ -31,8 +30,7 @@ export default function Navbar({
   completedCount,
   totalClues = 5,
   missionActive,
-  timerResetKey = 0,
-  onTimeUp
+  timeLeft
 }: NavbarProps) {
 
 
@@ -50,12 +48,10 @@ export default function Navbar({
           className="h-8 md:h-10 w-auto object-contain glitch-slow flicker"
         />
 
-        {missionActive && onTimeUp && (
+        {missionActive && timeLeft !== undefined && (
           <MissionTimer 
-            initialTime={180}
+            timeLeft={timeLeft}
             isPaused={!!isPaused}
-            resetKey={timerResetKey}
-            onTimeUp={onTimeUp}
           />
         )}
         

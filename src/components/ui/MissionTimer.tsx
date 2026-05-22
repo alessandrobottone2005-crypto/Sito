@@ -1,35 +1,11 @@
 import { motion, AnimatePresence } from "motion/react";
-import { useEffect, useState } from "react";
 
 interface MissionTimerProps {
-  initialTime: number;
+  timeLeft: number;
   isPaused: boolean;
-  resetKey: number;
-  onTimeUp: () => void;
 }
 
-export default function MissionTimer({ initialTime, isPaused, resetKey, onTimeUp }: MissionTimerProps) {
-  const [timeLeft, setTimeLeft] = useState(initialTime);
-
-  useEffect(() => {
-    setTimeLeft(initialTime);
-  }, [initialTime, resetKey]);
-
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (!isPaused && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            onTimeUp();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isPaused, onTimeUp, timeLeft]);
+export default function MissionTimer({ timeLeft, isPaused }: MissionTimerProps) {
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;

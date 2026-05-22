@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-cinematic: "Rajdhani", ui-sans-serif, system-ui, sans-serif;
+  --font-terminal: "Share Tech Mono", ui-monospace, monospace;
   --color-gold: rgb(250, 204, 21);
   --color-joker: #39FF14;
 }
@@ -815,4 +817,43 @@
 
 .bomb-pulse {
   animation: bomb-pulse 1s infinite ease-in-out;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CINEMATIC TYPOGRAPHY — Batcomputer / HUD / Joker Transmission
+══════════════════════════════════════════════════════════════════ */
+
+/* Primary cinematic narrative heading — Rajdhani */
+.cinematic-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.0;
+  text-transform: uppercase;
+  font-style: italic;
+}
+
+/* Accent / subtitle text — Share Tech Mono for terminal feel */
+.cinematic-accent {
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 400;
+  letter-spacing: 0.18em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+/* HUD label / micro text — Share Tech Mono */
+.cinematic-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 400;
+  letter-spacing: 0.6em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+/* Debug / dev UI — Share Tech Mono minimal */
+.dev-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 400;
+  letter-spacing: 0.05em;
 }

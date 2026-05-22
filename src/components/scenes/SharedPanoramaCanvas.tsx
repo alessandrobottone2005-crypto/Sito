@@ -1,5 +1,6 @@
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { OrbitControls, PerspectiveCamera, Html } from "@react-three/drei";
+import { PerspectiveCamera, Html } from "@react-three/drei";
+import { MouseLookControls } from "./MouseLookControls";
 import * as THREE from "three";
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
@@ -34,10 +35,22 @@ function PanoramaSphere({ texture }: { texture: THREE.Texture }) {
   );
 }
 
-function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, onSuccess, isPaused }: any) {
+function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, onSuccess, isPaused, hoveredCountRef }: any) {
   const [hovered, setHovered] = useState(false);
   const meshRef = useRef<THREE.Group>(null);
   const targetWorldPos = useRef(new THREE.Vector3());
+
+  useEffect(() => {
+    const shouldCount = hovered && !isCompleted;
+    if (shouldCount && hoveredCountRef) {
+      hoveredCountRef.current += 1;
+    }
+    return () => {
+      if (shouldCount && hoveredCountRef) {
+        hoveredCountRef.current = Math.max(0, hoveredCountRef.current - 1);
+      }
+    };
+  }, [hovered, isCompleted, hoveredCountRef]);
 
   useEffect(() => {
     if (meshRef.current && !isActive && position) {
@@ -69,7 +82,7 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
       <Html transform distanceFactor={60} zIndexRange={[100, 0]} center>
         <motion.div
           onPointerEnter={(e) => { e.stopPropagation(); setHovered(true); }}
-          onPointerLeave={() => setHovered(false)}
+          onPointerLeave={() => { setHovered(false); }}
           onClick={(e) => { e.stopPropagation(); if (!isActive && !isPaused) onClick(); }}
           animate={{ 
             borderColor: hovered || isActive ? "#39FF14" : "rgba(57, 255, 20, 0.8)",
@@ -123,9 +136,15 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
   );
 }
 
-function SceneContent({ texture, scene, cardPositions, activeCardId, completedIds, onCardClick, onCloseCard, onCardSuccess, isPaused }: any) {
+function SceneContent({ texture, scene, cardPositions, activeCardId, completedIds, onCardClick, onCloseCard, onCardSuccess, isPaused, hoveredCountRef }: any) {
   const { set: setThree } = useThree();
   useEffect(() => { setThree({ isPaused } as any); }, [isPaused, setThree]);
+
+  // Reset hovered count when scene changes
+  useEffect(() => {
+    if (hoveredCountRef) hoveredCountRef.current = 0;
+  }, [scene, hoveredCountRef]);
+
   const riddles = scene === "batcomputer" ? BATCOMPUTER_RIDDLES : scene === "armeria" ? [ARMERIA_RIDDLE] : BATMOBILE_RIDDLES;
   return (
     <>
@@ -134,7 +153,7 @@ function SceneContent({ texture, scene, cardPositions, activeCardId, completedId
         <ClueMesh key={`${scene}-${r.id}`} position={cardPositions[i]} riddle={r}
           onClick={() => onCardClick(r.id)} isCompleted={completedIds.includes(r.id)}
           isActive={activeCardId === r.id} onClose={onCloseCard}
-          onSuccess={() => onCardSuccess(r.id)} isPaused={isPaused} />
+          onSuccess={() => onCardSuccess(r.id)} isPaused={isPaused} hoveredCountRef={hoveredCountRef} />
       ))}
     </>
   );
@@ -284,13 +303,14 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
   }, [completedIds, baseCompleted, scene, onProgress, onNext]);
 
   const areaLabel = scene === "batcomputer" ? "Bat-Cave // Area Batcomputer" : scene === "armeria" ? "Area Armeria" : "Area Batmobile";
+  const hoveredCountRef = useRef(0);
 
   return (
     <div className="fixed inset-0 w-full h-full bg-black z-40 overflow-hidden">
       <Canvas gl={{ antialias: true, toneMapping: THREE.NoToneMapping, powerPreference: "high-performance" }}>
         <PerspectiveCamera makeDefault position={[0, 0, 0.1]} fov={75} />
-        <OrbitControls enableZoom={false} enablePan={false} rotateSpeed={-0.3} enableDamping dampingFactor={0.05} enabled={!activeCardId && !isExiting && !isPaused} />
-        <SceneContent texture={texture} scene={scene} cardPositions={cardPositions} activeCardId={activeCardId} completedIds={completedIds} onCardClick={(id: number) => setActiveCardId(id)} onCloseCard={() => setActiveCardId(null)} onCardSuccess={handleCardSuccess} isPaused={isPaused} />
+        <MouseLookControls enabled={!activeCardId && !isExiting && !isPaused} hoveredCountRef={hoveredCountRef} />
+        <SceneContent texture={texture} scene={scene} cardPositions={cardPositions} activeCardId={activeCardId} completedIds={completedIds} onCardClick={(id: number) => setActiveCardId(id)} onCloseCard={() => setActiveCardId(null)} onCardSuccess={handleCardSuccess} isPaused={isPaused} hoveredCountRef={hoveredCountRef} />
       </Canvas>
 
       <AnimatePresence>

@@ -6,6 +6,10 @@ import BatmanButton from "./BatmanButton";
 const TOTAL_FRAMES = 800;
 const IMAGE_PREFIX = "/assets/showreel/";
 const IMAGE_SUFFIX = ".png";
+// Show the canvas / hide the loading overlay once this many early frames are ready.
+// The rest of the 800 frames continue loading silently in the background.
+const SHOW_THRESHOLD = 120;
+const CONCURRENCY_LIMIT = 60;
 
 const pad = (num: number) => num.toString().padStart(4, "0");
 
@@ -117,22 +121,29 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
     setProgress(latest);
   });
 
-  // Optimized Concurrent Preload
+  // Optimized Concurrent Preload — priority-first strategy:
+  //   Phase 1: Load frames 1-SHOW_THRESHOLD with full concurrency so the
+  //            loading overlay disappears quickly (~15% of total).
+  //   Phase 2: Continue loading the remaining frames silently in background.
+  //   The canvas fallback logic already handles any frame gaps during playback.
   useEffect(() => {
     let count = 0;
     let isMounted = true;
-    const CONCURRENCY_LIMIT = 40;
+    // Shared queue pointer — workers race to claim the next index
     let currentIndex = 1;
 
     const loadImage = (index: number): Promise<void> => {
       return new Promise((resolve) => {
         const img = new Image();
+        // Hint to the browser that early frames are high priority
+        (img as any).fetchPriority = index <= SHOW_THRESHOLD ? "high" : "low";
         img.src = `${IMAGE_PREFIX}${pad(index)}${IMAGE_SUFFIX}`;
         const onFinish = () => {
           if (!isMounted) return resolve();
           count++;
           setLoadedCount(count);
-          if (count === TOTAL_FRAMES) setIsLoaded(true);
+          // Unlock the experience as soon as the first SHOW_THRESHOLD frames arrive
+          if (count >= SHOW_THRESHOLD) setIsLoaded(true);
           resolve();
         };
         img.onload = onFinish;
@@ -141,7 +152,19 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
       });
     };
 
-    const runQueue = async () => {
+    // Phase 1 — race to load first SHOW_THRESHOLD frames
+    const runPriorityPhase = async () => {
+      const workers = Array(Math.min(SHOW_THRESHOLD, CONCURRENCY_LIMIT)).fill(null).map(async () => {
+        while (currentIndex <= SHOW_THRESHOLD && isMounted) {
+          const index = currentIndex++;
+          await loadImage(index);
+        }
+      });
+      await Promise.all(workers);
+    };
+
+    // Phase 2 — fill remaining frames in background
+    const runBackgroundPhase = async () => {
       const workers = Array(CONCURRENCY_LIMIT).fill(null).map(async () => {
         while (currentIndex <= TOTAL_FRAMES && isMounted) {
           const index = currentIndex++;
@@ -151,7 +174,12 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
       await Promise.all(workers);
     };
 
-    runQueue();
+    const run = async () => {
+      await runPriorityPhase();
+      if (isMounted) await runBackgroundPhase();
+    };
+
+    run();
     return () => { isMounted = false; };
   }, []);
 

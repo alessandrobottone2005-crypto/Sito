@@ -29,15 +29,18 @@ Il sito è un'esperienza interattiva immersiva dedicata a una statua da collezio
 
 ## 🏗 Struttura del Progetto
 
-```text
+├── docs/             # Documentazione tecnica di dettaglio
+├── scripts/          # Script di utility e debug (debug.mjs, check_pixels.js)
 ├── src/
-│   ├── components/       # Componenti UI e Scene 3D
-│   ├── App.tsx           # Orchestratore principale e macchina a stati
-│   ├── main.tsx          # Punto di ingresso dell'applicazione
-│   └── index.css         # Stili globali e keyframes personalizzati
-├── public/               # Asset statici (Video, Audio, Texture)
-├── 0001.png - 0800.png   # Sequenza di immagini per lo scroll-animation
-└── index.html            # Template HTML di base
+│   ├── components/   # Componenti divisi per macro-aree (ui, scenes, layout, audio, effects)
+│   ├── hooks/        # Hook personalizzati (con .gitkeep)
+│   ├── types/        # Definizione tipi e interfacce (con .gitkeep)
+│   ├── utils/        # Funzioni di utility condivise (con .gitkeep)
+│   ├── App.tsx       # Orchestratore principale dell'esperienza e macchina a stati
+│   ├── main.tsx      # Entry point di React 19
+│   └── index.css     # Design system, stili globali ed effetti grafici
+├── public/           # Risorse statiche (video, audio, texture 360°, frame dello showreel)
+└── index.html        # Entry point HTML per Vite
 ```
 
 ---
@@ -106,8 +109,8 @@ Il componente `BatmanCamera` gestisce la sezione di presentazione del prodotto:
 ---
 
 ## 🛠 Script di Utilità
-- `debug.mjs`: Script per il monitoraggio o test rapido degli stati (se presente).
-- `check_pixels.js`: Utility per la verifica del caricamento o dei colori degli asset.
+- `scripts/debug.mjs`: Script Puppeteer per il monitoraggio e test rapido degli stati.
+- `scripts/check_pixels.js`: Script di supporto per il caricamento o i controlli degli asset.
 
 ---
 ## 🚀 Come Avviare il Progetto

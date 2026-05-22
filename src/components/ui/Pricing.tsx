@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import BatmanText from "./BatmanText";
 import BatmanButton from "./BatmanButton";
 
-export default function Pricing({ onPreorder }: { onPreorder: () => void }) {
+export default function Pricing({ speedrunUnlocked, onPreorder }: { speedrunUnlocked: boolean; onPreorder: () => void }) {
   return (
     <section id="pricing" className="bg-black py-40 px-6 relative overflow-hidden border-t border-white/5 z-20">
       {/* Background Decorative Elements */}
@@ -45,6 +45,30 @@ export default function Pricing({ onPreorder }: { onPreorder: () => void }) {
             </p>
           </BatmanText>
         </div>
+
+        {/* Speedrun Discount Alert */}
+        {speedrunUnlocked && (
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            className="mb-12 border border-gold bg-gold/10 px-8 py-5 max-w-xl text-center backdrop-blur-md rounded-sm relative"
+          >
+            <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-gold" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t border-r border-gold" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b border-l border-gold" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r border-gold" />
+
+            <div className="text-[9px] font-mono text-gold tracking-[0.3em] uppercase font-bold mb-1">
+              RISULTATO STRAORDINARIO SBLOCCATO
+            </div>
+            <div className="text-white text-base font-black tracking-wider uppercase mb-1">
+              Premio Speedrunner Sbloccato!
+            </div>
+            <div className="text-gold font-mono text-xs tracking-wider uppercase font-bold">
+              Codice: <span className="underline select-all text-white font-mono font-black text-sm">SPEEDRUN15</span> (-15%)
+            </div>
+          </motion.div>
+        )}
 
         {/* Premium Animated Button */}
         <BatmanButton

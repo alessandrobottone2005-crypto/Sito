@@ -54,7 +54,7 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
             exit={{ opacity: 0 }}
             className="flex flex-col items-center"
           >
-            <div className="text-white/20 font-mono text-[10px] tracking-[1em] uppercase animate-pulse">
+            <div className="cinematic-label text-white/20 text-[11px] animate-pulse">
               SEGNALE_INTERCETTATO...
             </div>
           </motion.div>
@@ -89,10 +89,10 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
                     transition={{ duration: 0.8, ease: "easeOut" }}
                     className="flex flex-col items-center"
                   >
-                    <h2 className="text-white text-xl md:text-5xl font-black tracking-tighter uppercase italic mb-2 glitch-slow px-4">
+                    <h2 className="cinematic-title text-white text-3xl md:text-6xl glitch-slow px-4 mb-3">
                       {BRIEFING_TEXTS[step - 1].text}
                     </h2>
-                    <p className="text-joker text-sm md:text-2xl font-bold tracking-[0.1em] md:tracking-[0.2em] uppercase flicker-fast px-4">
+                    <p className="cinematic-accent text-joker text-xs md:text-xl flicker-fast px-4">
                       {BRIEFING_TEXTS[step - 1].accent}
                     </p>
                   </motion.div>
@@ -109,10 +109,10 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
               >
                 {/* Timer Preview */}
                 <div className="mb-12 relative group">
-                   <div className="text-[10px] text-red-500/60 uppercase tracking-[0.8em] font-black mb-4 text-center">
+                   <div className="cinematic-label text-[9px] text-red-500/60 mb-4 text-center">
                      TEMPO_ALLA_DETONAZIONE
                    </div>
-                   <div className="text-7xl md:text-8xl font-black text-red-600 italic tracking-tighter tabular-nums drop-shadow-[0_0_30px_rgba(220,38,38,0.6)] camera-shake">
+                   <div className="cinematic-title text-7xl md:text-8xl text-red-600 tabular-nums drop-shadow-[0_0_30px_rgba(220,38,38,0.6)] camera-shake" style={{ letterSpacing: '-0.02em' }}>
                      03:00
                    </div>
                    <div className="absolute -inset-8 border border-red-600/20 animate-pulse" />
@@ -123,11 +123,11 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
                   onClick={onBegin}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative w-[280px] md:w-[400px] py-5 md:py-6 bg-black border-2 border-gold text-gold font-black rounded-sm overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(250,204,21,0.5)]"
+                  className="group relative w-[280px] md:w-[400px] py-5 md:py-6 bg-black border-2 border-gold text-gold rounded-sm overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(250,204,21,0.5)]"
                 >
-                  <span className="relative z-10 tracking-[0.4em] md:tracking-[0.8em] uppercase text-xs md:text-sm block">
-                    INIZIA LA MISSIONE
-                  </span>
+                   <span className="cinematic-label font-['Share_Tech_Mono',monospace] relative z-10 text-[10px] md:text-xs block" style={{ letterSpacing: '0.5em' }}>
+                     INIZIA LA MISSIONE
+                   </span>
                   <div className="absolute inset-0 bg-gold opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
                   
                   {/* Decorative corner brackets */}
@@ -165,9 +165,9 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
       <div className="absolute bottom-12 right-12 w-24 h-24 border-b border-r border-white/10" />
       
       {/* HUD Labels */}
-      <div className="absolute top-12 left-40 text-white/10 text-[8px] tracking-[0.5em] font-mono">BAT_SYS_V9.0 // MODALITÀ_BRIEFING</div>
+      <div className="cinematic-label absolute top-12 left-40 text-white/10 text-[8px]">BAT_SYS_V9.0 // MODALITÀ_BRIEFING</div>
       <div 
-        className="absolute bottom-12 right-40 text-joker/10 text-[8px] tracking-[0.5em] font-mono animate-pulse cursor-pointer hover:text-joker/40 transition-colors"
+        className="cinematic-label absolute bottom-12 right-40 text-joker/10 text-[8px] animate-pulse cursor-pointer hover:text-joker/40 transition-colors"
         onClick={onBegin}
       >
         MANOMISSIONE_JOKER_ATTIVA // SKIP_MISSION_BYPASS

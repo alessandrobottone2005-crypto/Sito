@@ -1,12 +1,30 @@
 import { motion } from "motion/react";
+import { useState, useEffect } from "react";
 
 interface ExplosionOverlayProps {
   onReset: () => void;
+  onSkip: () => void;
 }
 
-export default function ExplosionOverlay({ onReset }: ExplosionOverlayProps) {
+export default function ExplosionOverlay({ onReset, onSkip }: ExplosionOverlayProps) {
+  const [countdown, setCountdown] = useState(15);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCountdown((prev) => {
+        if (prev <= 1) {
+          clearInterval(timer);
+          onReset();
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [onReset]);
+
   return (
-    <div className="fixed inset-0 z-[300000] flex items-center justify-center bg-black overflow-hidden">
+    <div className="fixed inset-0 z-[300000] flex items-center justify-center bg-black overflow-hidden select-none">
       {/* 1. Freeze & Glitch Initial Phase */}
       <motion.div
         initial={{ opacity: 1 }}
@@ -45,23 +63,36 @@ export default function ExplosionOverlay({ onReset }: ExplosionOverlayProps) {
         <h2 className="text-red-600 text-6xl md:text-8xl font-black italic tracking-tighter mb-4 glitch-main uppercase">
           MISSIONE FALLITA
         </h2>
-        <p className="text-white/60 text-sm md:text-base tracking-[0.5em] uppercase font-bold mb-12">
+        <p className="text-white/60 text-sm md:text-base tracking-[0.5em] uppercase font-bold mb-8">
           La Batcaverna è stata distrutta.
         </p>
-        
-        <button
-          onClick={onReset}
-          className="group relative px-12 py-5 bg-red-600 text-white font-black rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,38,38,0.6)]"
-        >
-          <span className="relative z-10 tracking-[0.4em] uppercase text-xs">Riprova la Missione</span>
-          <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-          
-          {/* Decorative corners */}
-          <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-white" />
-          <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white" />
-          <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white" />
-          <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-white" />
-        </button>
+
+        <div className="flex flex-col sm:flex-row items-center gap-6 mt-4">
+          <button
+            onClick={onReset}
+            className="group relative px-10 py-4 bg-red-600 text-white font-black rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,38,38,0.6)]"
+          >
+            <span className="relative z-10 tracking-[0.4em] uppercase text-xs">Riprova la Missione</span>
+            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
+            
+            {/* Decorative corners */}
+            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-white" />
+            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white" />
+            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white" />
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-white" />
+          </button>
+
+          <button
+            onClick={onSkip}
+            className="text-white/40 hover:text-white transition-colors underline font-mono text-[10px] tracking-[0.2em] uppercase py-2 focus:outline-none pointer-events-auto cursor-pointer"
+          >
+            Salta la Missione
+          </button>
+        </div>
+
+        <p className="text-red-500/60 font-mono text-[9px] tracking-widest uppercase mt-8 animate-pulse">
+          Ripartenza automatica in {countdown} secondi...
+        </p>
       </motion.div>
 
       {/* Cinematic Borders */}

@@ -10,16 +10,39 @@ import {
 } from "lucide-react";
 
 interface CheckoutProps {
+  speedrunUnlocked?: boolean;
   onClose: () => void;
 }
 
 const STATUE_PRICE = 700;
 const SHIPPING_COST = 60;
 
-export default function Checkout({ onClose }: CheckoutProps) {
+export default function Checkout({ speedrunUnlocked = false, onClose }: CheckoutProps) {
   const [step, setStep] = useState<"form" | "loading" | "success">("form");
   const [quantity, setQuantity] = useState(1);
   const [showBilling, setShowBilling] = useState(false);
+  
+  // Promo code states
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedDiscount, setAppliedDiscount] = useState(0);
+  const [promoError, setPromoError] = useState("");
+
+  useEffect(() => {
+    if (speedrunUnlocked) {
+      setPromoCode("SPEEDRUN15");
+      setAppliedDiscount(0.15);
+    }
+  }, [speedrunUnlocked]);
+
+  const handleApplyPromo = () => {
+    if (promoCode.trim().toUpperCase() === "SPEEDRUN15") {
+      setAppliedDiscount(0.15);
+      setPromoError("");
+    } else {
+      setPromoError("Codice promozionale non valido");
+      setAppliedDiscount(0);
+    }
+  };
   
   const [formData, setFormData] = useState({
     fullName: "",
@@ -68,7 +91,9 @@ export default function Checkout({ onClose }: CheckoutProps) {
     }, 4000);
   };
 
-  const totalPrice = (STATUE_PRICE * quantity) + SHIPPING_COST;
+  const subtotal = STATUE_PRICE * quantity;
+  const discountAmount = subtotal * appliedDiscount;
+  const totalPrice = subtotal - discountAmount + SHIPPING_COST;
 
   const inputStyles = "w-full bg-white/[0.03] border border-white/10 focus:border-gold/50 focus:bg-gold/[0.02] p-4 text-sm text-white placeholder:text-white/10 outline-none transition-all uppercase font-mono tracking-wider";
   const labelStyles = "text-[10px] font-mono text-white/40 uppercase tracking-widest ml-1 block mb-2";
@@ -293,12 +318,50 @@ export default function Checkout({ onClose }: CheckoutProps) {
                     <div className="space-y-4">
                       <div className="flex justify-between text-[11px] font-mono tracking-widest uppercase">
                         <span className="text-white/40">Subtotale</span>
-                        <span className="text-white">€{(STATUE_PRICE * quantity).toLocaleString()},00</span>
+                        <span className="text-white">€{subtotal.toLocaleString()},00</span>
                       </div>
+                      {appliedDiscount > 0 && (
+                        <div className="flex justify-between text-[11px] font-mono tracking-widest uppercase text-green-400">
+                          <span>Sconto Speedrunner (15%)</span>
+                          <span>-€{discountAmount.toLocaleString()},00</span>
+                        </div>
+                      )}
                       <div className="flex justify-between text-[11px] font-mono tracking-widest uppercase">
                         <span className="text-white/40">Spedizione Tattica</span>
                         <span className="text-white">€{SHIPPING_COST.toLocaleString()},00</span>
                       </div>
+                    </div>
+
+                    {/* Promo Code Input */}
+                    <div className="border-t border-white/10 pt-6 space-y-3 pointer-events-auto">
+                      <label className="text-[10px] font-mono text-white/40 uppercase tracking-widest block">
+                        Codice Promozionale
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={promoCode}
+                          onChange={(e) => setPromoCode(e.target.value)}
+                          placeholder="SPEEDRUN15"
+                          className="flex-grow bg-white/[0.03] border border-white/10 focus:border-gold/50 p-2 text-xs text-white placeholder:text-white/20 outline-none uppercase font-mono tracking-widest"
+                        />
+                        <button
+                          onClick={handleApplyPromo}
+                          className="bg-white/10 hover:bg-gold hover:text-black transition-colors px-4 py-2 text-xs font-mono tracking-wider text-white font-bold"
+                        >
+                          APPLICA
+                        </button>
+                      </div>
+                      {promoError && (
+                        <p className="text-red-500 font-mono text-[9px] uppercase tracking-widest">
+                          {promoError}
+                        </p>
+                      )}
+                      {appliedDiscount > 0 && (
+                        <p className="text-green-400 font-mono text-[9px] uppercase tracking-widest">
+                          Sconto 15% applicato con successo.
+                        </p>
+                      )}
                     </div>
 
                     <div className="flex justify-between items-end border-t border-white/10 pt-8">
