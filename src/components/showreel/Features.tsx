@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import BatmanText from "./BatmanText";
+import BatmanText from "../ui/BatmanText";
 import { Shield, Eye, Smartphone } from "lucide-react";
 
 const features = [

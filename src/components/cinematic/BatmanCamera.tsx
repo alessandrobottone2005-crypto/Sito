@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValueEvent } from "motion/react";
-import BatmanText from "./BatmanText";
-import BatmanButton from "./BatmanButton";
+import { motion, useScroll, useSpring, AnimatePresence, useMotionValueEvent, useTransform } from "motion/react";
+import BatmanButton from "../ui/BatmanButton";
 
 const TOTAL_FRAMES = 800;
-const IMAGE_PREFIX = "/assets/showreel/";
+const IMAGE_PREFIX = "./assets/showreel/";
 const IMAGE_SUFFIX = ".png";
 // Show the canvas / hide the loading overlay once this many early frames are ready.
 // The rest of the 800 frames continue loading silently in the background.
@@ -116,10 +115,26 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
     restDelta: 0.001,
   });
 
-  const [progress, setProgress] = useState(0);
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setProgress(latest);
+  const [activeBeat, setActiveBeat] = useState<number>(-1);
+  useMotionValueEvent(smoothProgress, "change", (p) => {
+    if (p > 0.08 && p < 0.25) setActiveBeat(0);
+    else if (p > 0.28 && p < 0.45) setActiveBeat(1);
+    else if (p > 0.48 && p < 0.65) setActiveBeat(2);
+    else if (p > 0.68 && p < 0.90) setActiveBeat(3);
+    else setActiveBeat(-1);
   });
+
+  const [progress, setProgress] = useState(0);
+  // Use useEffect-based subscription for guaranteed reliability
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
+      setProgress(latest);
+      if (Math.round(latest * 100) % 10 === 0) {
+        console.log("[BatmanCamera] scroll progress:", latest.toFixed(3));
+      }
+    });
+    return unsubscribe;
+  }, [scrollYProgress]);
 
   // Optimized Concurrent Preload — priority-first strategy:
   //   Phase 1: Load frames 1-SHOW_THRESHOLD with full concurrency so the
@@ -234,18 +249,37 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
     return () => { unsubscribe(); window.removeEventListener("resize", handleResize); };
   }, [smoothProgress]);
 
-  // Overlay styles
-  const useBeatStyle = (start: number, end: number) => {
-    const opacity = useTransform(scrollYProgress, [start, start + 0.05, end - 0.05, end], [0, 1, 1, 0]);
-    const scale = useTransform(scrollYProgress, [start, start + 0.05, end - 0.05, end], [0.8, 1, 1, 1.2]);
-    const y = useTransform(scrollYProgress, [start, start + 0.05, end - 0.05, end], [20, 0, 0, -20]);
-    return { opacity, scale, y };
+  // Glitch animation variants for text beats
+  const glitchVariants = {
+    initial: { 
+      opacity: 0, 
+      clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)", 
+      filter: "brightness(2)" 
+    },
+    animate: { 
+      opacity: 1, 
+      clipPath: [
+        "polygon(0 20%, 100% 20%, 100% 40%, 0 40%)",
+        "polygon(0 80%, 100% 80%, 100% 100%, 0 100%)",
+        "polygon(0 0, 100% 100%, 100% 0, 0 100%)",
+        "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
+      ],
+      filter: ["brightness(2) contrast(1.5)", "brightness(1.5) contrast(2)", "brightness(1) contrast(1)"],
+      x: [-15, 15, -10, 5, 0],
+      transition: { duration: 0.4, times: [0, 0.2, 0.4, 0.6, 1] }
+    },
+    exit: {
+      opacity: 0,
+      filter: ["brightness(1) contrast(1)", "brightness(2) contrast(2)", "brightness(0) contrast(0)"],
+      x: [0, -15, 15, -10, 0],
+      clipPath: [
+        "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+        "polygon(0 40%, 100% 40%, 100% 60%, 0 60%)",
+        "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)"
+      ],
+      transition: { duration: 0.3 }
+    }
   };
-
-  const beatA = useBeatStyle(0.1, 0.25);
-  const beatB = useBeatStyle(0.3, 0.45);
-  const beatC = useBeatStyle(0.5, 0.65);
-  const beatD = useBeatStyle(0.7, 0.9);
 
   return (
     <div ref={containerRef} className="relative h-[800vh]">
@@ -268,38 +302,80 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
         </div>
 
         {/* Text Beats Overlay */}
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-6">
-          <motion.div style={beatA} className="absolute flex flex-col items-center text-center">
-            <HudCorners />
-            <h2 className="text-5xl md:text-7xl font-black text-gold uppercase tracking-tighter mb-4 glitch-med">
-              SCULPTING DI<br/>PRECISIONE
-            </h2>
-            <p className="text-white/60 uppercase tracking-widest text-xs">Dettagli ultra-definiti di Gotham</p>
-          </motion.div>
+        <div className="absolute inset-0 z-[60] pointer-events-none overflow-hidden">
+          <AnimatePresence>
+            {activeBeat === 0 && (
+              <motion.div
+                key="beat0"
+                variants={glitchVariants}
+                initial="initial" animate="animate" exit="exit"
+                className="absolute top-1/2 -translate-y-1/2 left-8 md:left-24 max-w-[40vw]"
+              >
+                <h2 className="text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4"
+                  style={{ textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" }}>
+                  SCULTURA DI<br/>PRECISIONE
+                </h2>
+                <p className="text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light"
+                  style={{ textShadow: "0px 2px 10px rgba(0,0,0,0.95)" }}>
+                  Ogni ombra di Gotham scolpita con ossessione
+                </p>
+              </motion.div>
+            )}
 
-          <motion.div style={beatB} className="absolute flex flex-col items-center text-center">
-            <HudCorners />
-            <h2 className="text-5xl md:text-7xl font-black text-gold uppercase tracking-tighter mb-4 glitch-med">
-              MATERIALI<br/>PREMIUM
-            </h2>
-            <p className="text-white/60 uppercase tracking-widest text-xs">Finiture di livello museale</p>
-          </motion.div>
+            {activeBeat === 1 && (
+              <motion.div
+                key="beat1"
+                variants={glitchVariants}
+                initial="initial" animate="animate" exit="exit"
+                className="absolute top-1/2 -translate-y-1/2 right-8 md:right-24 max-w-[40vw] text-right"
+              >
+                <h2 className="text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4"
+                  style={{ textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" }}>
+                  MATERIALI<br/>D'ELITE
+                </h2>
+                <p className="text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light"
+                  style={{ textShadow: "0px 2px 10px rgba(0,0,0,0.95)" }}>
+                  Finitura da pezzo da museo, non da scaffale
+                </p>
+              </motion.div>
+            )}
 
-          <motion.div style={beatC} className="absolute flex flex-col items-center text-center">
-            <HudCorners />
-            <h2 className="text-5xl md:text-7xl font-black text-gold uppercase tracking-tighter mb-4 glitch-med">
-              EDIZIONE<br/>LIMITATA
-            </h2>
-            <p className="text-white/60 uppercase tracking-widest text-xs">Un pezzo di storia numerato</p>
-          </motion.div>
+            {activeBeat === 2 && (
+              <motion.div
+                key="beat2"
+                variants={glitchVariants}
+                initial="initial" animate="animate" exit="exit"
+                className="absolute top-1/2 -translate-y-1/2 left-8 md:left-24 max-w-[40vw]"
+              >
+                <h2 className="text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4"
+                  style={{ textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" }}>
+                  EDIZIONE<br/>LIMITATA
+                </h2>
+                <p className="text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light"
+                  style={{ textShadow: "0px 2px 10px rgba(0,0,0,0.95)" }}>
+                  Solo 500 esemplari al mondo. Il tuo porta un numero.
+                </p>
+              </motion.div>
+            )}
 
-          <motion.div style={beatD} className="absolute flex flex-col items-center text-center">
-            <HudCorners />
-            <h2 className="text-5xl md:text-7xl font-black text-gold uppercase tracking-tighter mb-4 glitch-med">
-              PRESENZA<br/>ICONICA
-            </h2>
-            <p className="text-white/60 uppercase tracking-widest text-xs">Un simbolo per la tua collezione</p>
-          </motion.div>
+            {activeBeat === 3 && (
+              <motion.div
+                key="beat3"
+                variants={glitchVariants}
+                initial="initial" animate="animate" exit="exit"
+                className="absolute top-1/2 -translate-y-1/2 right-8 md:right-24 max-w-[40vw] text-right"
+              >
+                <h2 className="text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4"
+                  style={{ textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" }}>
+                  PRESENZA<br/>LEGGENDARIA
+                </h2>
+                <p className="text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light"
+                  style={{ textShadow: "0px 2px 10px rgba(0,0,0,0.95)" }}>
+                  Non arredamento. Una presenza.
+                </p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         {/* Vignette */}
@@ -314,7 +390,7 @@ export default function BatmanCamera({ onPreorder }: { onPreorder?: () => void }
             exit={{ opacity: 0 }} 
             className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center"
           >
-             <div className="text-gold font-mono text-[10px] tracking-[1em] mb-4">CARICAMENTO_RISORSE</div>
+             <div className="text-gold font-mono text-[10px] tracking-[1em] mb-4">CARICAMENTO_DATI</div>
              <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
                 <motion.div 
                   className="h-full bg-gold" 

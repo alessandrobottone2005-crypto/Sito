@@ -1,8 +1,8 @@
 import { motion } from "motion/react";
 import { Volume2, VolumeX, ArrowLeft } from "lucide-react";
 import BatmanButton from "../ui/BatmanButton";
-import ProgressTracker from "../ui/ProgressTracker";
-import MissionTimer from "../ui/MissionTimer";
+import ProgressTracker from "../hud/ProgressTracker";
+import MissionTimer from "../hud/MissionTimer";
 
 interface NavbarProps {
   isMuted: boolean;
@@ -16,6 +16,8 @@ interface NavbarProps {
   totalClues?: number;
   missionActive?: boolean;
   timeLeft?: number;
+  showPreorder?: boolean;
+  onPreorder?: () => void;
 }
 
 
@@ -30,7 +32,9 @@ export default function Navbar({
   completedCount,
   totalClues = 5,
   missionActive,
-  timeLeft
+  timeLeft,
+  showPreorder,
+  onPreorder
 }: NavbarProps) {
 
 
@@ -43,7 +47,7 @@ export default function Navbar({
 
         <motion.img
           whileHover={{ scale: 1.1 }}
-          src="/assets/images/Navbar.png"
+          src="./assets/images/Navbar.png"
           alt="Transizione"
           className="h-8 md:h-10 w-auto object-contain glitch-slow flicker"
         />
@@ -75,6 +79,15 @@ export default function Navbar({
               <span>Indietro</span>
             </div>
           </BatmanButton>
+        )}
+
+        {showPreorder && (
+          <button
+            onClick={onPreorder}
+            className="mr-2 md:mr-4 text-[9px] md:text-[10px] px-3 py-1 md:px-4 md:py-1.5 border border-gold text-gold hover:bg-gold/10 hover:border-gold transition-colors uppercase tracking-widest rounded-sm cursor-pointer pointer-events-auto"
+          >
+            Preordina il cavaliere
+          </button>
         )}
 
         {showPause && (

@@ -12,7 +12,7 @@ export default function ProgressTracker({ completedCount, total }: ProgressTrack
       
       <div className="flex flex-col items-start gap-1">
         <div className="text-[7px] tracking-[0.5em] text-gold/40 uppercase font-black font-mono">
-          TRACCIAMENTO_INDIZI
+          PROTOCOLLO WAYNE
         </div>
         <div className="flex gap-1.5">
           {Array.from({ length: total }).map((_, i) => (

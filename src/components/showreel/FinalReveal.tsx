@@ -51,7 +51,7 @@ export default function FinalReveal({ timeTaken, onComplete, isPaused }: FinalRe
         className="absolute inset-0 z-0"
       >
         <img 
-          src="/assets/textures/BatCaverna360_BatComputerArea.png" 
+          src="./assets/textures/BatCaverna360_BatComputerArea.png" 
           alt="Batcomputer" 
           className="w-full h-full object-cover filter grayscale contrast-125"
         />
@@ -75,7 +75,7 @@ export default function FinalReveal({ timeTaken, onComplete, isPaused }: FinalRe
               <span className="text-gold">DISINNESCATA</span>
             </h1>
             <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-md font-medium">
-              "Complimenti, Bats... Per una volta non volevo farti saltare in aria. Goditi la tua preziosa statua!"
+              “Complimenti, Bats… Per una volta non era mia intenzione farti saltare in aria. Goditi pure la tua preziosa reliquia — te la sei guadagnata.”
             </p>
             
             {timeTaken > 0 && (
@@ -84,14 +84,14 @@ export default function FinalReveal({ timeTaken, onComplete, isPaused }: FinalRe
                 <div className="text-2xl font-black text-white">{formatSeconds(timeTaken)}</div>
                 {timeTaken < 90 && (
                   <div className="text-[9px] text-green-400 uppercase tracking-wider font-bold animate-pulse">
-                    ★ RECORD DI VELOCITÀ: SCONTO 15% SBLOCCATO
+                    ★ VELOCITÀ LEGGENDARIA: SCONTO 15% SBLOCCATO
                   </div>
                 )}
                 <button
                   onClick={handleCopy}
                   className="mt-2 text-[9px] text-white/50 hover:text-white underline uppercase tracking-widest transition-colors block text-left"
                 >
-                  {copied ? "Link Copiato!" : "Copia Risultato & Condividi"}
+                  {copied ? "Link Copiato!" : "Copia il Risultato & Condividi"}
                 </button>
               </div>
             )}
@@ -100,7 +100,7 @@ export default function FinalReveal({ timeTaken, onComplete, isPaused }: FinalRe
               onClick={onComplete}
               className="mt-6 px-8 py-4 bg-gold text-black font-black uppercase tracking-widest text-xs hover:bg-white hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all pointer-events-auto"
             >
-              Vedi la Statua (Showreel)
+              Scopri la Statua
             </button>
           </div>
 
@@ -108,7 +108,7 @@ export default function FinalReveal({ timeTaken, onComplete, isPaused }: FinalRe
           <div className="border border-white/10 bg-black/60 p-6 md:p-8 backdrop-blur-md rounded-sm w-full flex flex-col gap-4 max-h-[450px] overflow-y-auto pointer-events-auto">
             <div className="flex justify-between items-center border-b border-white/10 pb-3">
               <span className="text-[10px] font-mono text-gold tracking-widest uppercase font-bold">Classifica Agenti</span>
-              <span className="text-[8px] font-mono text-white/40 uppercase">Top 10 Wayne Net</span>
+              <span className="text-[8px] font-mono text-white/40 uppercase">Top 10 — Rete Wayne</span>
             </div>
 
             <div className="space-y-2">

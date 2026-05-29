@@ -6,11 +6,11 @@ interface IntroScreenProps {
 }
 
 const BRIEFING_TEXTS = [
-  { text: "Batman...", accent: "Ti ho lasciato una piccola sorpresa nella tua caverna..." },
-  { text: "Da qualche parte nella Batcaverna", accent: "c'è un pacco che ti aspetta." },
-  { text: "Ma fai attenzione...", accent: "questo regalo contiene una bomba." },
-  { text: "Risolvi tutti e 5 gli indizi", accent: "prima che il tempo finisca..." },
-  { text: "...oppure Gotham", accent: "sentirà l'esplosione." }
+  { text: "Batman...", accent: "Ho lasciato un regalino nella tua preziosa caverna..." },
+  { text: "Non è il solito giocattolo,", accent: "ma qualcosa che farà il botto." },
+  { text: "Trova i miei 5 indizi.", accent: "Dimostrami che il Grande Pipistrello sa ancora giocare." },
+  { text: "Il tempo scorre.", accent: "Tic tac, Batsy..." },
+  { text: "Risolvi il gioco", accent: "o la tua caverna diventerà polvere." }
 ];
 
 export default function IntroScreen({ onBegin }: IntroScreenProps) {
@@ -126,7 +126,7 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
                   className="group relative w-[280px] md:w-[400px] py-5 md:py-6 bg-black border-2 border-gold text-gold rounded-sm overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(250,204,21,0.5)]"
                 >
                    <span className="cinematic-label font-['Share_Tech_Mono',monospace] relative z-10 text-[10px] md:text-xs block" style={{ letterSpacing: '0.5em' }}>
-                     INIZIA LA MISSIONE
+                     ACCETTA LA SFIDA
                    </span>
                   <div className="absolute inset-0 bg-gold opacity-0 group-hover:opacity-10 transition-opacity duration-300" />
                   
@@ -170,7 +170,7 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
         className="cinematic-label absolute bottom-12 right-40 text-joker/10 text-[8px] animate-pulse cursor-pointer hover:text-joker/40 transition-colors"
         onClick={onBegin}
       >
-        MANOMISSIONE_JOKER_ATTIVA // SKIP_MISSION_BYPASS
+        MANOMISSIONE_JOKER_ATTIVA // OVERRIDE_ACCETTA_LA_SFIDA
       </div>
     </div>
   );

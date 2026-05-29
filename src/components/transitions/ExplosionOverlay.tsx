@@ -64,7 +64,7 @@ export default function ExplosionOverlay({ onReset, onSkip }: ExplosionOverlayPr
           MISSIONE FALLITA
         </h2>
         <p className="text-white/60 text-sm md:text-base tracking-[0.5em] uppercase font-bold mb-8">
-          La Batcaverna è stata distrutta.
+          Gotham ha pagato il prezzo. La Batcaverna non esiste più.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-6 mt-4">
@@ -72,7 +72,7 @@ export default function ExplosionOverlay({ onReset, onSkip }: ExplosionOverlayPr
             onClick={onReset}
             className="group relative px-10 py-4 bg-red-600 text-white font-black rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,38,38,0.6)]"
           >
-            <span className="relative z-10 tracking-[0.4em] uppercase text-xs">Riprova la Missione</span>
+            <span className="relative z-10 tracking-[0.4em] uppercase text-xs">Riprendi la Missione</span>
             <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
             
             {/* Decorative corners */}
@@ -91,7 +91,7 @@ export default function ExplosionOverlay({ onReset, onSkip }: ExplosionOverlayPr
         </div>
 
         <p className="text-red-500/60 font-mono text-[9px] tracking-widest uppercase mt-8 animate-pulse">
-          Ripartenza automatica in {countdown} secondi...
+          Riavvio automatico tra {countdown} secondi…
         </p>
       </motion.div>
 

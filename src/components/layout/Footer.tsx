@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-12 relative z-10">
         <div className="flex flex-col gap-8">
           <div className="flex items-center gap-3">
-             <img src="/assets/images/LogoSideshow.png" alt="Sideshow" className="h-10 w-auto object-contain" />
+             <img src="./assets/images/LogoSideshow.png" alt="Sideshow" className="h-10 w-auto object-contain" />
           </div>
           <p className="text-white/20 max-w-sm tracking-[0.2em] text-[10px] uppercase font-bold leading-relaxed">
             Partner di Produzione della Wayne Enterprises. <br />

@@ -1,19 +1,29 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, Suspense, startTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Navbar from "./components/layout/Navbar";
-import BatmanCamera from "./components/ui/BatmanCamera";
-import Pricing from "./components/ui/Pricing";
-import Checkout from "./components/ui/Checkout";
-import IntroScreen from "./components/scenes/IntroScreen";
-import FinalReveal from "./components/ui/FinalReveal";
-import CinematicVideoPlayer from "./components/scenes/CinematicVideoPlayer";
-import TransitionOverlay from "./components/effects/TransitionOverlay";
-import ExplosionOverlay from "./components/effects/ExplosionOverlay";
-import SharedPanoramaCanvas, { PanoramaScene } from "./components/scenes/SharedPanoramaCanvas";
-import JokerAudioManager from "./components/audio/JokerAudioManager";
+import { lazy } from "react";
+import IntroScreen from "./components/cinematic/IntroScreen";
+import TransitionOverlay from "./components/transitions/TransitionOverlay";
+import ExplosionOverlay from "./components/transitions/ExplosionOverlay";
+import JokerAudioManager from "./components/joker/JokerAudioManager";
+import AssetPreloader from "./components/transitions/AssetPreloader";
+import type { PanoramaScene } from "./components/cinematic/SharedPanoramaCanvas";
 
-// Flow: intro → batcomputer (2) → transition1 → armeria (1) → transition2 → batmobile (2) → breather → reveal → showreel → checkout
-type Phase = "intro" | "batcomputer" | "transition1" | "armeria" | "transition2" | "batmobile" | "breather" | "reveal" | "showreel" | "checkout";
+const CinematicVideoPlayer = lazy(() => import("./components/cinematic/CinematicVideoPlayer"));
+const SharedPanoramaCanvas = lazy(() => import("./components/cinematic/SharedPanoramaCanvas"));
+const BatmanCamera = lazy(() => import("./components/cinematic/BatmanCamera"));
+const Pricing = lazy(() => import("./components/showreel/Pricing"));
+const Checkout = lazy(() => import("./components/showreel/Checkout"));
+const FinalReveal = lazy(() => import("./components/showreel/FinalReveal"));
+const ThankYouPage = lazy(() => import("./components/showreel/ThankYouPage"));
+import { useMobileDetection } from "./hooks/useMobileDetection";
+import { useMissionTimer } from "./hooks/useMissionTimer";
+import { useAudioSystem } from "./hooks/useAudioSystem";
+
+
+
+// Flow: intro → batcomputer (2) → transition1 → armeria (1) → transition2 → batmobile (2) → breather → reveal → showreel → checkout → thankyou
+type Phase = "intro" | "batcomputer" | "transition1" | "armeria" | "transition2" | "batmobile" | "breather" | "reveal" | "showreel" | "checkout" | "thankyou";
 type MissionStatus = "idle" | "active" | "failed" | "succeeded";
 
 // Map: which panorama scene is "active" for each phase
@@ -26,7 +36,12 @@ const PANORAMA_PHASE_MAP: Partial<Record<Phase, PanoramaScene>> = {
 };
 
 export default function App() {
-  const [phase, setPhase] = useState<Phase>("intro");
+  const [phase, setPhaseInternal] = useState<Phase>("intro");
+  const setPhase = useCallback((newPhase: Phase | ((prev: Phase) => Phase)) => {
+    startTransition(() => {
+      setPhaseInternal(newPhase);
+    });
+  }, []);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
@@ -34,86 +49,46 @@ export default function App() {
   const [missionStatus, setMissionStatus] = useState<MissionStatus>("idle");
   const [timerResetKey, setTimerResetKey] = useState(0);
   // Track which panorama scene the SharedPanoramaCanvas should display
-  const [panoramaScene, setPanoramaScene] = useState<PanoramaScene>("batcomputer");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [panoramaScene, setPanoramaSceneInternal] = useState<PanoramaScene>("batcomputer");
+  const setPanoramaScene = useCallback((newScene: PanoramaScene | ((prev: PanoramaScene) => PanoramaScene)) => {
+    startTransition(() => {
+      setPanoramaSceneInternal(newScene);
+    });
+  }, []);
+  // Note: audioRef is now managed by useAudioSystem
 
-  // Lifted Timer States
-  const [timeLeft, setTimeLeft] = useState(180);
-  const [initialTime, setInitialTime] = useState(180);
-  const [timerABGroup, setTimerABGroup] = useState<"A" | "B">("A");
-  const [bonusTimeGranted, setBonusTimeGranted] = useState(false);
+  // Mobile Detection
+  const { isMobile, forceMobile, setForceMobile } = useMobileDetection();
+
+  // Derived: is a cinematic transition video currently playing?
+  const isVideoTransition = phase === "transition1" || phase === "transition2";
+
+  const handleTimeUp = useCallback(() => setMissionStatus("failed"), []);
+
+  // Timer logic
+  const {
+    timeLeft,
+    initialTime,
+    timerABGroup,
+    bonusTimeGranted,
+    resetTimer,
+    grantBonusTime,
+    setTimeLeft,
+  } = useMissionTimer(missionStatus, isPaused, isVideoTransition, handleTimeUp);
+
   const [showBonusFeedback, setShowBonusFeedback] = useState(false);
   const [speedrunUnlocked, setSpeedrunUnlocked] = useState(false);
   const [finalTimeTaken, setFinalTimeTaken] = useState(0);
+  const [purchasedQuantity, setPurchasedQuantity] = useState(1);
 
-  // Mobile Detection & Skip Warning
-  const [isMobile, setIsMobile] = useState(false);
-  const [forceMobile, setForceMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // A/B Group Assignment on Mount
-  useEffect(() => {
-    const group = Math.random() < 0.5 ? "A" : "B";
-    setTimerABGroup(group);
-    const seconds = group === "A" ? 120 : 240;
-    setInitialTime(seconds);
-    setTimeLeft(seconds);
-    console.log(`[A/B TEST] Assegnato al Gruppo ${group} (${seconds}s timer)`);
-  }, []);
-
-  // Derived: is a cinematic transition video currently playing?
-  // During these phases the timer must be frozen so the player is not penalised.
-  const isVideoTransition = phase === "transition1" || phase === "transition2";
-
-  // Timer Tick Logic in App.tsx
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (missionStatus === "active" && !isPaused && !isVideoTransition && timeLeft > 0) {
-      interval = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            handleTimeUp();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [missionStatus, isPaused, isVideoTransition, timeLeft]);
-
-  // Background Music Logic
-  useEffect(() => {
-    const audio = new Audio("/assets/audio/SiglaBatman.wav");
-    audio.loop = true;
-    audio.volume = 0.4;
-    audio.muted = isMuted;
-    audioRef.current = audio;
-
-    const tryPlay = () => {
-      audio.play().catch(() => {
-        const unlock = () => {
-          audio.play().catch(() => { });
-          window.removeEventListener("click", unlock);
-        };
-        window.addEventListener("click", unlock);
-      });
-    };
-    tryPlay();
-    return () => { audio.pause(); audio.src = ""; };
-  }, []);
-
-  useEffect(() => {
-    if (audioRef.current) audioRef.current.muted = isMuted;
-  }, [isMuted]);
-
-  const handleTimeUp = () => setMissionStatus("failed");
+  // Audio system
+  const {
+    audioRef,
+    playMusic,
+    pauseMusic,
+    fadeOutMusic,
+    fadeInMusic,
+  } = useAudioSystem(isMuted);
 
   // Success Condition
   useEffect(() => {
@@ -124,7 +99,7 @@ export default function App() {
       // Speedrun Easter Egg check (under 90 seconds)
       if (timeTaken < 90) {
         setSpeedrunUnlocked(true);
-        console.log(`[SPEEDRUN] Sconto sbloccato! Tempo di completamento: ${timeTaken}s`);
+
       } else {
         setSpeedrunUnlocked(false);
       }
@@ -132,21 +107,19 @@ export default function App() {
       setMissionStatus("succeeded");
       changePhase("breather");
     }
-  }, [completedCount, missionStatus]);
+  }, [completedCount, missionStatus, initialTime, timeLeft]);
 
   // Bonus Time Check: when user finds first 2 clues
   useEffect(() => {
-    if (completedCount === 2 && missionStatus === "active" && !bonusTimeGranted) {
+    if (completedCount === 2 && missionStatus === "active") {
       const timeElapsed = initialTime - timeLeft;
-      if (timeElapsed <= 45) {
-        setTimeLeft((prev) => prev + 60);
-        setBonusTimeGranted(true);
+      if (timeElapsed <= 45 && grantBonusTime(60)) {
         setShowBonusFeedback(true);
-        console.log(`[BONUS] +60s per aver risolto i primi 2 indizi in ${timeElapsed}s!`);
+
         setTimeout(() => setShowBonusFeedback(false), 4000);
       }
     }
-  }, [completedCount, missionStatus, bonusTimeGranted, initialTime, timeLeft]);
+  }, [completedCount, missionStatus, initialTime, timeLeft, grantBonusTime]);
 
   // Unified phase change with transition overlay
   const changePhase = (newPhase: Phase) => {
@@ -155,16 +128,10 @@ export default function App() {
     if (phase === "intro" && newPhase === "batcomputer") {
       setCompletedCount(0);
       setTimerResetKey(prev => prev + 1);
-      const seconds = timerABGroup === "A" ? 120 : 240;
-      setTimeLeft(seconds);
-      setBonusTimeGranted(false);
+      resetTimer();
       setShowBonusFeedback(false);
       setMissionStatus("active");
-      if (audioRef.current) {
-        audioRef.current.currentTime = 20;
-        audioRef.current.volume = 0.4;
-        audioRef.current.play().catch(() => { });
-      }
+      playMusic(20, 0.4);
     }
 
     if (newPhase === "breather") {
@@ -173,20 +140,7 @@ export default function App() {
       setSpeedrunUnlocked(false);
 
       // Fade out background music
-      if (audioRef.current) {
-        let currentVol = audioRef.current.volume;
-        const fadeOut = setInterval(() => {
-          currentVol = Math.max(0, currentVol - 0.05);
-          if (audioRef.current) audioRef.current.volume = currentVol;
-          if (currentVol <= 0) {
-            clearInterval(fadeOut);
-            if (audioRef.current) {
-              audioRef.current.pause();
-              audioRef.current.volume = 0.4;
-            }
-          }
-        }, 80);
-      }
+      fadeOutMusic();
       setIsTransitioning(true);
       setTimeout(() => { setPhase("breather"); }, 400);
       setTimeout(() => { setIsTransitioning(false); }, 1000);
@@ -196,18 +150,8 @@ export default function App() {
         setIsTransitioning(true);
         setTimeout(() => {
           setPhase("reveal");
-          if (audioRef.current) {
-            audioRef.current.currentTime = 0; // Play calm/heroic theme start
-            audioRef.current.volume = 0.05;
-            audioRef.current.play().catch(() => {});
-            // Fade in theme
-            let currentVol = 0.05;
-            const fadeIn = setInterval(() => {
-              currentVol = Math.min(0.4, currentVol + 0.05);
-              if (audioRef.current) audioRef.current.volume = currentVol;
-              if (currentVol >= 0.4) clearInterval(fadeIn);
-            }, 100);
-          }
+          // Play calm/heroic theme start and fade in
+          fadeInMusic(0.4, 0.05, 100);
         }, 400);
         setTimeout(() => { setIsTransitioning(false); }, 1000);
       }, 4400);
@@ -225,13 +169,11 @@ export default function App() {
     setCompletedCount(0);
     setTimerResetKey(prev => prev + 1);
     setPanoramaScene("batcomputer");
-    const seconds = timerABGroup === "A" ? 120 : 240;
-    setTimeLeft(seconds);
-    setBonusTimeGranted(false);
+    resetTimer();
     setShowBonusFeedback(false);
     setSpeedrunUnlocked(false);
+    pauseMusic();
     if (audioRef.current) {
-      audioRef.current.pause();
       audioRef.current.currentTime = 20;
     }
   };
@@ -265,6 +207,9 @@ export default function App() {
     } else if (phase === "showreel") {
       changePhase("checkout");
     } else if (phase === "checkout") {
+      setPurchasedQuantity(1);
+      changePhase("thankyou");
+    } else if (phase === "thankyou") {
       handleResetMission();
     }
   };
@@ -275,7 +220,7 @@ export default function App() {
       // CMD + 1 (Mac) or CTRL + 1 (Windows/Linux)
       if ((e.metaKey || e.ctrlKey) && e.key === "1") {
         e.preventDefault();
-        console.log("Easter Egg: Skipping gamification to showreel...");
+
 
         // Update states to simulate completion
         setMissionStatus("succeeded");
@@ -304,18 +249,21 @@ export default function App() {
 
   return (
     <div className="bg-black min-h-screen relative overflow-x-hidden">
+      <AssetPreloader />
       <Navbar
         isMuted={isMuted}
         onToggleMute={() => setIsMuted(!isMuted)}
         showBack={phase === "checkout"}
         onBack={() => changePhase("showreel")}
-        showPause={["batcomputer", "armeria", "batmobile", "showreel"].includes(phase)}
+        showPause={["batcomputer", "armeria", "batmobile"].includes(phase)}
         isPaused={isPaused}
         onTogglePause={() => setIsPaused(!isPaused)}
         completedCount={["batcomputer", "armeria", "batmobile"].includes(phase) ? completedCount : undefined}
         totalClues={5}
         timeLeft={timeLeft}
         missionActive={missionStatus === "active"}
+        showPreorder={phase === "showreel"}
+        onPreorder={() => changePhase("checkout")}
       />
 
       {/* ── DEV ONLY: Skip Phase Button ────────────────────────────────────── */}
@@ -335,6 +283,7 @@ export default function App() {
             phase === "breather" ? "Vittoria" :
             phase === "reveal" ? "Showreel" :
             phase === "showreel" ? "Checkout" :
+            phase === "checkout" ? "Thank You" :
             "Intro"
           }
         </button>
@@ -373,10 +322,10 @@ export default function App() {
               SISTEMA WAYNE TECH // MOBILE_ALERT
             </h2>
             <h3 className="text-white text-2xl font-black uppercase tracking-tighter">
-              DISPOSITIVO NON OTTIMIZZATO
+              DISPOSITIVO NON COMPATIBILE
             </h3>
             <p className="text-white/60 text-xs font-medium tracking-wider leading-relaxed uppercase">
-              L'esplorazione immersiva a 360° della Batcaverna richiede uno schermo desktop ed un mouse per completare la localizzazione degli indizi del Joker.
+              L'esplorazione immersiva a 360° della Batcaverna richiede un monitor desktop e un mouse. Solo così potrai individuare tutti gli indizi del Joker.
             </p>
             <div className="w-full flex flex-col gap-4 mt-4 pointer-events-auto">
               <button
@@ -387,13 +336,13 @@ export default function App() {
                 }}
                 className="w-full py-4 bg-gold text-black font-black uppercase tracking-widest text-xs transition-all hover:bg-white hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
               >
-                Salta al Prodotto & Ordina
+                Vai direttamente alla Statua & Preordina
               </button>
               <button
                 onClick={() => setForceMobile(true)}
                 className="w-full py-4 border border-white/20 text-white/50 font-black uppercase tracking-widest text-xs hover:text-white hover:border-white transition-colors"
               >
-                Forza Esplorazione a 360°
+                Continua l’Esplorazione a 360°
               </button>
             </div>
           </div>
@@ -411,23 +360,27 @@ export default function App() {
             The transition videos overlay on top (z-index 500).
         ────────────────────────────────────────────────────────────────── */}
         {isPanoramaPhase && (
-          <SharedPanoramaCanvas
-            scene={panoramaScene}
-            onProgress={(count) => setCompletedCount(count)}
-            baseCompleted={baseCompleted}
-            isPaused={isPaused}
-            onNext={() => {
-              if (panoramaScene === "batcomputer") {
-                setPhase("transition1");
-                setTimeout(() => setPanoramaScene("armeria"), 100);
-              } else if (panoramaScene === "armeria") {
-                setPhase("transition2");
-                setTimeout(() => setPanoramaScene("batmobile"), 100);
-              } else if (panoramaScene === "batmobile") {
-                changePhase("breather");
-              }
-            }}
-          />
+          <Suspense fallback={<div className="absolute inset-0 bg-black flex items-center justify-center text-gold font-mono text-xs">CARICAMENTO AREA...</div>}>
+            <SharedPanoramaCanvas
+              scene={panoramaScene}
+              onProgress={(count) => setCompletedCount(count)}
+              baseCompleted={baseCompleted}
+              isPaused={isPaused}
+              isMuted={isMuted}
+              isMissionActive={missionStatus === "active"}
+              onNext={() => {
+                if (panoramaScene === "batcomputer") {
+                  setPhase("transition1");
+                  setTimeout(() => setPanoramaScene("armeria"), 100);
+                } else if (panoramaScene === "armeria") {
+                  setPhase("transition2");
+                  setTimeout(() => setPanoramaScene("batmobile"), 100);
+                } else if (panoramaScene === "batmobile") {
+                  changePhase("breather");
+                }
+              }}
+            />
+          </Suspense>
         )}
 
         {/* ── TRANSITION VIDEOS (overlay above panorama canvas) ── */}
@@ -440,12 +393,14 @@ export default function App() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[500] bg-black"
             >
-              <CinematicVideoPlayer
-                src="/assets/videos/BatCaverna_PassaggioBatComputerAArmeria.mp4"
-                onEnded={() => setPhase("armeria")}
-                label="SPOSTAMENTO: AREA ARMERIA"
-                nextAsset="/assets/textures/BatCaverna360_ArmeriaArea.jpg"
-              />
+              <Suspense fallback={<div className="fixed inset-0 bg-black z-[500]" />}>
+                <CinematicVideoPlayer
+                  src="./assets/videos/BatCaverna_PassaggioBatComputerAArmeria.mp4"
+                  onEnded={() => setPhase("armeria")}
+                  label="SPOSTAMENTO: ZONA ARMERIA"
+                  nextAsset="./assets/textures/BatCaverna360_ArmeriaArea.jpg"
+                />
+              </Suspense>
             </motion.div>
           )}
 
@@ -457,12 +412,14 @@ export default function App() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 z-[500] bg-black"
             >
-              <CinematicVideoPlayer
-                src="/assets/videos/BatCaverna_PassaggioArmeriaABatMobile.mp4"
-                onEnded={() => setPhase("batmobile")}
-                label="SPOSTAMENTO: ZONA BATMOBILE"
-                nextAsset="/assets/textures/BatCaverna360_BatMobileArea.jpg"
-              />
+              <Suspense fallback={<div className="fixed inset-0 bg-black z-[500]" />}>
+                <CinematicVideoPlayer
+                  src="./assets/videos/BatCaverna_PassaggioArmeriaABatMobile.mp4"
+                  onEnded={() => setPhase("batmobile")}
+                  label="SPOSTAMENTO: ZONA BATMOBILE"
+                  nextAsset="./assets/textures/BatCaverna360_BatMobileArea.jpg"
+                />
+              </Suspense>
             </motion.div>
           )}
         </AnimatePresence>
@@ -492,28 +449,53 @@ export default function App() {
                 className="text-center space-y-2"
               >
                 <div className="text-[10px] font-mono text-green-500 tracking-[0.8em] uppercase font-bold">
-                  DISATTIVAZIONE CARICHE... BOMBA DISINNESCATA.
+                  NEUTRALIZZAZIONE COMPLETATA… MINACCIA ELIMINATA.
                 </div>
                 <div className="text-[8px] font-mono text-white/30 tracking-[0.5em] uppercase">
-                  RIPRISTINO SISTEMI DI SICUREZZA IN CORSO...
+                  RIPRISTINO PROTOCOLLI WAYNE TECH IN CORSO…
                 </div>
               </motion.div>
             </motion.div>
           )}
 
           {phase === "reveal" && (
-            <FinalReveal key="reveal" timeTaken={finalTimeTaken} onComplete={() => changePhase("showreel")} isPaused={isPaused} />
+            <Suspense fallback={null}>
+              <FinalReveal key="reveal" timeTaken={finalTimeTaken} onComplete={() => changePhase("showreel")} isPaused={isPaused} />
+            </Suspense>
           )}
 
           {phase === "showreel" && (
             <div key="showreel" className="relative z-10">
-              <BatmanCamera onPreorder={() => changePhase("checkout")} />
-              <Pricing speedrunUnlocked={speedrunUnlocked} onPreorder={() => changePhase("checkout")} />
+              <Suspense fallback={null}>
+                <BatmanCamera onPreorder={() => changePhase("checkout")} />
+                <Pricing speedrunUnlocked={speedrunUnlocked} onPreorder={() => changePhase("checkout")} />
+              </Suspense>
             </div>
           )}
 
           {phase === "checkout" && (
-            <Checkout key="checkout" speedrunUnlocked={speedrunUnlocked} onClose={() => changePhase("showreel")} />
+            <Suspense fallback={null}>
+              <Checkout 
+                key="checkout" 
+                speedrunUnlocked={speedrunUnlocked} 
+                onClose={() => changePhase("showreel")} 
+                onSuccess={(qty) => {
+                  setPurchasedQuantity(qty);
+                  changePhase("thankyou");
+                }}
+              />
+            </Suspense>
+          )}
+
+          {phase === "thankyou" && (
+            <Suspense fallback={null}>
+              <ThankYouPage
+                key="thankyou"
+                quantity={purchasedQuantity}
+                onReturnHome={() => handleResetMission()}
+                onViewStatue={() => changePhase("showreel")}
+              />
+            </Suspense>
           )}
         </AnimatePresence>
 
@@ -535,7 +517,7 @@ export default function App() {
               className="fixed inset-0 z-[99999] bg-black/85 backdrop-blur-lg flex flex-col items-center justify-center select-none"
             >
               <h2 className="text-white text-4xl md:text-6xl font-black tracking-tighter mb-2 glitch-slow">MISSIONE IN PAUSA</h2>
-              <p className="text-gold text-[10px] tracking-[0.8em] uppercase font-bold opacity-60">Batcomputer in Standby // In attesa di ripresa</p>
+              <p className="text-gold text-[10px] tracking-[0.8em] uppercase font-bold opacity-60">Batcomputer in Standby // In attesa di riattivazione</p>
               <div className="absolute top-24 left-24 w-12 h-12 border-t-2 border-l-2 border-gold/20" />
               <div className="absolute bottom-24 right-24 w-12 h-12 border-b-2 border-r-2 border-gold/20" />
             </motion.div>

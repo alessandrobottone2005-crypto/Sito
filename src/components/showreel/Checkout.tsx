@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import React, { useState, useEffect } from "react";
-import BatmanText from "./BatmanText";
-import BatmanButton from "./BatmanButton";
+import BatmanText from "../ui/BatmanText";
+import BatmanButton from "../ui/BatmanButton";
 import { 
   ShieldCheck, Mail, User, MapPin, CreditCard, Apple, Wallet, 
   Landmark, ChevronRight, Info, MessageSquare, X, CheckCircle2, 
@@ -12,13 +12,14 @@ import {
 interface CheckoutProps {
   speedrunUnlocked?: boolean;
   onClose: () => void;
+  onSuccess?: (quantity: number) => void;
 }
 
 const STATUE_PRICE = 700;
 const SHIPPING_COST = 60;
 
-export default function Checkout({ speedrunUnlocked = false, onClose }: CheckoutProps) {
-  const [step, setStep] = useState<"form" | "loading" | "success">("form");
+export default function Checkout({ speedrunUnlocked = false, onClose, onSuccess }: CheckoutProps) {
+  const [step, setStep] = useState<"form" | "loading">("form");
   const [quantity, setQuantity] = useState(1);
   const [showBilling, setShowBilling] = useState(false);
   
@@ -87,7 +88,9 @@ export default function Checkout({ speedrunUnlocked = false, onClose }: Checkout
     
     // Simulate order preparation
     setTimeout(() => {
-      setStep("success");
+      if (onSuccess) {
+        onSuccess(quantity);
+      }
     }, 4000);
   };
 
@@ -268,7 +271,7 @@ export default function Checkout({ speedrunUnlocked = false, onClose }: Checkout
                     </BatmanButton>
                     {!isFormValid() && (
                       <p className="text-center text-[9px] font-mono text-red-500/50 uppercase tracking-widest animate-pulse">
-                        Sistemi in attesa: Dati necessari incompleti
+                        Protocollo in attesa: dati di missione incompleti
                       </p>
                     )}
                   </div>
@@ -302,14 +305,14 @@ export default function Checkout({ speedrunUnlocked = false, onClose }: Checkout
                     <div className="flex gap-6 pb-10 border-b border-white/5">
                       <div className="w-32 h-32 bg-black border border-white/10 flex items-center justify-center p-2 group relative overflow-hidden">
                         <img 
-                          src="/assets/showreel/0800.png" 
+                          src="./assets/showreel/0800.png" 
                           alt="Batman Statue" 
                           className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700"
                         />
                         <div className="absolute inset-0 bg-gold/10 opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
                       <div className="flex flex-col justify-center gap-2">
-                        <h3 className="font-bold text-white uppercase tracking-wider">Statua Tattica di Batman</h3>
+                        <h3 className="font-bold text-white uppercase tracking-wider">Batman 87th Anniversary — Statua in Edizione Limitata</h3>
                         <div className="text-[10px] font-mono text-white/40 tracking-widest">SCALA: 1/4 | MAT: RESINA</div>
                         <div className="text-gold font-mono font-bold mt-2">€{STATUE_PRICE.toLocaleString()},00 x {quantity}</div>
                       </div>
@@ -374,7 +377,7 @@ export default function Checkout({ speedrunUnlocked = false, onClose }: Checkout
                     <div className="bg-white/[0.03] border border-white/5 p-4 flex items-center gap-4">
                       <ShieldCheck className="text-gold" size={24} />
                       <div className="text-[9px] font-mono text-white/50 leading-relaxed uppercase tracking-widest">
-                        Crittografia a 256-bit attiva. Limite di 2 unità per protocollo di sicurezza.
+                        Crittografia a 256-bit attiva. Limite di 2 unità per ordine — protocollo di sicurezza Wayne.
                       </div>
                     </div>
                   </div>
@@ -398,102 +401,15 @@ export default function Checkout({ speedrunUnlocked = false, onClose }: Checkout
                 </div>
               </div>
               <BatmanText delay={0.2}>
-                <h2 className="text-2xl font-bold text-white uppercase tracking-[0.3em] mb-4">Protocollo in Preparazione</h2>
+                <h2 className="text-2xl font-bold text-white uppercase tracking-[0.3em] mb-4">Protocollo di Acquisizione in Corso</h2>
               </BatmanText>
               <BatmanText delay={0.4}>
                 <div className="text-[10px] font-mono text-gold/60 uppercase tracking-[0.2em] space-y-2">
                   <p>Inizializzazione server Wayne...</p>
                   <p>Crittografia dati transazione...</p>
-                  <p>Allocazione inventario tattico...</p>
+                  <p>Verifica disponibilità unità riservata…</p>
                 </div>
               </BatmanText>
-            </motion.main>
-          )}
-
-          {step === "success" && (
-            <motion.main
-              key="success-screen"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="flex-grow flex flex-col items-center justify-center p-6 text-center max-w-3xl mx-auto py-20 md:py-40"
-            >
-              <BatmanText delay={0.2}>
-                <div className="mb-12 relative">
-                  <div className="absolute inset-0 bg-gold/20 blur-[60px] animate-pulse" />
-                  <div className="relative w-24 h-24 border-2 border-gold flex items-center justify-center mx-auto">
-                    <CheckCircle2 size={48} className="text-gold" />
-                    <div className="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-gold/50" />
-                    <div className="absolute -bottom-4 -right-4 w-8 h-8 border-b-2 border-r-2 border-gold/50" />
-                  </div>
-                </div>
-              </BatmanText>
-
-              <BatmanText delay={0.4}>
-                <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white uppercase mb-6 glitch-med ghost-rgb">
-                  Grazie per l'acquisto
-                </h1>
-              </BatmanText>
-
-              <BatmanText delay={0.6}>
-                <p className="text-gold/60 font-mono tracking-[0.2em] uppercase text-sm mb-12 max-w-xl mx-auto leading-relaxed">
-                  Il tuo ordine di {quantity} {quantity === 1 ? "statua" : "statue"} è stato ricevuto. 
-                  Il protocollo di spedizione è stato attivato per il valore di €{totalPrice.toLocaleString()},00.
-                </p>
-              </BatmanText>
-
-              <div className="grid md:grid-cols-2 gap-8 w-full max-w-2xl mb-16">
-                <BatmanText delay={0.8}>
-                  <div className="border border-white/10 bg-white/[0.02] p-6 text-left space-y-4">
-                    <div className="flex items-center gap-2 text-gold/40 text-[10px] font-mono uppercase tracking-widest">
-                      <Package size={12} />
-                      Stato Spedizione
-                    </div>
-                    <div className="text-white font-bold uppercase tracking-wider">In fase di preparazione</div>
-                    <div className="w-full bg-white/5 h-1 overflow-hidden">
-                      <motion.div 
-                        initial={{ width: 0 }}
-                        animate={{ width: "15%" }}
-                        transition={{ duration: 2, delay: 1 }}
-                        className="h-full bg-gold"
-                      />
-                    </div>
-                  </div>
-                </BatmanText>
-
-                <BatmanText delay={1.0}>
-                  <div className="border border-white/10 bg-white/[0.02] p-6 text-left space-y-4">
-                    <div className="flex items-center gap-2 text-gold/40 text-[10px] font-mono uppercase tracking-widest">
-                      <Download size={12} />
-                      Documentazione
-                    </div>
-                    <div className="text-white font-bold uppercase tracking-wider">Ricevuta Criptata</div>
-                    <BatmanButton variant="ghost" className="w-full !px-2">SCARICA PDF</BatmanButton>
-                  </div>
-                </BatmanText>
-              </div>
-
-              <BatmanText delay={1.2}>
-                <div className="space-y-6">
-                  <div className="text-[10px] font-mono text-white/20 tracking-widest uppercase">
-                    La missione continua. Controlla la tua email per gli aggiornamenti tattici.
-                  </div>
-                  <BatmanButton 
-                    variant="primary" 
-                    showCorners={true}
-                    onClick={onClose}
-                  >
-                    TORNA ALLA BASE
-                  </BatmanButton>
-                </div>
-              </BatmanText>
-
-              <div className="fixed inset-0 pointer-events-none -z-10 opacity-20">
-                 <div className="absolute top-1/4 left-1/4 w-px h-32 bg-gradient-to-b from-transparent via-gold/50 to-transparent" />
-                 <div className="absolute top-1/4 left-1/4 w-32 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-                 <div className="absolute bottom-1/4 right-1/4 w-px h-32 bg-gradient-to-b from-transparent via-gold/50 to-transparent" />
-                 <div className="absolute bottom-1/4 right-1/4 w-32 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
-              </div>
             </motion.main>
           )}
         </AnimatePresence>

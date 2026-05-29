@@ -84,7 +84,13 @@ export default function JokerCard({
         }}
       >
         {/* Front side (Retro Carta) */}
-        <div className="absolute inset-0 w-full h-full backface-hidden bg-black border-2 border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col items-center justify-center p-6 group">
+        <div className="absolute inset-0 w-full h-full backface-hidden bg-black border-2 border-white/10 rounded-2xl overflow-hidden shadow-2xl group">
+          <img 
+            src="./assets/images/JollyJokerCard.jpg" 
+            alt="Joker Hint" 
+            className="absolute inset-0 w-full h-full object-cover opacity-90"
+          />
+          
           {/* Pulsing Green Glow Border - INTENSIFIED */}
           <motion.div 
             className="absolute inset-0 border-2 border-joker rounded-2xl pointer-events-none"
@@ -103,28 +109,22 @@ export default function JokerCard({
             }}
           />
 
-          <div className="absolute top-4 left-4 w-4 h-4 border-t-2 border-l-2 border-joker opacity-80 group-hover:opacity-100 transition-opacity" />
-          <div className="absolute top-4 right-4 w-4 h-4 border-t-2 border-r-2 border-joker opacity-80 group-hover:opacity-100 transition-opacity" />
-          <div className="absolute bottom-4 left-4 w-4 h-4 border-b-2 border-l-2 border-joker opacity-80 group-hover:opacity-100 transition-opacity" />
-          <div className="absolute bottom-4 right-4 w-4 h-4 border-b-2 border-r-2 border-joker opacity-80 group-hover:opacity-100 transition-opacity" />
-          
-          <div className="w-24 h-24 text-joker opacity-30 group-hover:opacity-60 transition-opacity">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2L4.5 20.29l.71.71L12 18l6.79 3 .71-.71z" />
-            </svg>
-          </div>
-          
-          <div className="mt-8 text-[10px] tracking-[0.4em] text-white/60 group-hover:text-joker/80 transition-colors uppercase font-bold">
-            Indizio Joker #{id}
-          </div>
-
           <div className="absolute inset-0 bg-joker/5 group-hover:bg-joker/10 transition-colors pointer-events-none" />
         </div>
 
         {/* Back side (Riddle & Multiple Choice) */}
-        <div className={`absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-zinc-950 border-2 rounded-2xl p-8 flex flex-col items-center justify-center transition-all duration-500 ${isSolved ? "border-joker shadow-[0_0_80px_rgba(57,255,20,0.4)]" : error ? "border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.3)]" : "border-joker/30 shadow-[0_0_50px_rgba(57,255,20,0.15)]"}`}>
+        <div className={`absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-black overflow-hidden border-2 rounded-2xl p-8 flex flex-col items-center justify-center transition-all duration-500 ${isSolved ? "border-joker shadow-[0_0_80px_rgba(57,255,20,0.4)]" : error ? "border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.3)]" : "border-joker/30 shadow-[0_0_50px_rgba(57,255,20,0.15)]"}`}>
           
-          {/* Glitch Effect Overlay when solved */}
+          <div className="absolute inset-0 pointer-events-none z-0">
+            <img 
+              src="./assets/images/JollyJokerCard_Back.jpg" 
+              alt="Card Background" 
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
+            {/* Glitch Effect Overlay when solved */}
           {isSolved && (
             <motion.div 
               initial={{ opacity: 0 }}
@@ -134,23 +134,18 @@ export default function JokerCard({
             />
           )}
 
-          <button 
-            onClick={handleClose}
-            className="absolute top-6 right-6 text-white/30 hover:text-white transition-colors z-50"
-          >
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
 
-          <motion.h3 
-            animate={isSolved ? { color: "#39FF14" } : {}}
-            className="text-joker text-[9px] tracking-[0.5em] font-bold uppercase mb-8 opacity-80 font-mono"
-          >
-            {isSolved ? "RISPOSTA CORRETTA" : "Protocollo Investigativo"}
-          </motion.h3>
+
+          {isSolved && (
+            <motion.h3 
+              animate={{ color: "#7f1d1d" }}
+              className="text-red-900 text-[11px] tracking-[0.4em] font-bold uppercase mb-8 font-serif bg-white/50 px-3 py-1 rounded backdrop-blur-sm"
+            >
+              RISPOSTA CORRETTA
+            </motion.h3>
+          )}
           
-          <p className="text-white text-center text-lg md:text-xl font-medium leading-relaxed mb-10 italic px-2 font-serif">
+          <p className="text-black text-center text-xl md:text-2xl font-bold leading-relaxed mb-10 italic px-4 font-serif">
             "{riddle}"
           </p>
 
@@ -165,22 +160,22 @@ export default function JokerCard({
                   handleOptionClick(option);
                 }}
                 className={`
-                  relative w-full py-4 px-6 bg-black border transition-all duration-300 group overflow-hidden
+                  relative w-full py-4 px-6 bg-white/50 backdrop-blur-md border-2 transition-all duration-300 group overflow-hidden
                   ${isSolved && option === correctAnswer 
-                    ? "border-joker text-joker shadow-[0_0_20px_rgba(57,255,20,0.3)]" 
-                    : "border-white/10 text-white/80 hover:border-joker hover:text-white hover:shadow-[0_0_15px_rgba(57,255,20,0.2)]"}
+                    ? "border-green-700 text-green-900 bg-green-500/40 shadow-[0_0_15px_rgba(34,197,94,0.4)]" 
+                    : "border-black/40 text-black hover:border-red-800 hover:text-red-900 hover:bg-red-500/20 hover:shadow-[0_0_10px_rgba(220,38,38,0.3)]"}
                   rounded-lg
                 `}
               >
-                {/* Batcomputer Hover Line */}
-                <div className="absolute top-0 left-0 w-1 h-full bg-joker opacity-0 group-hover:opacity-100 transition-opacity" />
+                {/* Red Hover Line */}
+                <div className="absolute top-0 left-0 w-1 h-full bg-red-800 opacity-0 group-hover:opacity-100 transition-opacity" />
                 
-                <span className="relative z-10 text-xs md:text-sm tracking-[0.2em] uppercase font-bold font-space-grotesk">
+                <span className="relative z-10 text-xs md:text-sm tracking-[0.2em] uppercase font-bold font-serif">
                   {option}
                 </span>
 
                 {/* Micro-glow background on hover */}
-                <div className="absolute inset-0 bg-joker/0 group-hover:bg-joker/5 transition-colors" />
+                <div className="absolute inset-0 bg-red-900/0 group-hover:bg-red-900/5 transition-colors" />
               </motion.button>
             ))}
           </div>
@@ -191,12 +186,13 @@ export default function JokerCard({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="absolute bottom-6 text-[10px] text-red-500 font-bold tracking-[0.3em] font-mono uppercase"
+                className="absolute bottom-6 text-[11px] text-red-800 font-bold tracking-[0.3em] font-serif uppercase bg-white/60 px-4 py-2 rounded-lg backdrop-blur-md border border-red-800/40 shadow-lg"
               >
                 Accesso Negato // Riprova
               </motion.div>
             )}
           </AnimatePresence>
+          </div>
         </div>
       </motion.div>
     </div>

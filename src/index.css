@@ -1,10 +1,11 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-cinematic: "Rajdhani", ui-sans-serif, system-ui, sans-serif;
-  --font-terminal: "Share Tech Mono", ui-monospace, monospace;
+  --font-cinematic: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-terminal: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --color-gold: rgb(250, 204, 21);
   --color-joker: #39FF14;
 }
@@ -15,11 +16,11 @@
     color: #ffffff;
     scrollbar-width: thin;
     scrollbar-color: #FFD700 #000;
-    cursor: url('/assets/images/batman-cursor.png') 16 12, auto;
+    cursor: url('./assets/images/batman-cursor.png') 16 12, auto;
   }
 
   * {
-    cursor: url('/assets/images/batman-cursor.png') 16 12, auto !important;
+    cursor: url('./assets/images/batman-cursor.png') 16 12, auto !important;
   }
 
   body {

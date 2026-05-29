@@ -26,7 +26,7 @@ export default function MissionTimer({ timeLeft, isPaused }: MissionTimerProps) 
         
         <div className="relative z-10">
           <div className={`text-[6px] md:text-[7px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-1 opacity-50 font-mono ${isUrgent ? 'animate-pulse' : ''}`}>
-            {isUrgent ? 'COLLASSO_SISTEMA' : 'STATO_MISSIONE'}
+            {isUrgent ? 'DETONAZIONE IMMINENTE' : 'DETONAZIONE IN'}
           </div>
           <div className={`text-xl md:text-3xl font-black tabular-nums tracking-tighter ${isUrgent ? 'camera-shake' : ''}`}>
             {formattedTime}

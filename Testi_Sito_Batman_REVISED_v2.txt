@@ -1,0 +1,362 @@
+BATMAN 87th ANNIVERSARY STATUE
+Inventario Completo dei Testi del Sito Web
+Generato il 22/05/2026
+
+I testi sono elencati in ordine di apparizione, schermata per schermata.
+
+
+SCHERMATA 0  NAVBAR (ELEMENTO PERSISTENTE)
+────────────────────────────────────────────────────────────────────────────────
+La Navbar appare in quasi tutte le schermate. Contiene controlli funzionali senza testi fissi visibili, ad eccezione del badge indizi e del timer.
+  [Badge Indizi (visibile durante fasi batcomputer / armeria / batmobile)]
+Indizi trovati: X / 5  (X = numero completati)
+  [Timer (visibile durante missione attiva)]
+MM:SS  (conto alla rovescia della missione)
+
+
+SCHERMATA 1  INTRO — BRIEFING DEL JOKER
+────────────────────────────────────────────────────────────────────────────────
+Sequenza di testi che appaiono uno alla volta, con effetti glitch e typing.
+  [Fase iniziale (glitch)]
+SEGNALE_INTERCETTATO...
+  [HUD in alto a sinistra]
+SIS_BAT_V9.0 // MODALITÀ_BRIEFING
+  [Testo narrativo — Messaggio 1 (h2 + accento)]
+Batman...  (titolo grande (glitch))
+Ho lasciato qualcosa per te nella tua caverna oscura...  (testo evidenziato in verde Joker)
+  [Testo narrativo — Messaggio 2]
+Nelle profondità della Batcaverna
+giace qualcosa destinato a te.
+  [Testo narrativo — Messaggio 3]
+Ma non illuderti...
+questo omaggio nasconde una carica esplosiva.
+  [Testo narrativo — Messaggio 4]
+Risolvi tutti e cinque gli enigmi
+prima che il tempo ti tradisca...
+  [Testo narrativo — Messaggio 5]
+...o Gotham intera
+tremerà sotto le macerie.
+  [Etichetta timer — fase finale]
+TEMPO_ALLA_DETONAZIONE
+03:00  (display cifre grandi in rosso)
+  [Pulsante principale — step finale]
+AVVIA LA MISSIONE
+  [HUD in basso a destra (easter egg / skip)]
+SABOTAGGIO_JOKER_ATTIVO // SALTA_MISSIONE  (click → salta la missione)
+
+
+SCHERMATA 2  BATCOMPUTER 360° — RICERCA INDIZI
+────────────────────────────────────────────────────────────────────────────────
+Panorama interattivo 360°. L'utente trova 2 carte-indizio cliccando sulle icone pulsanti.
+  [HUD in basso a sinistra]
+Batcaverna // Zona Batcomputer
+Indizi: X / 2  (X = completati in questa zona)
+  [Schermata di caricamento texture]
+Sincronizzazione Zona...  (indicatore di caricamento)
+  [Carta Indizio 1 — Enigma (JokerCard)]
+Non è un uomo, non è un mostro, non è un re… eppure tutta Gotham trattiene il fiato quando compare nel cielo notturno.
+Opzioni: Joker | Batsegnale | Pinguino | Arkham  (risposta corretta: Batsegnale)
+  [Carta Indizio 2 — Enigma (JokerCard)]
+Porto un sorriso eterno, ma non ho mai conosciuto la gioia. Più rido… più Gotham brucia.
+Opzioni: Due Facce | Robin | Joker | Enigmista  (risposta corretta: Joker)
+
+
+SCHERMATA 3  VIDEO TRANSIZIONE 1 — BATCOMPUTER → ARMERIA
+────────────────────────────────────────────────────────────────────────────────
+Video cinematografico che copre l'intera schermata durante lo spostamento.
+  [Etichetta sovrimpressione video]
+SPOSTAMENTO: ZONA ARMERIA
+
+
+SCHERMATA 4  ARMERIA 360° — RICERCA INDIZIO
+────────────────────────────────────────────────────────────────────────────────
+Panorama interattivo 360°. 1 carta-indizio da trovare.
+  [HUD in basso a sinistra]
+Area Armeria
+Indizi: X / 1
+  [Carta Indizio 3 — Enigma (JokerCard)]
+Non ho poteri sovrumani, eppure i criminali tremano al mio nome. Le tenebre sono il mio dominio.
+Opzioni: Superman | Batman | Bane | Flash  (risposta corretta: Batman)
+
+
+SCHERMATA 5  VIDEO TRANSIZIONE 2 — ARMERIA → BATMOBILE
+────────────────────────────────────────────────────────────────────────────────
+  [Etichetta sovrimpressione video]
+SPOSTAMENTO: ZONA BATMOBILE
+
+
+SCHERMATA 6  BATMOBILE 360° — RICERCA INDIZI
+────────────────────────────────────────────────────────────────────────────────
+Panorama interattivo 360°. 2 carte-indizio da trovare.
+  [HUD in basso a sinistra]
+Area Batmobile
+Indizi: X / 2
+  [Carta Indizio 4 — Enigma (JokerCard)]
+DIVORO L'ASFALTO DI GOTHAM A VELOCITÀ IMPOSSIBILI. LASCIO SOLO FUMO E TERRORE. COSA SONO?
+Opzioni: Batwing | Batmobile | Joker Van | Treno di Gotham  (risposta corretta: Batmobile)
+  [Carta Indizio 5 — Enigma (JokerCard)]
+RUGGIO NELL’OSCURITÀ DI GOTHAM, IL CUORE PULSANTE DELLA MACCHINA DEL CAVALIERE. COSA SONO?
+Opzioni: Reattore | Turbina | Pistone  (risposta corretta: Reattore)
+
+
+SCHERMATA 7  OVERLAY BONUS TEMPO (CONDIZIONALE)
+────────────────────────────────────────────────────────────────────────────────
+Appare brevemente se l'utente risolve i primi 2 indizi entro 45 secondi.
+  [Etichetta superiore]
+RIFLESSI DA CAVALIERE OSCURO
+  [Testo principale]
++60 SECONDI DI BONUS TEMPO
+
+
+SCHERMATA 8  BREATHER — BOMBA DISINNESCATA (SCHERMO NERO)
+────────────────────────────────────────────────────────────────────────────────
+Schermata nera di 4 secondi con testo pulsante. Appare automaticamente dopo il completamento.
+  [Riga 1 (verde, grande)]
+NEUTRALIZZAZIONE COMPLETATA… MINACCIA ELIMINATA.
+  [Riga 2 (bianco/grigio, piccolo)]
+RIPRISTINO PROTOCOLLI WAYNE TECH IN CORSO…
+
+
+SCHERMATA 9  FINAL REVEAL — ANALISI POST-MISSIONE
+────────────────────────────────────────────────────────────────────────────────
+Schermata di congratulazioni con classifica agenti e pulsante verso lo Showreel.
+  [Etichetta superiore (HUD)]
+Wayne Tech // Analisi Post-Missione
+  [Titolo principale (H1)]
+BOMBA
+DISINNESCATA  (testo in oro)
+  [Citazione del Joker]
+“Complimenti, Bats… Per una volta non era mia intenzione farti saltare in aria. Goditi pure la tua preziosa reliquia — te la sei guadagnata.”
+  [Sezione tempo (se > 0)]
+Tempo di Completamento  (etichetta)
+M:SS  (valore numerico del tempo impiegato)
+  [Badge speedrun (se tempo < 90s)]
+★ VELOCITÀ LEGGENDARIA: SCONTO 15% SBLOCCATO
+  [Link copia risultato]
+Copia il Risultato & Condividi
+Link Copiato!  (stato dopo il click)
+  [Pulsante CTA principale]
+Scopri la Statua
+  [Classifica — intestazione]
+Classifica Agenti
+Top 10 — Rete Wayne
+  [Classifica — voci (dati fittizi)]
+Agente 009  →  0:42
+Agente 003  →  0:54
+Agente 012  →  1:05
+Agente 007  →  1:12
+Agente 015  →  1:21
+Agente 004  →  1:30
+Agente 008  →  1:45
+Agente 011  →  2:02
+Agente 002  →  2:15
+Agente 014  →  2:38
+TU (AGENTE)  →  [tuo tempo]  (riga evidenziata in oro quando l'utente ha un punteggio)
+
+
+SCHERMATA 10  SHOWREEL — PRODOTTO IN EVIDENZA
+────────────────────────────────────────────────────────────────────────────────
+Sezione con animazione guidata dallo scorrimento (800 fotogrammi della statua) e testi che appaiono a cadenza ritmica.
+  [HUD in alto a sinistra]
+ID: B-KNIGHT-87
+SCANSIONE: ATTIVA
+  [HUD in alto a destra]
+COORD: 40.712 N
+LONG: 74.006 O
+  [Blocco A (scorrimento 10%-25%) — Titolo + sottotitolo]
+SCULTURA DI PRECISIONE  (H2 grande in oro con effetto glitch)
+Ogni ombra di Gotham scolpita con ossessione
+  [Blocco B (scorrimento 30%-45%)]
+MATERIALI D'ELITE
+Finitura da pezzo da museo, non da scaffale
+  [Blocco C (scorrimento 50%-65%)]
+EDIZIONE LIMITATA
+Solo 500 esemplari al mondo. Il tuo porta un numero.
+  [Blocco D (scorrimento 70%-90%)]
+PRESENZA LEGGENDARIA
+Non arredamento. Una presenza.
+  [Pulsante CTA fisso in basso]
+PREORDINA IL CAVALIERE
+  [Schermata di caricamento Vetrina]
+CARICAMENTO_DATI  (barra di avanzamento)
+  [— Sezione Prezzi (sotto la Vetrina) —]
+  [Testo di sfondo decorativo (molto trasparente)]
+IL CAVALIERE OSCURO
+  [Etichetta terminale]
+Accesso_Terminale // Autorizzato // RADICE_GOTHAM
+  [Titolo H2]
+L'EREDITÀ
+È TUA  (outline dorato)
+  [Sottotitolo]
+Non è una statua. È un simbolo forgiato nell’oscurità — il giuramento di un uomo che ha scelto di diventare leggenda.
+500 esemplari. Nessuna ristampa. Nessun secondo giro. Assicurati il tuo ora.
+  [Speedrun discount (condizionale — solo se sbloccato)]
+IMPRESA SBLOCCATA
+Hai la velocità del Cavaliere Oscuro.
+Codice: SPEEDRUN15 (-15%)
+  [Pulsante CTA Pricing]
+PREORDINA IL CAVALIERE
+  [Dati HUD in basso]
+UNITÀ  →  87/500
+STATO  →  ULTIMA_DISPONIBILITÀ
+CERT.  →  AUTENTICO
+PREZZO  →  STIMA Q4
+
+
+SCHERMATA 11  CHECKOUT — PROTOCOLLO DI ACQUISIZIONE
+────────────────────────────────────────────────────────────────────────────────
+Pagina di acquisto con form, riepilogo ordine e footer.
+  [Distintivo superiore]
+Transazione Sicura // Protocollo 0800
+  [Titolo H1]
+Protocollo di Acquisizione
+  [Sottotitolo sicurezza]
+Connessione crittografata end-to-end // RSA_ATTIVO
+  [Sezione 1 — Dati Personali e Contatto]
+1. Dati Personali e Contatto  (titolo sezione)
+Nome e Cognome  (etichetta campo)
+BRUCE WAYNE  (testo segnaposto)
+Indirizzo Email  (etichetta campo)
+OPERATIVE@NETWORK.COM  (testo segnaposto)
+Numero di Telefono  (etichetta campo)
++39 000 0000000  (testo segnaposto)
+  [Sezione 2 — Dati di Spedizione]
+2. Dati di Spedizione  (titolo sezione)
+Via / Piazza  (etichetta campo)
+1007 MOUNTAIN DRIVE  (testo segnaposto)
+N. Civico  (etichetta campo)
+12  (testo segnaposto)
+CAP  (etichetta campo)
+12345  (testo segnaposto)
+Città  (etichetta campo)
+GOTHAM  (testo segnaposto)
+Provincia  (etichetta campo)
+GT  (testo segnaposto)
+Nazione  (etichetta campo)
+STATI UNITI  (testo segnaposto)
+Indirizzo di fatturazione diverso da quello di spedizione  (etichetta casella)
+Indirizzo di Fatturazione  (etichetta campo condizionale)
+INSERISCI INDIRIZZO COMPLETO  (segnaposto condizionale)
+  [Sezione 3 — Dati di Pagamento]
+3. Dati di Pagamento  (titolo sezione)
+Numero Carta  (etichetta campo)
+0000 0000 0000 0000  (testo segnaposto)
+Data di Scadenza  (etichetta campo)
+MM/AA  (testo segnaposto)
+CVV/CVC  (etichetta campo)
+000  (testo segnaposto)
+Nome Intestatario  (etichetta campo)
+BRUCE WAYNE  (testo segnaposto)
+  [Pulsante submit]
+Completa Acquisto  (stato: modulo valido)
+Inserisci tutti i dati per procedere  (stato: modulo non valido)
+  [Avviso form incompleto]
+Protocollo in attesa: dati di missione incompleti
+  [Riepilogo Ordine — colonna destra]
+Riepilogo Ordine  (titolo)
+Batman 87th Anniversary — Statua in Edizione Limitata  (nome prodotto)
+SCALA: 1/4 | MAT: RESINA  (specifiche)
+€700,00 x [quantità]
+Subtotale
+Sconto Speedrunner (15%)  (condizionale se promo attiva)
+Spedizione Tattica
+Codice Promozionale  (label campo promo)
+SPEEDRUN15  (placeholder campo promo)
+APPLICA  (pulsante)
+Codice promozionale non valido  (errore promo)
+Sconto 15% applicato con successo.  (conferma promo)
+Totale
+€[importo],00  (totale dinamico)
+Crittografia a 256-bit attiva. Limite di 2 unità per ordine — protocollo di sicurezza Wayne.
+  [Schermata di caricamento ordine]
+Protocollo di Acquisizione in Corso
+Inizializzazione server Wayne…
+Cifratura dati transazione…
+Verifica disponibilità unità riservata…
+  [Footer Checkout]
+© Wayne Enterprises Defense Industries. Tutti i diritti riservati.
+Protocolli di sicurezza  (link footer)
+Politica di reso  (link footer)
+Crittografia dei dati  (link footer)
+Chat Live  (link footer)
+
+
+SCHERMATA 12  THANK YOU PAGE — MISSIONE COMPLETATA
+────────────────────────────────────────────────────────────────────────────────
+Pagina post-acquisto con riepilogo ordine e pulsanti di azione.
+  [Distintivo superiore]
+Trasmissione Cifrata // Rete Wayne
+  [Titolo H1]
+Missione Completata.
+  [Sottotitolo]
+Il tuo preordine della Batman 87th Anniversary Limited Edition è stato registrato con successo nei database Wayne.
+  [Card ordine — ID Transazione]
+ID Transazione  (etichetta)
+ORD-BW-XXXX  (valore generato casualmente)
+  [Card ordine — Stato]
+Stato Protocollo  (etichetta)
+PREORDINE CONFERMATO
+  [Card ordine — Dettagli]
+Prodotto  →  Batman 87th Anniversary
+Quantità  →  x[N]
+Data  →  GG/MM/AAAA
+Spedizione  →  Prevista inizio Q4
+  [Pulsante 1]
+Torna alla Batcaverna →
+  [Pulsante 2]
+Rivedi il Cavaliere
+
+
+SCHERMATA 13  OVERLAY — MISSIONE FALLITA (TIMER SCADUTO)
+────────────────────────────────────────────────────────────────────────────────
+Appare quando il timer arriva a zero. Copre l'intera schermata con effetto esplosione.
+  [Titolo principale (rosso, glitch)]
+MISSIONE FALLITA
+  [Testo descrittivo]
+Gotham ha pagato il prezzo. La Batcaverna non esiste più.
+  [Pulsante principale]
+Riprendi la Missione
+  [Link secondario]
+Salta la Missione
+  [Conto alla rovescia]
+Riavvio automatico tra [N] secondi…
+
+
+SCHERMATA 14  OVERLAY — MISSIONE IN PAUSA
+────────────────────────────────────────────────────────────────────────────────
+Appare quando l'utente clicca il pulsante pausa nella Navbar (durante le fasi attive).
+  [Titolo principale (glitch)]
+MISSIONE IN PAUSA
+  [Sottotitolo]
+Batcomputer in Standby // In attesa di riattivazione
+
+
+SCHERMATA 15  OVERLAY — AVVISO DISPOSITIVO MOBILE
+────────────────────────────────────────────────────────────────────────────────
+Appare solo su schermi < 768px di larghezza, all'apertura del sito.
+  [Label tecnico superiore]
+SISTEMA WAYNE TECH // AVVISO_MOBILE
+  [Titolo H2]
+DISPOSITIVO NON COMPATIBILE
+  [Testo esplicativo]
+L'esplorazione immersiva a 360° della Batcaverna richiede un monitor desktop e un mouse. Solo così potrai individuare tutti gli indizi del Joker.
+  [Pulsante 1 (principale, dorato)]
+Vai direttamente alla Statua & Preordina
+  [Pulsante 2 (secondario)]
+Continua l’Esplorazione a 360°
+
+
+SCHERMATA 16  PULSANTE DEV — SALTA FASE (ANGOLO IN BASSO A DESTRA)
+────────────────────────────────────────────────────────────────────────────────
+Presente in tutte le fasi durante lo sviluppo. Testo dinamico in base alla fase corrente.
+  [Label pulsante (varia per fase)]
+⚡ Salta a: Batcomputer 360°  (da fase: intro)
+⚡ Salta a: Transizione 1 (Video)  (da fase: batcomputer)
+⚡ Salta a: Armeria 360°  (da fase: transition1)
+⚡ Salta a: Transizione 2 (Video)  (da fase: armeria)
+⚡ Salta a: Batmobile 360°  (da fase: transition2)
+⚡ Salta a: Vittoria  (da fase: batmobile / breather)
+⚡ Salta a: Vetrina Prodotto  (da fase: reveal)
+⚡ Salta a: Acquisto  (da fase: showreel)
+⚡ Salta a: Grazie  (da fase: checkout)
+⚡ Salta a: Introduzione  (da fase: thankyou)

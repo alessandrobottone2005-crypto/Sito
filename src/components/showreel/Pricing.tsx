@@ -1,6 +1,6 @@
 import { motion } from "motion/react";
-import BatmanText from "./BatmanText";
-import BatmanButton from "./BatmanButton";
+import BatmanText from "../ui/BatmanText";
+import BatmanButton from "../ui/BatmanButton";
 
 export default function Pricing({ speedrunUnlocked, onPreorder }: { speedrunUnlocked: boolean; onPreorder: () => void }) {
   return (
@@ -28,7 +28,7 @@ export default function Pricing({ speedrunUnlocked, onPreorder }: { speedrunUnlo
         <div className="text-center mb-16 relative">
           <BatmanText delay={0.1}>
             <span className="text-gold text-[10px] font-mono mb-4 tracking-[1em] uppercase block flicker">
-              Accesso_Terminale // Approvato // GOTHAM_ROOT
+              Accesso_Terminale // Autorizzato // RADICE_GOTHAM
             </span>
           </BatmanText>
           
@@ -40,8 +40,8 @@ export default function Pricing({ speedrunUnlocked, onPreorder }: { speedrunUnlo
           
           <BatmanText delay={0.3}>
             <p className="max-w-xl mx-auto text-white/80 text-sm md:text-base font-medium tracking-wide uppercase leading-relaxed px-4 text-jump">
-              Non è solo una statua. È il simbolo di una città che non si arrende mai. <br />
-              Assicurati un pezzo di storia di Gotham.
+              Non è una statua. È un simbolo forgiato nell’oscurità — il giuramento di un uomo che ha scelto di diventare leggenda. <br />
+              500 esemplari. Nessuna ristampa. Nessun secondo giro. Assicurati il tuo ora.
             </p>
           </BatmanText>
         </div>
@@ -59,10 +59,10 @@ export default function Pricing({ speedrunUnlocked, onPreorder }: { speedrunUnlo
             <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r border-gold" />
 
             <div className="text-[9px] font-mono text-gold tracking-[0.3em] uppercase font-bold mb-1">
-              RISULTATO STRAORDINARIO SBLOCCATO
+              IMPRESA SBLOCCATA
             </div>
             <div className="text-white text-base font-black tracking-wider uppercase mb-1">
-              Premio Speedrunner Sbloccato!
+              Hai la velocità del Cavaliere Oscuro.
             </div>
             <div className="text-gold font-mono text-xs tracking-wider uppercase font-bold">
               Codice: <span className="underline select-all text-white font-mono font-black text-sm">SPEEDRUN15</span> (-15%)
@@ -85,7 +85,7 @@ export default function Pricing({ speedrunUnlocked, onPreorder }: { speedrunUnlo
         <div className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-12 text-center opacity-60">
           {[
             { label: "UNITÀ", value: "87/500", delay: 0.4 },
-            { label: "STATO", value: "ULTIMA_CHIAMATA", delay: 0.5 },
+            { label: "STATO", value: "ULTIMA_DISPONIBILITÀ", delay: 0.5 },
             { label: "CERT.", value: "AUTENTICO", delay: 0.6 },
             { label: "PREZZO", value: "STIMA Q4", delay: 0.7 }
           ].map((item) => (
