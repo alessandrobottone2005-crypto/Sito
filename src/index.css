@@ -858,3 +858,137 @@
   font-weight: 400;
   letter-spacing: 0.05em;
 }
+
+/* ══════════════════════════════════════════════════════════════════
+   SHOWREEL TECH BACKGROUND — Circuit / Hex / Data stream
+══════════════════════════════════════════════════════════════════ */
+
+/* Circuit pulse traveling along a wire */
+@keyframes circuit-pulse {
+  0% { stroke-dashoffset: 1000; opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+/* Hex grid shimmer */
+@keyframes hex-shimmer {
+  0%, 100% { opacity: 0.03; }
+  50% { opacity: 0.08; }
+}
+
+.hex-grid {
+  animation: hex-shimmer 6s ease-in-out infinite;
+}
+
+/* Data stream drop */
+@keyframes data-drop {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 0.5; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   3D LAYER CROSSING — Text depth transitions
+══════════════════════════════════════════════════════════════════ */
+
+/* Text entering from "behind" the z-plane */
+@keyframes depth-enter-back {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(20px) perspective(800px) translateZ(-80px);
+    filter: blur(6px) brightness(0.6);
+  }
+  100% {
+    opacity: 0.55;
+    transform: scale(0.82) translateY(0px) perspective(800px) translateZ(-40px);
+    filter: blur(0px) brightness(0.85);
+  }
+}
+
+/* Text punching through the plane to the front */
+@keyframes depth-cross {
+  0% {
+    opacity: 0.55;
+    transform: scale(0.82) perspective(800px) translateZ(-40px);
+    filter: brightness(0.85);
+  }
+  40% {
+    opacity: 0.9;
+    transform: scale(1.06) perspective(800px) translateZ(20px);
+    filter: brightness(1.4) blur(1px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1.0) perspective(800px) translateZ(0px);
+    filter: brightness(1) blur(0px);
+  }
+}
+
+/* Text exiting forward */
+@keyframes depth-exit-front {
+  0% {
+    opacity: 1;
+    transform: scale(1.0);
+    filter: brightness(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.88) translateY(10px);
+    filter: brightness(0.5) blur(4px);
+  }
+}
+
+/* Energy burst at crossing point */
+@keyframes depth-burst {
+  0% { opacity: 0; transform: scale(0.5); }
+  30% { opacity: 0.7; transform: scale(1.5); }
+  100% { opacity: 0; transform: scale(3); }
+}
+
+.depth-burst {
+  animation: depth-burst 0.5s ease-out forwards;
+}
+
+/* Gold line horizontal sweep for reveal moments */
+@keyframes gold-sweep {
+  0% { transform: scaleX(0); opacity: 0; transform-origin: left; }
+  50% { opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0.6; transform-origin: left; }
+}
+
+.gold-sweep {
+  animation: gold-sweep 0.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Neon text glow — used on front-layer beats */
+@keyframes neon-gold-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 10px rgba(255, 215, 0, 0.4),
+      0 0 30px rgba(255, 215, 0, 0.2),
+      0 0 60px rgba(255, 215, 0, 0.1);
+  }
+  50% {
+    text-shadow:
+      0 0 20px rgba(255, 215, 0, 0.8),
+      0 0 50px rgba(255, 215, 0, 0.4),
+      0 0 100px rgba(255, 215, 0, 0.2),
+      0 0 150px rgba(255, 215, 0, 0.1);
+  }
+}
+
+.neon-gold {
+  animation: neon-gold-pulse 2.5s ease-in-out infinite;
+}
+
+/* Z-depth badge fade in */
+@keyframes zdepth-appear {
+  0% { opacity: 0; transform: translateX(-8px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+.zdepth-badge {
+  animation: zdepth-appear 0.4s ease-out forwards;
+}

@@ -516,7 +516,7 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
       loader.load(urls[idx],
         (tex) => {
           if (!active) { tex.dispose(); return; }
-          console.log(`[Panorama] ✅ Texture loaded for ${scene}: ${urls[idx]}, size: ${tex.image?.width}x${tex.image?.height}`);
+          console.log(`[Panorama] SUCCESS: Texture loaded for ${scene}: ${urls[idx]}, size: ${tex.image?.width}x${tex.image?.height}`);
           tex.colorSpace = THREE.SRGBColorSpace;
           myTex = tex;
           setTexture(tex);
@@ -528,7 +528,7 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
           }
         },
         (err) => {
-          console.error(`[Panorama] ❌ Failed to load ${urls[idx]}:`, err);
+          console.error(`[Panorama] ERROR: Failed to load ${urls[idx]}:`, err);
           tryLoad(idx + 1);
         }
       );

@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { useState, useMemo } from "react";
+import TechBackground from "../ui/TechBackground";
 
 interface FinalRevealProps {
   timeTaken: number;
@@ -44,47 +45,35 @@ export default function FinalReveal({ timeTaken, onComplete, isPaused }: FinalRe
 
   return (
     <div className="fixed inset-0 z-[200] bg-black flex items-center justify-center overflow-hidden">
-      {/* Background: Batcomputer Area */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 0.3 }}
-        className="absolute inset-0 z-0"
-      >
-        <img 
-          src="./assets/textures/BatCaverna360_BatComputerArea.png" 
-          alt="Batcomputer" 
-          className="w-full h-full object-cover filter grayscale contrast-125"
-        />
-        <div className="absolute inset-0 bg-black/60" />
-      </motion.div>
+      <TechBackground />
 
       <div className="relative z-10 w-full max-w-5xl mx-auto px-6 py-12 flex flex-col items-center max-h-screen overflow-y-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="w-full grid md:grid-cols-2 gap-12 items-center"
+          className="w-full flex flex-col items-center gap-12 text-center"
         >
-          {/* Left Column: Congratulations */}
-          <div className="flex flex-col items-center md:items-start text-center md:text-left space-y-6">
-            <span className="text-gold text-[9px] font-mono tracking-[0.4em] uppercase block">
+          {/* Top: Congratulations */}
+          <div className="flex flex-col items-center text-center space-y-6 w-full">
+            <span className="text-gold text-sm font-mono tracking-[0.4em] uppercase block">
               Wayne Tech // Analisi Post-Missione
             </span>
-            <h1 className="text-4xl md:text-6xl font-black italic text-white tracking-tighter uppercase glitch-med leading-none">
+            <h1 className="text-6xl md:text-8xl font-black italic text-white tracking-tighter uppercase glitch-med leading-none">
               BOMBA <br />
               <span className="text-gold">DISINNESCATA</span>
             </h1>
-            <p className="text-white/80 text-sm md:text-base leading-relaxed max-w-md font-medium">
+            <p className="text-white/80 text-lg md:text-2xl leading-relaxed max-w-3xl font-medium">
               “Complimenti, Bats… Per una volta non era mia intenzione farti saltare in aria. Goditi pure la tua preziosa reliquia — te la sei guadagnata.”
             </p>
             
             {timeTaken > 0 && (
-              <div className="bg-gold/5 border border-gold/20 p-4 w-full max-w-md font-mono text-left space-y-2">
-                <div className="text-[9px] text-gold/60 uppercase tracking-widest">Tempo di Completamento</div>
-                <div className="text-2xl font-black text-white">{formatSeconds(timeTaken)}</div>
+              <div className="bg-gold/5 border border-gold/20 p-6 w-full max-w-lg font-mono text-center space-y-3">
+                <div className="text-xs text-gold/60 uppercase tracking-widest">Tempo di Completamento</div>
+                <div className="text-4xl md:text-5xl font-black text-white">{formatSeconds(timeTaken)}</div>
                 {timeTaken < 90 && (
                   <div className="text-[9px] text-green-400 uppercase tracking-wider font-bold animate-pulse">
-                    ★ VELOCITÀ LEGGENDARIA: SCONTO 15% SBLOCCATO
+                    VELOCITÀ LEGGENDARIA: SCONTO 15% SBLOCCATO
                   </div>
                 )}
                 <button
@@ -98,17 +87,16 @@ export default function FinalReveal({ timeTaken, onComplete, isPaused }: FinalRe
 
             <button
               onClick={onComplete}
-              className="mt-6 px-8 py-4 bg-gold text-black font-black uppercase tracking-widest text-xs hover:bg-white hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all pointer-events-auto"
-            >
+              className="mt-6 px-12 py-6 bg-gold text-black font-black uppercase tracking-widest text-base md:text-xl hover:bg-white hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all pointer-events-auto">
               Scopri la Statua
             </button>
           </div>
 
-          {/* Right Column: Leaderboard */}
-          <div className="border border-white/10 bg-black/60 p-6 md:p-8 backdrop-blur-md rounded-sm w-full flex flex-col gap-4 max-h-[450px] overflow-y-auto pointer-events-auto">
+          {/* Leaderboard below */}
+          <div className="border border-white/10 bg-black/60 p-6 md:p-10 backdrop-blur-md rounded-sm w-full max-w-2xl flex flex-col gap-4 max-h-[450px] overflow-y-auto pointer-events-auto">
             <div className="flex justify-between items-center border-b border-white/10 pb-3">
-              <span className="text-[10px] font-mono text-gold tracking-widest uppercase font-bold">Classifica Agenti</span>
-              <span className="text-[8px] font-mono text-white/40 uppercase">Top 10 — Rete Wayne</span>
+              <span className="text-sm font-mono text-gold tracking-widest uppercase font-bold">Classifica Agenti</span>
+              <span className="text-xs font-mono text-white/40 uppercase">Top 10 — Rete Wayne</span>
             </div>
 
             <div className="space-y-2">

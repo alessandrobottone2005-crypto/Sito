@@ -1,12 +1,14 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
+import TechBackground from "../ui/TechBackground";
+import { BatcavernAudio } from "../../lib/audioManager";
 
 interface IntroScreenProps {
   onBegin: () => void;
 }
 
 const BRIEFING_TEXTS = [
-  { text: "Batman...", accent: "Ho lasciato un regalino nella tua preziosa caverna..." },
+  { text: "Batman 2 ...", accent: "Ho lasciato un regalino nella tua preziosa caverna..." },
   { text: "Non è il solito giocattolo,", accent: "ma qualcosa che farà il botto." },
   { text: "Trova i miei 5 indizi.", accent: "Dimostrami che il Grande Pipistrello sa ancora giocare." },
   { text: "Il tempo scorre.", accent: "Tic tac, Batsy..." },
@@ -18,28 +20,39 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
   const [isHacked, setIsHacked] = useState(false);
 
   useEffect(() => {
+    // ── AUDIO ────────────────────────────────────────────────────────────
+    // La musica parte esattamente quando compare il briefing del Joker.
+    // Il fade-in di 2 secondi è sincronizzato con l'animazione del testo.
+    // BatcavernAudio.start() è idempotente: sicuro da chiamare più volte.
+    const audioTimer = setTimeout(() => {
+      BatcavernAudio.start(2000);
+    }, 1500); // coincide con setIsHacked(true)
+
     // Initial glitch sequence
     const t1 = setTimeout(() => setIsHacked(true), 1500);
-    
+
     // Text sequence
     const timers: NodeJS.Timeout[] = [];
     for (let i = 0; i < BRIEFING_TEXTS.length; i++) {
       timers.push(setTimeout(() => setStep(i + 1), 2000 + (i * 3000)));
     }
-    
+
     // Final step
     timers.push(setTimeout(() => setStep(6), 2000 + (BRIEFING_TEXTS.length * 3000)));
 
     return () => {
+      clearTimeout(audioTimer);
       clearTimeout(t1);
       timers.forEach(clearTimeout);
+      // NON fermiamo la musica qui: deve sopravvivere alla transizione
     };
   }, []);
 
   return (
     <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center overflow-hidden">
+      <TechBackground theme="joker" />
       {/* Background: CRT Glitch / Batcomputer */}
-      <div className="absolute inset-0 opacity-20 pointer-events-none">
+      <div className="absolute inset-0 opacity-20 pointer-events-none z-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(57,255,20,0.05)_0%,transparent_70%)]" />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" />
         <div className="absolute inset-0 scan-sweep-line opacity-30" />
@@ -63,36 +76,26 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
             key="briefing-content"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="relative z-10 w-full max-w-4xl px-6 flex flex-col items-center text-center"
+            className="relative z-10 w-full max-w-5xl px-6 flex flex-col items-center text-center"
           >
-            {/* Joker Symbol */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 1.5, filter: "blur(20px)" }}
-              animate={{ opacity: 0.15, scale: 1, filter: "blur(0px)" }}
-              transition={{ duration: 1 }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-            >
-              <svg width="600" height="300" viewBox="0 0 120 60" fill="none" className="text-joker opacity-20">
-                <path d="M10 20C30 45 90 45 110 20C90 55 30 55 10 20Z" fill="currentColor" />
-              </svg>
-            </motion.div>
+
 
             {/* Narrative Texts */}
-            <div className="min-h-[200px] flex items-center justify-center mb-12">
+            <div className="min-h-[260px] flex items-center justify-center mb-14">
               <AnimatePresence mode="wait">
                 {step >= 1 && step <= 5 && (
                   <motion.div
                     key={step}
-                    initial={{ opacity: 0, y: 20, filter: "blur(10px)" }}
+                    initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    exit={{ opacity: 0, y: -20, filter: "blur(10px)" }}
+                    exit={{ opacity: 0, y: -24, filter: "blur(10px)" }}
                     transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="flex flex-col items-center"
+                    className="flex flex-col items-center gap-6"
                   >
-                    <h2 className="cinematic-title text-white text-3xl md:text-6xl glitch-slow px-4 mb-3">
+                    <h2 className="cinematic-title text-white text-5xl md:text-8xl glitch-slow px-4 font-black tracking-tight leading-none">
                       {BRIEFING_TEXTS[step - 1].text}
                     </h2>
-                    <p className="cinematic-accent text-joker text-xs md:text-xl flicker-fast px-4">
+                    <p className="cinematic-accent text-joker text-lg md:text-3xl flicker-fast px-4 font-medium tracking-wide max-w-2xl">
                       {BRIEFING_TEXTS[step - 1].accent}
                     </p>
                   </motion.div>
@@ -108,24 +111,40 @@ export default function IntroScreen({ onBegin }: IntroScreenProps) {
                 className="flex flex-col items-center"
               >
                 {/* Timer Preview */}
-                <div className="mb-12 relative group">
-                   <div className="cinematic-label text-[9px] text-red-500/60 mb-4 text-center">
-                     TEMPO_ALLA_DETONAZIONE
+                <div className="mb-14 relative group w-[380px] md:w-[620px]">
+                   <div className="absolute inset-0 pointer-events-none flex items-center justify-center w-full h-full z-0 opacity-40">
+                     <svg viewBox="0 0 200 80" className="w-full h-full drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]" preserveAspectRatio="none">
+                       <path 
+                         d="M 20 5 L 180 5 L 195 20 L 195 60 L 180 75 L 20 75 L 5 60 L 5 20 Z" 
+                         fill="rgba(20,0,0,0.8)" 
+                         stroke="#ef4444" 
+                         strokeWidth="1.5" 
+                       />
+                       <path d="M 5 30 L 5 20 L 15 10" stroke="#ef4444" strokeWidth="3" fill="none" />
+                       <path d="M 195 50 L 195 60 L 185 70" stroke="#ef4444" strokeWidth="3" fill="none" />
+                     </svg>
                    </div>
-                   <div className="cinematic-title text-7xl md:text-8xl text-red-600 tabular-nums drop-shadow-[0_0_30px_rgba(220,38,38,0.6)] camera-shake" style={{ letterSpacing: '-0.02em' }}>
-                     03:00
+                   
+                   <div className="relative z-10 py-8 flex flex-col items-center justify-center overflow-visible">
+                     <div className="cinematic-label text-sm md:text-base text-red-500/80 mb-4 text-center tracking-[0.6em] uppercase animate-pulse">
+                       TEMPO_ALLA_DETONAZIONE
+                     </div>
+                     <div className="text-8xl md:text-[10rem] text-red-600 font-mono font-black drop-shadow-[0_0_40px_rgba(220,38,38,0.8)] camera-shake px-4" style={{ letterSpacing: '0.05em' }}>
+                       03:00
+                     </div>
                    </div>
-                   <div className="absolute -inset-8 border border-red-600/20 animate-pulse" />
-                   <div className="absolute -inset-1 border border-red-600/40 opacity-0 group-hover:opacity-100 transition-opacity" />
+                   
+                   <div className="absolute inset-0 bg-[linear-gradient(rgba(255,0,0,0.1)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none rounded-xl" />
+                   <div className="absolute -inset-4 border border-red-600/10 animate-pulse pointer-events-none" />
                 </div>
 
                 <motion.button
                   onClick={onBegin}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="group relative w-[280px] md:w-[400px] py-5 md:py-6 bg-black border-2 border-gold text-gold rounded-sm overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(250,204,21,0.5)]"
+                  className="group relative w-[320px] md:w-[520px] py-6 md:py-8 bg-black border-2 border-gold text-gold rounded-sm overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(250,204,21,0.5)]"
                 >
-                   <span className="cinematic-label font-['Share_Tech_Mono',monospace] relative z-10 text-[10px] md:text-xs block" style={{ letterSpacing: '0.5em' }}>
+                   <span className="cinematic-label font-['Share_Tech_Mono',monospace] relative z-10 text-sm md:text-lg block" style={{ letterSpacing: '0.5em' }}>
                      ACCETTA LA SFIDA
                    </span>
                   <div className="absolute inset-0 bg-gold opacity-0 group-hover:opacity-10 transition-opacity duration-300" />

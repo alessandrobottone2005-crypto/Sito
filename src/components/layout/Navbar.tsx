@@ -52,13 +52,6 @@ export default function Navbar({
           className="h-8 md:h-10 w-auto object-contain glitch-slow flicker"
         />
 
-        {missionActive && timeLeft !== undefined && (
-          <MissionTimer 
-            timeLeft={timeLeft}
-            isPaused={!!isPaused}
-          />
-        )}
-        
         {completedCount !== undefined && (
           <div className="hidden md:block">
             <ProgressTracker completedCount={completedCount} total={totalClues} />
@@ -66,6 +59,15 @@ export default function Navbar({
         )}
       </div>
 
+      {/* Centered Timer */}
+      {missionActive && timeLeft !== undefined && (
+        <div className="absolute left-1/2 -translate-x-1/2 top-2 md:top-4 pointer-events-auto">
+          <MissionTimer 
+            timeLeft={timeLeft}
+            isPaused={!!isPaused}
+          />
+        </div>
+      )}
 
       <div className="flex items-center gap-4 pointer-events-auto">
         {showBack && (

@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import BatmanText from "../ui/BatmanText";
 import BatmanButton from "../ui/BatmanButton";
 import { CheckCircle2, Package, ShieldCheck, ChevronRight } from "lucide-react";
@@ -17,17 +17,8 @@ export default function ThankYouPage({ onReturnHome, onViewStatue, quantity = 1 
     return d.toLocaleDateString('it-IT', { year: 'numeric', month: '2-digit', day: '2-digit' });
   });
 
-  useEffect(() => {
-    // Sound design di conferma premium
-    const audio = new Audio("./assets/audio/SiglaBatman.wav"); // Fallback to main if no specific success sound
-    audio.currentTime = 0;
-    audio.volume = 0.1;
-    audio.play().catch(() => {});
-
-    return () => {
-      audio.pause();
-    };
-  }, []);
+  // La musica di sottofondo è gestita dal singleton BatcavernAudio
+  // che continua senza interruzioni — nessuna istanza duplicata.
 
   return (
     <motion.div

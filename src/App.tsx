@@ -12,7 +12,7 @@ import type { PanoramaScene } from "./components/cinematic/SharedPanoramaCanvas"
 const CinematicVideoPlayer = lazy(() => import("./components/cinematic/CinematicVideoPlayer"));
 const SharedPanoramaCanvas = lazy(() => import("./components/cinematic/SharedPanoramaCanvas"));
 const BatmanCamera = lazy(() => import("./components/cinematic/BatmanCamera"));
-const Pricing = lazy(() => import("./components/showreel/Pricing"));
+const BatcomputerBootOverlay = lazy(() => import("./components/ui/BatcomputerBootOverlay"));
 const Checkout = lazy(() => import("./components/showreel/Checkout"));
 const FinalReveal = lazy(() => import("./components/showreel/FinalReveal"));
 const ThankYouPage = lazy(() => import("./components/showreel/ThankYouPage"));
@@ -55,6 +55,7 @@ export default function App() {
       setPanoramaSceneInternal(newScene);
     });
   }, []);
+  const [showBootOverlay, setShowBootOverlay] = useState(false);
   // Note: audioRef is now managed by useAudioSystem
 
   // Mobile Detection
@@ -81,14 +82,9 @@ export default function App() {
   const [finalTimeTaken, setFinalTimeTaken] = useState(0);
   const [purchasedQuantity, setPurchasedQuantity] = useState(1);
 
-  // Audio system
-  const {
-    audioRef,
-    playMusic,
-    pauseMusic,
-    fadeOutMusic,
-    fadeInMusic,
-  } = useAudioSystem(isMuted);
+  // Audio system — solo sincronizzazione mute, la riproduzione è gestita
+  // dal singleton BatcavernAudio avviato in IntroScreen.
+  useAudioSystem(isMuted);
 
   // Success Condition
   useEffect(() => {
@@ -126,12 +122,9 @@ export default function App() {
     if (isTransitioning) return;
 
     if (phase === "intro" && newPhase === "batcomputer") {
-      setCompletedCount(0);
-      setTimerResetKey(prev => prev + 1);
-      resetTimer();
-      setShowBonusFeedback(false);
-      setMissionStatus("active");
-      playMusic(20, 0.4);
+      setPhase("batcomputer");
+      setShowBootOverlay(true);
+      return;
     }
 
     if (newPhase === "breather") {
@@ -139,20 +132,16 @@ export default function App() {
       setFinalTimeTaken(0);
       setSpeedrunUnlocked(false);
 
-      // Fade out background music
-      fadeOutMusic();
+      // La musica NON si interrompe — continua in background senza soluzione
+      // di continuità. Il singleton BatcavernAudio gestisce il loop permanente.
       setIsTransitioning(true);
       setTimeout(() => { setPhase("breather"); }, 400);
       setTimeout(() => { setIsTransitioning(false); }, 1000);
 
-      // Silent breather for 4 seconds, then transition to reveal
+      // Breather di 4 secondi, poi transizione a reveal (musica sempre attiva)
       setTimeout(() => {
         setIsTransitioning(true);
-        setTimeout(() => {
-          setPhase("reveal");
-          // Play calm/heroic theme start and fade in
-          fadeInMusic(0.4, 0.05, 100);
-        }, 400);
+        setTimeout(() => { setPhase("reveal"); }, 400);
         setTimeout(() => { setIsTransitioning(false); }, 1000);
       }, 4400);
       return;
@@ -172,10 +161,18 @@ export default function App() {
     resetTimer();
     setShowBonusFeedback(false);
     setSpeedrunUnlocked(false);
-    pauseMusic();
-    if (audioRef.current) {
-      audioRef.current.currentTime = 20;
-    }
+    setShowBootOverlay(false);
+    // La musica continua senza interruzioni anche durante il reset
+  };
+
+  const handleStartMission = () => {
+    setShowBootOverlay(false);
+    setCompletedCount(0);
+    setTimerResetKey(prev => prev + 1);
+    resetTimer();
+    setShowBonusFeedback(false);
+    setMissionStatus("active");
+    // La musica è già in riproduzione dal singleton — nessun restart
   };
 
   const handleSkipPhase = () => {
@@ -273,7 +270,7 @@ export default function App() {
           className="bg-black/60 border border-gold/30 hover:border-gold text-gold/80 hover:text-gold transition-all duration-200 px-3 py-1.5 text-[9px] rounded-sm backdrop-blur-sm focus:outline-none cursor-pointer font-mono tracking-wider"
           title="Salta alla fase successiva (Dev)"
         >
-          ⚡ Salta a: {
+          Salta a: {
             phase === "intro" ? "BatComputer 360" :
             phase === "batcomputer" ? "Transizione 1 (Video)" :
             phase === "transition1" ? "Armeria 360" :
@@ -383,6 +380,13 @@ export default function App() {
           </Suspense>
         )}
 
+        {/* ── BATCOMPUTER BOOT OVERLAY ────────────────────────────────────── */}
+        <AnimatePresence>
+          {phase === "batcomputer" && showBootOverlay && (
+            <BatcomputerBootOverlay onComplete={handleStartMission} />
+          )}
+        </AnimatePresence>
+
         {/* ── TRANSITION VIDEOS (overlay above panorama canvas) ── */}
         <AnimatePresence>
           {phase === "transition1" && (
@@ -468,7 +472,6 @@ export default function App() {
             <div key="showreel" className="relative z-10">
               <Suspense fallback={null}>
                 <BatmanCamera onPreorder={() => changePhase("checkout")} />
-                <Pricing speedrunUnlocked={speedrunUnlocked} onPreorder={() => changePhase("checkout")} />
               </Suspense>
             </div>
           )}
