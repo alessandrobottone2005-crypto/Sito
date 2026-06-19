@@ -1,7 +1,7 @@
 (function() {
   "use strict";
   var __vite_style__ = document.createElement("style");
-  __vite_style__.textContent = `@import "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap";
+  __vite_style__.textContent = `@import "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;700;900&display=swap";
 
 /*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */
 @layer properties {
@@ -84,6 +84,7 @@
     --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
     --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
     --font-mono: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+    --color-red-400: oklch(70.4% .191 22.216);
     --color-red-500: oklch(63.7% .237 25.331);
     --color-red-600: oklch(57.7% .245 27.325);
     --color-red-800: oklch(44.4% .177 26.899);
@@ -101,6 +102,7 @@
     --spacing: .25rem;
     --container-sm: 24rem;
     --container-md: 28rem;
+    --container-lg: 32rem;
     --container-xl: 36rem;
     --container-2xl: 42rem;
     --container-3xl: 48rem;
@@ -138,13 +140,17 @@
     --font-weight-bold: 700;
     --font-weight-black: 900;
     --tracking-tighter: -.05em;
+    --tracking-tight: -.025em;
     --tracking-wide: .025em;
     --tracking-wider: .05em;
     --tracking-widest: .1em;
     --leading-relaxed: 1.625;
-    --radius-sm: .25rem;
+    --radius-sm: 5px;
+    --radius-md: 6px;
     --radius-lg: .5rem;
+    --radius-xl: .75rem;
     --radius-2xl: 1rem;
+    --drop-shadow-lg: 0 4px 4px #00000026;
     --ease-in: cubic-bezier(.4, 0, 1, 1);
     --ease-out: cubic-bezier(0, 0, .2, 1);
     --ease-in-out: cubic-bezier(.4, 0, .2, 1);
@@ -160,7 +166,7 @@
     --default-transition-timing-function: cubic-bezier(.4, 0, .2, 1);
     --default-font-family: var(--font-sans);
     --default-mono-font-family: var(--font-mono);
-    --color-gold: #facc15;
+    --color-gold: gold;
     --color-joker: #39ff14;
   }
 }
@@ -573,6 +579,10 @@
     inset: calc(var(--spacing) * -1);
   }
 
+  .-inset-4 {
+    inset: calc(var(--spacing) * -4);
+  }
+
   .-inset-8 {
     inset: calc(var(--spacing) * -8);
   }
@@ -619,6 +629,10 @@
 
   .top-1\\/4 {
     top: 25%;
+  }
+
+  .top-2 {
+    top: calc(var(--spacing) * 2);
   }
 
   .top-4 {
@@ -805,12 +819,8 @@
     z-index: 40;
   }
 
-  .z-50, .z-\\[50\\] {
+  .z-50 {
     z-index: 50;
-  }
-
-  .z-\\[60\\] {
-    z-index: 60;
   }
 
   .z-\\[100\\] {
@@ -899,6 +909,14 @@
     margin-inline: auto;
   }
 
+  .my-1 {
+    margin-block: calc(var(--spacing) * 1);
+  }
+
+  .my-4 {
+    margin-block: calc(var(--spacing) * 4);
+  }
+
   .my-12 {
     margin-block: calc(var(--spacing) * 12);
   }
@@ -939,6 +957,14 @@
     margin-right: calc(var(--spacing) * 2);
   }
 
+  .mb-0 {
+    margin-bottom: calc(var(--spacing) * 0);
+  }
+
+  .mb-0\\.5 {
+    margin-bottom: calc(var(--spacing) * .5);
+  }
+
   .mb-1 {
     margin-bottom: calc(var(--spacing) * 1);
   }
@@ -969,6 +995,10 @@
 
   .mb-12 {
     margin-bottom: calc(var(--spacing) * 12);
+  }
+
+  .mb-14 {
+    margin-bottom: calc(var(--spacing) * 14);
   }
 
   .mb-16 {
@@ -1103,10 +1133,6 @@
     height: 450px;
   }
 
-  .h-\\[800vh\\] {
-    height: 800vh;
-  }
-
   .h-full {
     height: 100%;
   }
@@ -1115,16 +1141,12 @@
     height: 1px;
   }
 
-  .max-h-\\[450px\\] {
-    max-height: 450px;
-  }
-
   .max-h-screen {
     max-height: 100vh;
   }
 
-  .min-h-\\[200px\\] {
-    min-height: 200px;
+  .min-h-\\[260px\\] {
+    min-height: 260px;
   }
 
   .min-h-screen {
@@ -1203,8 +1225,12 @@
     width: 90vw;
   }
 
-  .w-\\[280px\\] {
-    width: 280px;
+  .w-\\[320px\\] {
+    width: 320px;
+  }
+
+  .w-\\[380px\\] {
+    width: 380px;
   }
 
   .w-auto {
@@ -1219,6 +1245,10 @@
     max-width: var(--container-2xl);
   }
 
+  .max-w-3xl {
+    max-width: var(--container-3xl);
+  }
+
   .max-w-4xl {
     max-width: var(--container-4xl);
   }
@@ -1231,16 +1261,16 @@
     max-width: var(--container-7xl);
   }
 
-  .max-w-\\[40vw\\] {
-    max-width: 40vw;
-  }
-
   .max-w-\\[320px\\] {
     max-width: 320px;
   }
 
   .max-w-\\[800px\\] {
     max-width: 800px;
+  }
+
+  .max-w-lg {
+    max-width: var(--container-lg);
   }
 
   .max-w-md {
@@ -1287,6 +1317,20 @@
     translate: var(--tw-translate-x) var(--tw-translate-y);
   }
 
+  .scale-105 {
+    --tw-scale-x: 105%;
+    --tw-scale-y: 105%;
+    --tw-scale-z: 105%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+
+  .scale-110 {
+    --tw-scale-x: 110%;
+    --tw-scale-y: 110%;
+    --tw-scale-z: 110%;
+    scale: var(--tw-scale-x) var(--tw-scale-y);
+  }
+
   .scale-125 {
     --tw-scale-x: 125%;
     --tw-scale-y: 125%;
@@ -1305,11 +1349,6 @@
 
   .skew-x-12 {
     --tw-skew-x: skewX(12deg);
-    transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
-  }
-
-  .skew-x-\\[-15deg\\] {
-    --tw-skew-x: skewX(-15deg);
     transform: var(--tw-rotate-x, ) var(--tw-rotate-y, ) var(--tw-rotate-z, ) var(--tw-skew-x, ) var(--tw-skew-y, );
   }
 
@@ -1469,6 +1508,10 @@
     overflow: hidden;
   }
 
+  .overflow-visible {
+    overflow: visible;
+  }
+
   .overflow-x-hidden {
     overflow-x: hidden;
   }
@@ -1493,12 +1536,20 @@
     border-radius: var(--radius-lg);
   }
 
+  .rounded-md {
+    border-radius: var(--radius-md);
+  }
+
   .rounded-none {
     border-radius: 0;
   }
 
   .rounded-sm {
     border-radius: var(--radius-sm);
+  }
+
+  .rounded-xl {
+    border-radius: var(--radius-xl);
   }
 
   .border {
@@ -1580,7 +1631,7 @@
   }
 
   .border-gold\\/10 {
-    border-color: #facc151a;
+    border-color: #ffd7001a;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1590,7 +1641,7 @@
   }
 
   .border-gold\\/20 {
-    border-color: #facc1533;
+    border-color: #ffd70033;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1600,7 +1651,7 @@
   }
 
   .border-gold\\/30 {
-    border-color: #facc154d;
+    border-color: #ffd7004d;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1610,7 +1661,7 @@
   }
 
   .border-gold\\/40 {
-    border-color: #facc1566;
+    border-color: #ffd70066;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1620,7 +1671,7 @@
   }
 
   .border-gold\\/50 {
-    border-color: #facc1580;
+    border-color: #ffd70080;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1647,12 +1698,32 @@
     }
   }
 
+  .border-joker\\/50 {
+    border-color: #39ff1480;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-joker\\/50 {
+      border-color: color-mix(in oklab, var(--color-joker) 50%, transparent);
+    }
+  }
+
   .border-red-500 {
     border-color: var(--color-red-500);
   }
 
   .border-red-600 {
     border-color: var(--color-red-600);
+  }
+
+  .border-red-600\\/10 {
+    border-color: #e400141a;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .border-red-600\\/10 {
+      border-color: color-mix(in oklab, var(--color-red-600) 10%, transparent);
+    }
   }
 
   .border-red-600\\/20 {
@@ -1665,14 +1736,8 @@
     }
   }
 
-  .border-red-600\\/40 {
-    border-color: #e4001466;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .border-red-600\\/40 {
-      border-color: color-mix(in oklab, var(--color-red-600) 40%, transparent);
-    }
+  .border-red-800 {
+    border-color: var(--color-red-800);
   }
 
   .border-red-800\\/40 {
@@ -1789,6 +1854,16 @@
     }
   }
 
+  .bg-black\\/80 {
+    background-color: #000c;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-black\\/80 {
+      background-color: color-mix(in oklab, var(--color-black) 80%, transparent);
+    }
+  }
+
   .bg-black\\/85 {
     background-color: #000000d9;
   }
@@ -1799,12 +1874,22 @@
     }
   }
 
+  .bg-black\\/95 {
+    background-color: #000000f2;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .bg-black\\/95 {
+      background-color: color-mix(in oklab, var(--color-black) 95%, transparent);
+    }
+  }
+
   .bg-gold {
     background-color: var(--color-gold);
   }
 
   .bg-gold\\/5 {
-    background-color: #facc150d;
+    background-color: #ffd7000d;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1814,7 +1899,7 @@
   }
 
   .bg-gold\\/10 {
-    background-color: #facc151a;
+    background-color: #ffd7001a;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1824,7 +1909,7 @@
   }
 
   .bg-gold\\/15 {
-    background-color: #facc1526;
+    background-color: #ffd70026;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1834,7 +1919,7 @@
   }
 
   .bg-gold\\/20 {
-    background-color: #facc1533;
+    background-color: #ffd70033;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1844,7 +1929,7 @@
   }
 
   .bg-gold\\/30 {
-    background-color: #facc154d;
+    background-color: #ffd7004d;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1854,7 +1939,7 @@
   }
 
   .bg-gold\\/50 {
-    background-color: #facc1580;
+    background-color: #ffd70080;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -1881,16 +1966,6 @@
     background-color: var(--color-joker);
   }
 
-  .bg-joker\\/0 {
-    background-color: #0000;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-joker\\/0 {
-      background-color: color-mix(in oklab, var(--color-joker) 0%, transparent);
-    }
-  }
-
   .bg-joker\\/5 {
     background-color: #39ff140d;
   }
@@ -1905,13 +1980,13 @@
     background-color: var(--color-orange-500);
   }
 
-  .bg-orange-500\\/15 {
-    background-color: #fe6e0026;
+  .bg-orange-500\\/40 {
+    background-color: #fe6e0066;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
-    .bg-orange-500\\/15 {
-      background-color: color-mix(in oklab, var(--color-orange-500) 15%, transparent);
+    .bg-orange-500\\/40 {
+      background-color: color-mix(in oklab, var(--color-orange-500) 40%, transparent);
     }
   }
 
@@ -1919,18 +1994,22 @@
     background-color: var(--color-red-600);
   }
 
-  .bg-red-600\\/30 {
-    background-color: #e400144d;
+  .bg-red-600\\/60 {
+    background-color: #e4001499;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
-    .bg-red-600\\/30 {
-      background-color: color-mix(in oklab, var(--color-red-600) 30%, transparent);
+    .bg-red-600\\/60 {
+      background-color: color-mix(in oklab, var(--color-red-600) 60%, transparent);
     }
   }
 
   .bg-red-800 {
     background-color: var(--color-red-800);
+  }
+
+  .bg-red-900 {
+    background-color: var(--color-red-900);
   }
 
   .bg-red-900\\/0 {
@@ -2048,12 +2127,24 @@
     background-image: linear-gradient(#12101000 50%, #00000040 50%), linear-gradient(90deg, #ff00000f, #00ff0005, #0000ff0f);
   }
 
+  .bg-\\[linear-gradient\\(rgba\\(255\\,0\\,0\\,0\\.1\\)_1px\\,transparent_1px\\)\\] {
+    background-image: linear-gradient(#ff00001a 1px, #0000 1px);
+  }
+
+  .bg-\\[linear-gradient\\(rgba\\(255\\,255\\,255\\,0\\.05\\)_1px\\,transparent_1px\\)\\] {
+    background-image: linear-gradient(#ffffff0d 1px, #0000 1px);
+  }
+
   .bg-\\[radial-gradient\\(circle_at_center\\,rgba\\(57\\,255\\,20\\,0\\.05\\)_0\\%\\,transparent_70\\%\\)\\] {
     background-image: radial-gradient(circle, #39ff140d 0%, #0000 70%);
   }
 
   .bg-\\[radial-gradient\\(circle_at_center\\,rgba\\(250\\,204\\,21\\,0\\.15\\)_0\\%\\,transparent_70\\%\\)\\] {
     background-image: radial-gradient(circle, #facc1526 0%, #0000 70%);
+  }
+
+  .bg-\\[radial-gradient\\(circle_at_center\\,transparent_0\\%\\,rgba\\(0\\,0\\,0\\,0\\.85\\)_100\\%\\)\\] {
+    background-image: radial-gradient(circle, #0000 0%, #000000d9 100%);
   }
 
   .bg-\\[radial-gradient\\(circle_at_center\\,transparent_30\\%\\,black_100\\%\\)\\] {
@@ -2099,7 +2190,7 @@
   }
 
   .via-gold\\/10 {
-    --tw-gradient-via: #facc151a;
+    --tw-gradient-via: #ffd7001a;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -2152,6 +2243,14 @@
 
   .bg-\\[length\\:100\\%_2px\\,3px_100\\%\\] {
     background-size: 100% 2px, 3px 100%;
+  }
+
+  .bg-\\[size\\:100\\%_3px\\] {
+    background-size: 100% 3px;
+  }
+
+  .bg-\\[size\\:100\\%_4px\\] {
+    background-size: 100% 4px;
   }
 
   .stroke-\\[1px\\] {
@@ -2218,6 +2317,10 @@
     padding-inline: calc(var(--spacing) * 10);
   }
 
+  .px-12 {
+    padding-inline: calc(var(--spacing) * 12);
+  }
+
   .px-16 {
     padding-inline: calc(var(--spacing) * 16);
   }
@@ -2254,6 +2357,10 @@
     padding-block: calc(var(--spacing) * 8);
   }
 
+  .py-10 {
+    padding-block: calc(var(--spacing) * 10);
+  }
+
   .py-12 {
     padding-block: calc(var(--spacing) * 12);
   }
@@ -2286,6 +2393,10 @@
     padding-top: calc(var(--spacing) * 10);
   }
 
+  .pr-2 {
+    padding-right: calc(var(--spacing) * 2);
+  }
+
   .pb-3 {
     padding-bottom: calc(var(--spacing) * 3);
   }
@@ -2294,12 +2405,24 @@
     padding-bottom: calc(var(--spacing) * 6);
   }
 
+  .pb-8 {
+    padding-bottom: calc(var(--spacing) * 8);
+  }
+
   .pb-10 {
     padding-bottom: calc(var(--spacing) * 10);
   }
 
+  .pl-2 {
+    padding-left: calc(var(--spacing) * 2);
+  }
+
   .pl-4 {
     padding-left: calc(var(--spacing) * 4);
+  }
+
+  .pl-6 {
+    padding-left: calc(var(--spacing) * 6);
   }
 
   .text-center {
@@ -2360,6 +2483,11 @@
     line-height: var(--tw-leading, var(--text-7xl--line-height));
   }
 
+  .text-8xl {
+    font-size: var(--text-8xl);
+    line-height: var(--tw-leading, var(--text-8xl--line-height));
+  }
+
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
@@ -2385,18 +2513,6 @@
     line-height: var(--tw-leading, var(--text-xs--line-height));
   }
 
-  .text-\\[6px\\] {
-    font-size: 6px;
-  }
-
-  .text-\\[7px\\] {
-    font-size: 7px;
-  }
-
-  .text-\\[7vw\\] {
-    font-size: 7vw;
-  }
-
   .text-\\[8px\\] {
     font-size: 8px;
   }
@@ -2413,25 +2529,8 @@
     font-size: 11px;
   }
 
-  .text-\\[12px\\] {
-    font-size: 12px;
-  }
-
-  .text-\\[13px\\] {
-    font-size: 13px;
-  }
-
   .text-\\[40vw\\] {
     font-size: 40vw;
-  }
-
-  .text-\\[150px\\] {
-    font-size: 150px;
-  }
-
-  .leading-\\[0\\.9\\] {
-    --tw-leading: .9;
-    line-height: .9;
   }
 
   .leading-none {
@@ -2464,11 +2563,6 @@
     font-weight: var(--font-weight-medium);
   }
 
-  .tracking-\\[0\\.1em\\] {
-    --tw-tracking: .1em;
-    letter-spacing: .1em;
-  }
-
   .tracking-\\[0\\.2em\\] {
     --tw-tracking: .2em;
     letter-spacing: .2em;
@@ -2489,6 +2583,11 @@
     letter-spacing: .5em;
   }
 
+  .tracking-\\[0\\.6em\\] {
+    --tw-tracking: .6em;
+    letter-spacing: .6em;
+  }
+
   .tracking-\\[0\\.8em\\] {
     --tw-tracking: .8em;
     letter-spacing: .8em;
@@ -2497,6 +2596,11 @@
   .tracking-\\[1em\\] {
     --tw-tracking: 1em;
     letter-spacing: 1em;
+  }
+
+  .tracking-tight {
+    --tw-tracking: var(--tracking-tight);
+    letter-spacing: var(--tracking-tight);
   }
 
   .tracking-tighter {
@@ -2523,10 +2627,6 @@
     white-space: nowrap;
   }
 
-  .text-\\[\\#FFD700\\] {
-    color: gold;
-  }
-
   .text-black {
     color: var(--color-black);
   }
@@ -2536,7 +2636,7 @@
   }
 
   .text-gold\\/40 {
-    color: #facc1566;
+    color: #ffd70066;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -2546,7 +2646,7 @@
   }
 
   .text-gold\\/60 {
-    color: #facc1599;
+    color: #ffd70099;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -2556,7 +2656,7 @@
   }
 
   .text-gold\\/80 {
-    color: #facc15cc;
+    color: #ffd700cc;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -2595,6 +2695,10 @@
     color: var(--color-orange-400);
   }
 
+  .text-red-400 {
+    color: var(--color-red-400);
+  }
+
   .text-red-500 {
     color: var(--color-red-500);
   }
@@ -2616,6 +2720,16 @@
   @supports (color: color-mix(in lab, red, red)) {
     .text-red-500\\/60 {
       color: color-mix(in oklab, var(--color-red-500) 60%, transparent);
+    }
+  }
+
+  .text-red-500\\/80 {
+    color: #fb2c36cc;
+  }
+
+  @supports (color: color-mix(in lab, red, red)) {
+    .text-red-500\\/80 {
+      color: color-mix(in oklab, var(--color-red-500) 80%, transparent);
     }
   }
 
@@ -2709,16 +2823,6 @@
     }
   }
 
-  .text-white\\/70 {
-    color: #ffffffb3;
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .text-white\\/70 {
-      color: color-mix(in oklab, var(--color-white) 70%, transparent);
-    }
-  }
-
   .text-white\\/80 {
     color: #fffc;
   }
@@ -2729,13 +2833,13 @@
     }
   }
 
-  .text-white\\/\\[0\\.03\\] {
-    color: #ffffff08;
+  .text-white\\/90 {
+    color: #ffffffe6;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
-    .text-white\\/\\[0\\.03\\] {
-      color: color-mix(in oklab, var(--color-white) 3%, transparent);
+    .text-white\\/90 {
+      color: color-mix(in oklab, var(--color-white) 90%, transparent);
     }
   }
 
@@ -2827,13 +2931,18 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .shadow-\\[0_0_8px_rgba\\(250\\,204\\,21\\,0\\.6\\)\\] {
-    --tw-shadow: 0 0 8px var(--tw-shadow-color, #facc1599);
+  .shadow-\\[0_0_10px_\\#facd15\\] {
+    --tw-shadow: 0 0 10px var(--tw-shadow-color, #facd15);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .shadow-\\[0_0_10px_\\#facd15\\] {
-    --tw-shadow: 0 0 10px var(--tw-shadow-color, #facd15);
+  .shadow-\\[0_0_10px_rgba\\(57\\,255\\,20\\,0\\.3\\)\\] {
+    --tw-shadow: 0 0 10px var(--tw-shadow-color, #39ff144d);
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  .shadow-\\[0_0_12px_rgba\\(250\\,204\\,21\\,0\\.8\\)\\] {
+    --tw-shadow: 0 0 12px var(--tw-shadow-color, #facc15cc);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
@@ -2842,8 +2951,8 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
-  .shadow-\\[0_0_20px_rgba\\(57\\,255\\,20\\,0\\.3\\)\\] {
-    --tw-shadow: 0 0 20px var(--tw-shadow-color, #39ff144d);
+  .shadow-\\[0_0_40px_rgba\\(0\\,0\\,0\\,0\\.8\\)\\] {
+    --tw-shadow: 0 0 40px var(--tw-shadow-color, #000c);
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
@@ -2887,6 +2996,11 @@
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
   }
 
+  .blur-\\[30px\\] {
+    --tw-blur: blur(30px);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
   .blur-\\[40px\\] {
     --tw-blur: blur(40px);
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
@@ -2918,8 +3032,44 @@
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
   }
 
-  .drop-shadow-\\[0_0_30px_rgba\\(220\\,38\\,38\\,0\\.6\\)\\] {
-    --tw-drop-shadow-size: drop-shadow(0 0 30px var(--tw-drop-shadow-color, #dc262699));
+  .drop-shadow-\\[0_0_15px_rgba\\(220\\,38\\,38\\,0\\.5\\)\\] {
+    --tw-drop-shadow-size: drop-shadow(0 0 15px var(--tw-drop-shadow-color, #dc262680));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .drop-shadow-\\[0_0_15px_rgba\\(249\\,115\\,22\\,0\\.8\\)\\] {
+    --tw-drop-shadow-size: drop-shadow(0 0 15px var(--tw-drop-shadow-color, #f97316cc));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .drop-shadow-\\[0_0_15px_rgba\\(250\\,204\\,21\\,0\\.6\\)\\] {
+    --tw-drop-shadow-size: drop-shadow(0 0 15px var(--tw-drop-shadow-color, #facc1599));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .drop-shadow-\\[0_0_20px_rgba\\(239\\,68\\,68\\,1\\)\\] {
+    --tw-drop-shadow-size: drop-shadow(0 0 20px var(--tw-drop-shadow-color, #ef4444));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .drop-shadow-\\[0_0_20px_rgba\\(255\\,255\\,255\\,0\\.2\\)\\] {
+    --tw-drop-shadow-size: drop-shadow(0 0 20px var(--tw-drop-shadow-color, #fff3));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .drop-shadow-\\[0_0_20px_rgba\\(255\\,255\\,255\\,0\\.4\\)\\] {
+    --tw-drop-shadow-size: drop-shadow(0 0 20px var(--tw-drop-shadow-color, #fff6));
+    --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .drop-shadow-\\[0_0_40px_rgba\\(220\\,38\\,38\\,0\\.8\\)\\] {
+    --tw-drop-shadow-size: drop-shadow(0 0 40px var(--tw-drop-shadow-color, #dc2626cc));
     --tw-drop-shadow: var(--tw-drop-shadow-size);
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
   }
@@ -2933,6 +3083,12 @@
   .drop-shadow-\\[0_0_50px_rgba\\(250\\,204\\,21\\,0\\.3\\)\\] {
     --tw-drop-shadow-size: drop-shadow(0 0 50px var(--tw-drop-shadow-color, #facc154d));
     --tw-drop-shadow: var(--tw-drop-shadow-size);
+    filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
+  }
+
+  .drop-shadow-lg {
+    --tw-drop-shadow-size: drop-shadow(0 4px 4px var(--tw-drop-shadow-color, #00000026));
+    --tw-drop-shadow: drop-shadow(var(--drop-shadow-lg));
     filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, );
   }
 
@@ -3110,22 +3266,12 @@
     }
 
     .group-hover\\:border-gold\\/50:is(:where(.group):hover *) {
-      border-color: #facc1580;
+      border-color: #ffd70080;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
       .group-hover\\:border-gold\\/50:is(:where(.group):hover *) {
         border-color: color-mix(in oklab, var(--color-gold) 50%, transparent);
-      }
-    }
-
-    .group-hover\\:bg-joker\\/5:is(:where(.group):hover *) {
-      background-color: #39ff140d;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .group-hover\\:bg-joker\\/5:is(:where(.group):hover *) {
-        background-color: color-mix(in oklab, var(--color-joker) 5%, transparent);
       }
     }
 
@@ -3149,16 +3295,6 @@
       }
     }
 
-    .group-hover\\:text-joker\\/80:is(:where(.group):hover *) {
-      color: #39ff14cc;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .group-hover\\:text-joker\\/80:is(:where(.group):hover *) {
-        color: color-mix(in oklab, var(--color-joker) 80%, transparent);
-      }
-    }
-
     .group-hover\\:text-white\\/70:is(:where(.group):hover *) {
       color: #ffffffb3;
     }
@@ -3175,10 +3311,6 @@
 
     .group-hover\\:opacity-20:is(:where(.group):hover *) {
       opacity: .2;
-    }
-
-    .group-hover\\:opacity-60:is(:where(.group):hover *) {
-      opacity: .6;
     }
 
     .group-hover\\:opacity-100:is(:where(.group):hover *) {
@@ -3235,22 +3367,19 @@
   }
 
   @media (hover: hover) {
+    .hover\\:scale-105:hover {
+      --tw-scale-x: 105%;
+      --tw-scale-y: 105%;
+      --tw-scale-z: 105%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+
     .hover\\:border-gold:hover {
       border-color: var(--color-gold);
     }
 
-    .hover\\:border-gold\\/30:hover {
-      border-color: #facc154d;
-    }
-
-    @supports (color: color-mix(in lab, red, red)) {
-      .hover\\:border-gold\\/30:hover {
-        border-color: color-mix(in oklab, var(--color-gold) 30%, transparent);
-      }
-    }
-
     .hover\\:border-gold\\/50:hover {
-      border-color: #facc1580;
+      border-color: #ffd70080;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -3260,17 +3389,13 @@
     }
 
     .hover\\:border-gold\\/60:hover {
-      border-color: #facc1599;
+      border-color: #ffd70099;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
       .hover\\:border-gold\\/60:hover {
         border-color: color-mix(in oklab, var(--color-gold) 60%, transparent);
       }
-    }
-
-    .hover\\:border-joker:hover {
-      border-color: var(--color-joker);
     }
 
     .hover\\:border-red-800:hover {
@@ -3286,7 +3411,7 @@
     }
 
     .hover\\:bg-gold\\/5:hover {
-      background-color: #facc150d;
+      background-color: #ffd7000d;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -3296,7 +3421,7 @@
     }
 
     .hover\\:bg-gold\\/10:hover {
-      background-color: #facc151a;
+      background-color: #ffd7001a;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -3306,7 +3431,7 @@
     }
 
     .hover\\:bg-gold\\/20:hover {
-      background-color: #facc1533;
+      background-color: #ffd70033;
     }
 
     @supports (color: color-mix(in lab, red, red)) {
@@ -3380,11 +3505,6 @@
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
 
-    .hover\\:shadow-\\[0_0_15px_rgba\\(57\\,255\\,20\\,0\\.2\\)\\]:hover {
-      --tw-shadow: 0 0 15px var(--tw-shadow-color, #39ff1433);
-      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
-    }
-
     .hover\\:shadow-\\[0_0_30px_rgba\\(250\\,204\\,21\\,0\\.4\\)\\]:hover {
       --tw-shadow: 0 0 30px var(--tw-shadow-color, #facc1566);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
@@ -3399,10 +3519,15 @@
       --tw-shadow: 0 0 50px var(--tw-shadow-color, #facc1580);
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
     }
+
+    .hover\\:shadow-\\[0_0_50px_rgba\\(250\\,204\\,21\\,0\\.6\\)\\]:hover {
+      --tw-shadow: 0 0 50px var(--tw-shadow-color, #facc1599);
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
   }
 
   .focus\\:border-gold\\/50:focus {
-    border-color: #facc1580;
+    border-color: #ffd70080;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -3412,7 +3537,7 @@
   }
 
   .focus\\:bg-gold\\/\\[0\\.02\\]:focus {
-    background-color: #facc1505;
+    background-color: #ffd70005;
   }
 
   @supports (color: color-mix(in lab, red, red)) {
@@ -3440,20 +3565,16 @@
   }
 
   @media (min-width: 48rem) {
+    .md\\:top-4 {
+      top: calc(var(--spacing) * 4);
+    }
+
     .md\\:right-10 {
       right: calc(var(--spacing) * 10);
     }
 
-    .md\\:right-24 {
-      right: calc(var(--spacing) * 24);
-    }
-
     .md\\:left-10 {
       left: calc(var(--spacing) * 10);
-    }
-
-    .md\\:left-24 {
-      left: calc(var(--spacing) * 24);
     }
 
     .md\\:col-span-2 {
@@ -3472,6 +3593,10 @@
       display: block;
     }
 
+    .md\\:h-3 {
+      height: calc(var(--spacing) * 3);
+    }
+
     .md\\:h-10 {
       height: calc(var(--spacing) * 10);
     }
@@ -3484,23 +3609,24 @@
       height: 620px;
     }
 
-    .md\\:w-\\[400px\\] {
-      width: 400px;
+    .md\\:w-10 {
+      width: calc(var(--spacing) * 10);
     }
 
     .md\\:w-\\[420px\\] {
       width: 420px;
     }
 
-    .md\\:max-w-none {
-      max-width: none;
+    .md\\:w-\\[520px\\] {
+      width: 520px;
     }
 
-    .md\\:scale-150 {
-      --tw-scale-x: 150%;
-      --tw-scale-y: 150%;
-      --tw-scale-z: 150%;
-      scale: var(--tw-scale-x) var(--tw-scale-y);
+    .md\\:w-\\[620px\\] {
+      width: 620px;
+    }
+
+    .md\\:max-w-none {
+      max-width: none;
     }
 
     .md\\:grid-cols-2 {
@@ -3523,10 +3649,6 @@
       align-items: center;
     }
 
-    .md\\:items-start {
-      align-items: flex-start;
-    }
-
     .md\\:gap-0 {
       gap: calc(var(--spacing) * 0);
     }
@@ -3537,6 +3659,10 @@
 
     .md\\:gap-8 {
       gap: calc(var(--spacing) * 8);
+    }
+
+    .md\\:gap-10 {
+      gap: calc(var(--spacing) * 10);
     }
 
     .md\\:border-\\[20px\\] {
@@ -3556,20 +3682,28 @@
       padding-inline: calc(var(--spacing) * 4);
     }
 
-    .md\\:px-6 {
-      padding-inline: calc(var(--spacing) * 6);
-    }
-
     .md\\:px-10 {
       padding-inline: calc(var(--spacing) * 10);
+    }
+
+    .md\\:px-12 {
+      padding-inline: calc(var(--spacing) * 12);
     }
 
     .md\\:py-1\\.5 {
       padding-block: calc(var(--spacing) * 1.5);
     }
 
+    .md\\:py-3 {
+      padding-block: calc(var(--spacing) * 3);
+    }
+
     .md\\:py-6 {
       padding-block: calc(var(--spacing) * 6);
+    }
+
+    .md\\:py-8 {
+      padding-block: calc(var(--spacing) * 8);
     }
 
     .md\\:py-20 {
@@ -3594,6 +3728,16 @@
       line-height: var(--tw-leading, var(--text-3xl--line-height));
     }
 
+    .md\\:text-4xl {
+      font-size: var(--text-4xl);
+      line-height: var(--tw-leading, var(--text-4xl--line-height));
+    }
+
+    .md\\:text-5xl {
+      font-size: var(--text-5xl);
+      line-height: var(--tw-leading, var(--text-5xl--line-height));
+    }
+
     .md\\:text-6xl {
       font-size: var(--text-6xl);
       line-height: var(--tw-leading, var(--text-6xl--line-height));
@@ -3609,14 +3753,14 @@
       line-height: var(--tw-leading, var(--text-8xl--line-height));
     }
 
-    .md\\:text-9xl {
-      font-size: var(--text-9xl);
-      line-height: var(--tw-leading, var(--text-9xl--line-height));
-    }
-
     .md\\:text-base {
       font-size: var(--text-base);
       line-height: var(--tw-leading, var(--text-base--line-height));
+    }
+
+    .md\\:text-lg {
+      font-size: var(--text-lg);
+      line-height: var(--tw-leading, var(--text-lg--line-height));
     }
 
     .md\\:text-sm {
@@ -3634,24 +3778,24 @@
       line-height: var(--tw-leading, var(--text-xs--line-height));
     }
 
-    .md\\:text-\\[4vw\\] {
-      font-size: 4vw;
+    .md\\:text-\\[5rem\\] {
+      font-size: 5rem;
     }
 
-    .md\\:text-\\[7px\\] {
-      font-size: 7px;
+    .md\\:text-\\[9px\\] {
+      font-size: 9px;
     }
 
     .md\\:text-\\[10px\\] {
       font-size: 10px;
     }
 
-    .md\\:text-\\[30rem\\] {
-      font-size: 30rem;
+    .md\\:text-\\[10rem\\] {
+      font-size: 10rem;
     }
 
-    .md\\:text-\\[300px\\] {
-      font-size: 300px;
+    .md\\:text-\\[30rem\\] {
+      font-size: 30rem;
     }
 
     .md\\:tracking-\\[0\\.6em\\] {
@@ -3678,6 +3822,10 @@
       grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
+    .lg\\:grid-cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
     .lg\\:grid-cols-12 {
       grid-template-columns: repeat(12, minmax(0, 1fr));
     }
@@ -3687,6 +3835,97 @@
       line-height: var(--tw-leading, var(--text-8xl--line-height));
     }
   }
+}
+:root {
+  --colors-yellow: gold;
+  --colors-black: #000;
+  --colors-white: #fff;
+  --colors-red-light: red;
+  --colors-red-dark: #800;
+  --colors-green-light: #39ff14;
+  --colors-green-dark: #158300;
+  --colors-gray-light: #c4c4c4;
+  --colors-gray-medium: #535353;
+  --colors-gray-dark: #2a2a2a;
+  --colors-purple-light: #6600c5;
+  --colors-purple-dark: #29004f;
+  --texts-text-title-primary: var(--colors-yellow);
+  --texts-text-title-secondary: var(--colors-purple-light);
+  --texts-text-body-primary: var(--colors-white);
+  --texts-text-body-secondary: var(--colors-black);
+  --buttons-primary-active: var(--colors-black);
+  --buttons-on-primary-active: var(--colors-yellow);
+  --buttons-on-primary-stroke-active: var(--colors-yellow);
+  --buttons-primary-over: var(--colors-yellow);
+  --buttons-on-primary-over: var(--colors-black);
+  --buttons-on-primary-stroke-over: var(--colors-black);
+  --buttons-primary-disabled: var(--colors-gray-medium);
+  --buttons-on-primary-disabled: var(--colors-gray-light);
+  --buttons-on-primary-stroke-disabled: var(--colors-gray-dark);
+  --buttons-primary-active-joker: var(--colors-black);
+  --buttons-on-primary-active-joker: var(--colors-purple-light);
+  --buttons-on-primary-stroke-active-joker: var(--colors-purple-light);
+  --buttons-primary-over-joker: var(--colors-purple-light);
+  --buttons-on-primary-over-joker: var(--colors-black);
+  --buttons-on-primary-stroke-over-joker: var(--colors-purple-dark);
+  --buttons-primary-active-riddle: var(--colors-white);
+  --buttons-on-primary-active-riddle: var(--colors-black);
+  --buttons-on-primary-stroke-active-riddle: var(--colors-black);
+  --buttons-primary-active-riddle-false: var(--colors-red-light);
+  --buttons-on-primary-stroke-active-riddle-false: var(--colors-red-dark);
+  --buttons-primary-active-riddle-true: var(--colors-green-light);
+  --buttons-on-primary-stroke-active-riddle-true: var(--colors-green-dark);
+  --buttons-primary-active-checkout: var(--colors-gray-medium);
+  --buttons-on-primary-active-checkout: var(--colors-gray-light);
+  --buttons-on-primary-stroke-active-checkout: var(--colors-gray-dark);
+  --buttons-primary-tapped-checkout: var(--colors-gray-medium);
+  --buttons-on-primary-tapped-checkout: var(--colors-white);
+  --buttons-on-primary-stroke-tapped-checkout: var(--colors-yellow);
+  --effect-glow-yellow: 0 0 14px var(--colors-yellow);
+  --effect-glow-yellow-lg: 0 0 14px var(--colors-yellow), 0 0 30px #ffd70080;
+  --effect-glow-green-light: 0 0 14px var(--colors-green-light);
+  --effect-glow-green-light-lg: 0 0 14px var(--colors-green-light), 0 0 30px #39ff1480;
+  --effect-glow-red-light: 0 0 14px #ff000040;
+  --effect-glow-red-light-lg: 0 0 14px var(--colors-red-light);
+  --effect-glow-purple-light: 0 0 14px var(--colors-purple-light);
+  --effect-glow-purple-light-lg: 0 0 14px var(--colors-purple-light), 0 0 30px #6600c580;
+  --radius-atoms-sm: 5px;
+  --radius-atoms-md: 6px;
+  --radius-atoms-pill: 18px;
+  --ds-gold: var(--colors-yellow);
+  --ds-joker: var(--colors-green-light);
+  --ds-danger: var(--colors-red-light);
+  --ds-purple: var(--colors-purple-light);
+  --ds-black: var(--colors-black);
+  --ds-white: var(--colors-white);
+  --ds-gray-mid: var(--colors-gray-medium);
+  --ds-gray-lt: var(--colors-gray-light);
+  --ds-gray-btn: var(--colors-gray-light);
+  --ds-surface: var(--colors-gray-dark);
+  --ds-glow-gold: var(--effect-glow-yellow);
+  --ds-glow-joker: var(--effect-glow-green-light);
+  --ds-glow-danger: var(--effect-glow-red-light);
+  --ds-glow-purple: var(--effect-glow-purple-light);
+  --ds-glow-gold-lg: var(--effect-glow-yellow-lg);
+  --ds-glow-joker-lg: var(--effect-glow-green-light-lg);
+  --ds-glow-purple-lg: var(--effect-glow-purple-light-lg);
+  --ds-radius-sm: var(--radius-atoms-sm);
+  --ds-radius-md: var(--radius-atoms-md);
+  --ds-radius-pill: var(--radius-atoms-pill);
+  --ds-text-xs: 12px;
+  --ds-text-sm: 15px;
+  --ds-text-base: 16px;
+  --ds-text-lg: 20px;
+  --ds-text-xl: 30px;
+  --ds-text-2xl: 40px;
+  --ds-text-3xl: 80px;
+  --ds-text-icon: 10px;
+  --ds-fw-regular: 400;
+  --ds-fw-bold: 700;
+  --ds-fw-black: 900;
+  --ds-ls-tight: -6px;
+  --ds-ls-icon: -1.34px;
+  --ds-ls-normal: 0;
 }
 .gpu {
   will-change: transform, opacity;
@@ -4350,6 +4589,166 @@
   letter-spacing: .05em;
   font-family: Share Tech Mono, monospace;
   font-weight: 400;
+}
+@keyframes circuit-pulse {
+  0% {
+    stroke-dashoffset: 1000px;
+    opacity: 0;
+  }
+
+  10% {
+    opacity: .8;
+  }
+
+  90% {
+    opacity: .8;
+  }
+
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0;
+  }
+}
+@keyframes hex-shimmer {
+  0%, 100% {
+    opacity: .03;
+  }
+
+  50% {
+    opacity: .08;
+  }
+}
+.hex-grid {
+  animation: 6s ease-in-out infinite hex-shimmer;
+}
+@keyframes data-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: .5;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(110vh);
+  }
+}
+@keyframes depth-enter-back {
+  0% {
+    opacity: 0;
+    filter: blur(6px) brightness(.6);
+    transform: scale(.7) translateY(20px) perspective(800px) translateZ(-80px);
+  }
+
+  100% {
+    opacity: .55;
+    filter: blur() brightness(.85);
+    transform: scale(.82) translateY(0) perspective(800px) translateZ(-40px);
+  }
+}
+@keyframes depth-cross {
+  0% {
+    opacity: .55;
+    filter: brightness(.85);
+    transform: scale(.82) perspective(800px) translateZ(-40px);
+  }
+
+  40% {
+    opacity: .9;
+    filter: brightness(1.4) blur(1px);
+    transform: scale(1.06) perspective(800px) translateZ(20px);
+  }
+
+  100% {
+    opacity: 1;
+    filter: brightness() blur();
+    transform: scale(1) perspective(800px) translateZ(0);
+  }
+}
+@keyframes depth-exit-front {
+  0% {
+    opacity: 1;
+    filter: brightness();
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    filter: brightness(.5) blur(4px);
+    transform: scale(.88) translateY(10px);
+  }
+}
+@keyframes depth-burst {
+  0% {
+    opacity: 0;
+    transform: scale(.5);
+  }
+
+  30% {
+    opacity: .7;
+    transform: scale(1.5);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(3);
+  }
+}
+.depth-burst {
+  animation: .5s ease-out forwards depth-burst;
+}
+@keyframes gold-sweep {
+  0% {
+    opacity: 0;
+    transform-origin: 0;
+    transform: scaleX(0);
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: .6;
+    transform-origin: 0;
+    transform: scaleX(1);
+  }
+}
+.gold-sweep {
+  animation: .8s cubic-bezier(.23, 1, .32, 1) forwards gold-sweep;
+}
+@keyframes neon-gold-pulse {
+  0%, 100% {
+    text-shadow: 0 0 10px #ffd70066, 0 0 30px #ffd70033, 0 0 60px #ffd7001a;
+  }
+
+  50% {
+    text-shadow: 0 0 20px #ffd700cc, 0 0 50px #ffd70066, 0 0 100px #ffd70033, 0 0 150px #ffd7001a;
+  }
+}
+.neon-gold {
+  animation: 2.5s ease-in-out infinite neon-gold-pulse;
+}
+@keyframes zdepth-appear {
+  0% {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.zdepth-badge {
+  animation: .4s ease-out forwards zdepth-appear;
 }
 @property --tw-translate-x {
   syntax: "*";
@@ -43373,7 +43772,7 @@
     }
   }
   let _context;
-  class AudioContext {
+  let AudioContext$1 = class AudioContext {
     /**
      * Returns the global native audio context.
      *
@@ -43393,7 +43792,7 @@
     static setContext(value) {
       _context = value;
     }
-  }
+  };
   class AudioLoader extends Loader {
     /**
      * Constructs a new audio loader.
@@ -43422,7 +43821,7 @@
       loader.load(url, function(buffer) {
         try {
           const bufferCopy = buffer.slice(0);
-          const context2 = AudioContext.getContext();
+          const context2 = AudioContext$1.getContext();
           const decodeUrl = url + "#decode";
           scope.manager.itemStart(decodeUrl);
           context2.decodeAudioData(bufferCopy, function(audioBuffer) {
@@ -43779,7 +44178,7 @@
     constructor() {
       super();
       this.type = "AudioListener";
-      this.context = AudioContext.getContext();
+      this.context = AudioContext$1.getContext();
       this.gain = this.context.createGain();
       this.gain.connect(this.context.destination);
       this.filter = null;
@@ -60242,7 +60641,7 @@ void main() {
     AttachedBindMode,
     Audio: Audio$1,
     AudioAnalyser,
-    AudioContext,
+    AudioContext: AudioContext$1,
     AudioListener,
     AudioLoader,
     AxesHelper,
@@ -69917,27 +70316,27 @@ void main() {
     ] });
   }
   function ProgressTracker({ completedCount, total }) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-6 px-4 py-2 relative", children: [
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-8 px-6 py-3 relative", children: [
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gold/5 blur-xl -z-10" }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-start gap-1", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[7px] tracking-[0.5em] text-gold/40 uppercase font-black font-mono", children: "PROTOCOLLO WAYNE" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-1.5", children: Array.from({ length: total }).map((_, i2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-start gap-2", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[10px] md:text-xs tracking-[0.5em] text-gold/40 uppercase font-black font-mono", children: "PROTOCOLLO WAYNE" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "flex gap-2", children: Array.from({ length: total }).map((_, i2) => /* @__PURE__ */ jsxRuntimeExports.jsx(
           "div",
           {
-            className: `w-5 h-1.5 border-r transition-all duration-700 relative ${i2 < completedCount ? "bg-gold border-gold shadow-[0_0_8px_rgba(250,204,21,0.6)]" : "bg-white/5 border-white/10"}`,
+            className: `w-8 h-2 md:w-10 md:h-3 transition-all duration-700 relative rounded-sm ${i2 < completedCount ? "bg-gold border border-gold shadow-[0_0_12px_rgba(250,204,21,0.8)]" : "bg-white/5 border border-white/10"}`,
             children: i2 === completedCount && /* @__PURE__ */ jsxRuntimeExports.jsx(
               motion.div,
               {
                 animate: { opacity: [0.2, 0.8, 0.2] },
                 transition: { duration: 1, repeat: Infinity },
-                className: "absolute inset-0 bg-gold/30"
+                className: "absolute inset-0 bg-gold/30 rounded-sm"
               }
             )
           },
           i2
         )) })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-gold font-mono text-[10px] font-black tabular-nums border-l border-white/10 pl-4 py-1", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-gold font-mono text-sm md:text-base font-black tabular-nums border-l border-white/10 pl-6 py-2", children: [
         completedCount,
         " ",
         /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-30", children: "/" }),
@@ -69952,19 +70351,33 @@ void main() {
     const formattedTime = `${minutes.toString().padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
     const isWarning = timeLeft <= 30 && timeLeft > 10;
     const isUrgent = timeLeft <= 10 && timeLeft > 0;
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex items-center justify-center", children: [
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative flex items-center justify-center mt-2 group", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none flex items-center justify-center w-full h-full scale-125 z-0 opacity-80", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: "0 0 200 80", className: "w-full h-full drop-shadow-lg", preserveAspectRatio: "none", children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "path",
+          {
+            d: "M 20 5 L 180 5 L 195 20 L 195 60 L 180 75 L 20 75 L 5 60 L 5 20 Z",
+            fill: "rgba(0,0,0,0.6)",
+            stroke: isUrgent ? "#ef4444" : isWarning ? "#f97316" : "#eab308",
+            strokeWidth: "2",
+            className: "transition-colors duration-500"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M 5 30 L 5 20 L 15 10", stroke: isUrgent ? "#ef4444" : "#eab308", strokeWidth: "3", fill: "none" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M 195 50 L 195 60 L 185 70", stroke: isUrgent ? "#ef4444" : "#eab308", strokeWidth: "3", fill: "none" })
+      ] }) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: `
-        relative px-4 md:px-6 py-2 transition-all duration-500
-        ${isUrgent ? "text-red-500" : isWarning ? "text-orange-400" : "text-gold"}
+        relative px-8 md:px-12 py-2 md:py-3 transition-all duration-500 flex flex-col items-center
+        ${isUrgent ? "text-red-500 scale-110" : isWarning ? "text-orange-400 scale-105" : "text-gold hover:scale-105"}
       `, children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `absolute inset-0 bg-black/20 backdrop-blur-sm border-l-2 ${isUrgent ? "border-red-600" : "border-gold/30"} skew-x-[-15deg] pointer-events-none` }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-[6px] md:text-[7px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-1 opacity-50 font-mono ${isUrgent ? "animate-pulse" : ""}`, children: isUrgent ? "DETONAZIONE IMMINENTE" : "DETONAZIONE IN" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-xl md:text-3xl font-black tabular-nums tracking-tighter ${isUrgent ? "camera-shake" : ""}`, children: formattedTime })
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100%_3px] opacity-30 z-0 rounded-md overflow-hidden" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 flex flex-col items-center", children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-[8px] md:text-[9px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-0.5 opacity-90 font-mono font-bold ${isUrgent ? "animate-pulse text-red-400" : ""}`, children: isUrgent ? "!!! DETONAZIONE IMMINENTE !!!" : "DETONAZIONE IN" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `text-2xl md:text-4xl font-black font-mono pr-2 pl-2 ${isUrgent ? "camera-shake text-red-500 drop-shadow-[0_0_20px_rgba(239,68,68,1)]" : isWarning ? "drop-shadow-[0_0_15px_rgba(249,115,22,0.8)]" : "drop-shadow-[0_0_15px_rgba(250,204,21,0.6)]"}`, children: formattedTime })
         ] }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: `
-          absolute inset-0 -z-10 blur-2xl transition-opacity duration-500
-          ${isUrgent ? "bg-red-600/30 opacity-100" : isWarning ? "bg-orange-500/15 opacity-60" : "bg-gold/10 opacity-30"}
+          absolute inset-0 -z-10 blur-[30px] transition-opacity duration-500
+          ${isUrgent ? "bg-red-600/60 opacity-100" : isWarning ? "bg-orange-500/40 opacity-80" : "bg-gold/30 opacity-60"}
         ` })
       ] }),
       /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: isUrgent && /* @__PURE__ */ jsxRuntimeExports.jsxs(
@@ -70022,15 +70435,15 @@ void main() {
             className: "h-8 md:h-10 w-auto object-contain glitch-slow flicker"
           }
         ),
-        missionActive && timeLeft !== void 0 && /* @__PURE__ */ jsxRuntimeExports.jsx(
-          MissionTimer,
-          {
-            timeLeft,
-            isPaused: !!isPaused
-          }
-        ),
         completedCount !== void 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hidden md:block", children: /* @__PURE__ */ jsxRuntimeExports.jsx(ProgressTracker, { completedCount, total: totalClues }) })
       ] }),
+      missionActive && timeLeft !== void 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute left-1/2 -translate-x-1/2 top-2 md:top-4 pointer-events-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        MissionTimer,
+        {
+          timeLeft,
+          isPaused: !!isPaused
+        }
+      ) }),
       /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex items-center gap-4 pointer-events-auto", children: [
         showBack && /* @__PURE__ */ jsxRuntimeExports.jsx(
           BatmanButton,
@@ -70072,8 +70485,302 @@ void main() {
       ] })
     ] });
   }
+  function TechBackground({ theme = "gold" }) {
+    const canvasRef = reactExports.useRef(null);
+    const animFrameRef = reactExports.useRef(0);
+    const particlesRef = reactExports.useRef([]);
+    const circuitNodesRef = reactExports.useRef([]);
+    const timeRef = reactExports.useRef(0);
+    reactExports.useEffect(() => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+      let W2 = 0, H = 0;
+      const initElements = () => {
+        W2 = canvas.width = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+        const cols = 12, rows = 8;
+        const nodes = [];
+        for (let r2 = 0; r2 < rows; r2++) {
+          for (let c2 = 0; c2 < cols; c2++) {
+            if (Math.random() > 0.35) {
+              nodes.push({
+                x: c2 / (cols - 1) * W2 + (Math.random() - 0.5) * (W2 / cols) * 0.6,
+                y: r2 / (rows - 1) * H + (Math.random() - 0.5) * (H / rows) * 0.6,
+                connections: []
+              });
+            }
+          }
+        }
+        nodes.forEach((node, i2) => {
+          nodes.forEach((other, j2) => {
+            if (i2 === j2) return;
+            const dist = Math.hypot(node.x - other.x, node.y - other.y);
+            if (dist < W2 / 6 && Math.random() > 0.5) {
+              node.connections.push(j2);
+            }
+          });
+        });
+        circuitNodesRef.current = nodes;
+        particlesRef.current = Array.from({ length: 40 }, () => ({
+          x: Math.random() * W2,
+          y: Math.random() * H,
+          vx: (Math.random() - 0.5) * 0.4,
+          vy: (Math.random() - 0.5) * 0.3,
+          size: Math.random() * 2 + 0.5,
+          opacity: Math.random() * 0.5 + 0.1,
+          pulse: Math.random() * Math.PI * 2,
+          pulseSpeed: Math.random() * 0.02 + 5e-3
+        }));
+      };
+      const draw = (time2) => {
+        timeRef.current = time2 * 1e-3;
+        const t2 = timeRef.current;
+        const rgb = theme === "joker" ? "57, 255, 20" : "255, 215, 0";
+        ctx.clearRect(0, 0, W2, H);
+        const bgGrad = ctx.createRadialGradient(W2 * 0.5, H * 0.5, 0, W2 * 0.5, H * 0.5, Math.max(W2, H) * 0.7);
+        bgGrad.addColorStop(0, "rgba(4, 6, 12, 1)");
+        bgGrad.addColorStop(0.5, "rgba(2, 4, 8, 1)");
+        bgGrad.addColorStop(1, "rgba(0, 0, 0, 1)");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, W2, H);
+        const hexSize = 60;
+        const hexW = hexSize * 2;
+        const hexH = Math.sqrt(3) * hexSize;
+        ctx.strokeStyle = `rgba(${rgb}, 0.025)`;
+        ctx.lineWidth = 0.8;
+        for (let row = -1; row < H / hexH + 2; row++) {
+          for (let col = -1; col < W2 / hexW + 2; col++) {
+            const xOffset = row % 2 === 0 ? 0 : hexW * 0.75;
+            const cx = col * hexW * 1.5 + xOffset;
+            const cy = row * hexH;
+            ctx.beginPath();
+            for (let i2 = 0; i2 < 6; i2++) {
+              const angle = Math.PI / 3 * i2 - Math.PI / 6;
+              const hx = cx + hexSize * Math.cos(angle);
+              const hy = cy + hexSize * Math.sin(angle);
+              if (i2 === 0) ctx.moveTo(hx, hy);
+              else ctx.lineTo(hx, hy);
+            }
+            ctx.closePath();
+            ctx.stroke();
+          }
+        }
+        const nodes = circuitNodesRef.current;
+        nodes.forEach((node, i2) => {
+          node.connections.forEach((j2) => {
+            const other = nodes[j2];
+            const pulsePhase = (t2 * 0.5 + i2 * 0.3) % 1;
+            const grad = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
+            grad.addColorStop(0, `rgba(${rgb}, 0.04)`);
+            grad.addColorStop(Math.max(0, pulsePhase - 0.15), `rgba(${rgb}, 0.04)`);
+            grad.addColorStop(pulsePhase, `rgba(${rgb}, 0.25)`);
+            grad.addColorStop(Math.min(1, pulsePhase + 0.15), `rgba(${rgb}, 0.04)`);
+            grad.addColorStop(1, `rgba(${rgb}, 0.04)`);
+            ctx.beginPath();
+            ctx.strokeStyle = grad;
+            ctx.lineWidth = 0.8;
+            const midX = (node.x + other.x) / 2;
+            ctx.moveTo(node.x, node.y);
+            ctx.lineTo(midX, node.y);
+            ctx.lineTo(midX, other.y);
+            ctx.lineTo(other.x, other.y);
+            ctx.stroke();
+          });
+          const nodePulse = Math.sin(t2 * 1.5 + i2 * 0.7) * 0.5 + 0.5;
+          ctx.beginPath();
+          ctx.arc(node.x, node.y, 2 + nodePulse, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${rgb}, ${0.15 + nodePulse * 0.3})`;
+          ctx.fill();
+          if (i2 % 5 === 0) {
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 6 + nodePulse * 3, 0, Math.PI * 2);
+            ctx.strokeStyle = `rgba(${rgb}, ${0.05 + nodePulse * 0.1})`;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        });
+        particlesRef.current.forEach((p2) => {
+          p2.x = (p2.x + p2.vx + W2) % W2;
+          p2.y = (p2.y + p2.vy + H) % H;
+          p2.pulse += p2.pulseSpeed;
+          const alpha2 = p2.opacity * (0.6 + 0.4 * Math.sin(p2.pulse));
+          ctx.beginPath();
+          ctx.arc(p2.x, p2.y, p2.size, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${rgb}, ${alpha2})`;
+          ctx.fill();
+        });
+        const scanX = (t2 * 0.08 % 1.4 - 0.2) * W2;
+        const scanGrad = ctx.createLinearGradient(scanX - 80, 0, scanX + 80, 0);
+        scanGrad.addColorStop(0, `rgba(${rgb}, 0)`);
+        scanGrad.addColorStop(0.5, `rgba(${rgb}, 0.03)`);
+        scanGrad.addColorStop(1, `rgba(${rgb}, 0)`);
+        ctx.fillStyle = scanGrad;
+        ctx.fillRect(scanX - 80, 0, 160, H);
+        for (let y = 0; y < H; y += 4) {
+          ctx.fillStyle = "rgba(0,0,0,0.08)";
+          ctx.fillRect(0, y, W2, 1);
+        }
+        const streamCols = Math.floor(W2 / 24);
+        for (let c2 = 0; c2 < streamCols; c2 += 3) {
+          const streamT = (t2 * 0.3 + c2 * 0.17) % 1;
+          if (streamT > 0.85) {
+            const streamY = streamT * H * 1.4;
+            const streamOpacity = (1 - streamT) * 0.15;
+            ctx.fillStyle = `rgba(${rgb}, ${streamOpacity})`;
+            ctx.font = "10px 'Space Grotesk', monospace";
+            const chars = "01BTWK∑ΦΩΔΓΛ";
+            ctx.fillText(chars[Math.floor(t2 * 20 + c2) % chars.length], c2 * 24 + 8, streamY % H);
+          }
+        }
+        const cornerSize = Math.min(W2, H) * 0.08;
+        const cornerAlpha = 0.15 + 0.08 * Math.sin(t2 * 1.2);
+        [
+          [0, 0, 1, 1],
+          [W2, 0, -1, 1],
+          [0, H, 1, -1],
+          [W2, H, -1, -1]
+        ].forEach(([cx, cy, sx, sy]) => {
+          ctx.strokeStyle = `rgba(${rgb}, ${cornerAlpha})`;
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy + sy * cornerSize);
+          ctx.lineTo(cx, cy);
+          ctx.lineTo(cx + sx * cornerSize, cy);
+          ctx.stroke();
+        });
+        animFrameRef.current = requestAnimationFrame(draw);
+      };
+      initElements();
+      window.addEventListener("resize", initElements);
+      animFrameRef.current = requestAnimationFrame(draw);
+      return () => {
+        cancelAnimationFrame(animFrameRef.current);
+        window.removeEventListener("resize", initElements);
+      };
+    }, [theme]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      "canvas",
+      {
+        ref: canvasRef,
+        className: "absolute inset-0 w-full h-full",
+        style: { zIndex: 1, pointerEvents: "none" }
+      }
+    );
+  }
+  const AUDIO_SRC = "./assets/audio/SiglaBatman.wav";
+  const TARGET_VOLUME = 0.45;
+  const FADE_IN_DURATION_MS = 2e3;
+  let _audio = null;
+  let _started = false;
+  let _fadeRafId = null;
+  function _getInstance() {
+    if (_audio) return _audio;
+    _audio = new Audio(AUDIO_SRC);
+    _audio.loop = true;
+    _audio.volume = 0;
+    _audio.preload = "auto";
+    _audio.addEventListener("timeupdate", () => {
+      if (!_audio) return;
+      const d = _audio.duration;
+      if (d && _audio.currentTime > d - 0.05) {
+        _audio.currentTime = 0;
+      }
+    });
+    return _audio;
+  }
+  function _cancelFade() {
+    if (_fadeRafId !== null) {
+      cancelAnimationFrame(_fadeRafId);
+      _fadeRafId = null;
+    }
+  }
+  function _fadeInRAF(startVolume, targetVolume, durationMs) {
+    _cancelFade();
+    if (!_audio) return;
+    const startTime = performance.now();
+    const delta = targetVolume - startVolume;
+    const tick = (now2) => {
+      if (!_audio) return;
+      const elapsed = now2 - startTime;
+      const progress2 = Math.min(elapsed / durationMs, 1);
+      const eased = 1 - Math.pow(1 - progress2, 3);
+      _audio.volume = Math.min(targetVolume, startVolume + delta * eased);
+      if (progress2 < 1) {
+        _fadeRafId = requestAnimationFrame(tick);
+      } else {
+        _fadeRafId = null;
+      }
+    };
+    _fadeRafId = requestAnimationFrame(tick);
+  }
+  const BatcavernAudio = {
+    /**
+     * Precaricare l'audio appena possibile senza riprodurlo.
+     * Da chiamare al mount dell'app per minimizzare la latenza.
+     */
+    preload() {
+      _getInstance();
+    },
+    /**
+     * Avvia la traccia con fade-in morbido.
+     * Se è già in riproduzione, non fa nulla (idempotente).
+     * Gestisce automaticamente la autoplay policy dei browser moderni.
+     */
+    start(fadeDurationMs = FADE_IN_DURATION_MS) {
+      if (_started) return;
+      _started = true;
+      const audio = _getInstance();
+      audio.currentTime = 0;
+      audio.volume = 0;
+      const doPlay = () => {
+        audio.play().then(() => {
+          _fadeInRAF(0, TARGET_VOLUME, fadeDurationMs);
+        }).catch(() => {
+          _started = false;
+        });
+      };
+      doPlay();
+      const unlockAndStart = () => {
+        if (_started && _audio && !_audio.paused) return;
+        _started = true;
+        doPlay();
+        document.removeEventListener("click", unlockAndStart, { capture: true });
+        document.removeEventListener("keydown", unlockAndStart, {
+          capture: true
+        });
+        document.removeEventListener("touchstart", unlockAndStart, {
+          capture: true
+        });
+      };
+      document.addEventListener("click", unlockAndStart, { capture: true });
+      document.addEventListener("keydown", unlockAndStart, { capture: true });
+      document.addEventListener("touchstart", unlockAndStart, { capture: true });
+    },
+    /**
+     * Aggiorna lo stato muted senza interrompere la riproduzione.
+     */
+    setMuted(muted) {
+      const audio = _getInstance();
+      audio.muted = muted;
+    },
+    /**
+     * Ritorna true se la traccia è in riproduzione.
+     */
+    isPlaying() {
+      return _audio !== null && !_audio.paused;
+    },
+    /**
+     * Accesso diretto all'istanza (solo per debug / lettura volume).
+     * Non usare per pause/stop.
+     */
+    getInstance() {
+      return _audio;
+    }
+  };
   const BRIEFING_TEXTS = [
-    { text: "Batman...", accent: "Ho lasciato un regalino nella tua preziosa caverna..." },
+    { text: "Batman ...", accent: "Ho lasciato un regalino nella tua preziosa caverna..." },
     { text: "Non è il solito giocattolo,", accent: "ma qualcosa che farà il botto." },
     { text: "Trova i miei 5 indizi.", accent: "Dimostrami che il Grande Pipistrello sa ancora giocare." },
     { text: "Il tempo scorre.", accent: "Tic tac, Batsy..." },
@@ -70083,6 +70790,9 @@ void main() {
     const [step, setStep] = reactExports.useState(0);
     const [isHacked, setIsHacked] = reactExports.useState(false);
     reactExports.useEffect(() => {
+      const audioTimer = setTimeout(() => {
+        BatcavernAudio.start(2e3);
+      }, 1500);
       const t1 = setTimeout(() => setIsHacked(true), 1500);
       const timers = [];
       for (let i2 = 0; i2 < BRIEFING_TEXTS.length; i2++) {
@@ -70090,12 +70800,14 @@ void main() {
       }
       timers.push(setTimeout(() => setStep(6), 2e3 + BRIEFING_TEXTS.length * 3e3));
       return () => {
+        clearTimeout(audioTimer);
         clearTimeout(t1);
         timers.forEach(clearTimeout);
       };
     }, []);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-50 bg-black flex flex-col items-center justify-center overflow-hidden", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 opacity-20 pointer-events-none", children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx(TechBackground, { theme: "joker" }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 opacity-20 pointer-events-none z-10", children: [
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(57,255,20,0.05)_0%,transparent_70%)]" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[length:100%_2px,3px_100%]" }),
         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 scan-sweep-line opacity-30" })
@@ -70115,29 +70827,19 @@ void main() {
         {
           initial: { opacity: 0 },
           animate: { opacity: 1 },
-          className: "relative z-10 w-full max-w-4xl px-6 flex flex-col items-center text-center",
+          className: "relative z-10 w-full max-w-5xl px-6 flex flex-col items-center text-center",
           children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
+            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-[260px] flex items-center justify-center mb-14", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { mode: "wait", children: step >= 1 && step <= 5 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
               motion.div,
               {
-                initial: { opacity: 0, scale: 1.5, filter: "blur(20px)" },
-                animate: { opacity: 0.15, scale: 1, filter: "blur(0px)" },
-                transition: { duration: 1 },
-                className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none",
-                children: /* @__PURE__ */ jsxRuntimeExports.jsx("svg", { width: "600", height: "300", viewBox: "0 0 120 60", fill: "none", className: "text-joker opacity-20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M10 20C30 45 90 45 110 20C90 55 30 55 10 20Z", fill: "currentColor" }) })
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "min-h-[200px] flex items-center justify-center mb-12", children: /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { mode: "wait", children: step >= 1 && step <= 5 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-              motion.div,
-              {
-                initial: { opacity: 0, y: 20, filter: "blur(10px)" },
+                initial: { opacity: 0, y: 24, filter: "blur(10px)" },
                 animate: { opacity: 1, y: 0, filter: "blur(0px)" },
-                exit: { opacity: 0, y: -20, filter: "blur(10px)" },
+                exit: { opacity: 0, y: -24, filter: "blur(10px)" },
                 transition: { duration: 0.8, ease: "easeOut" },
-                className: "flex flex-col items-center",
+                className: "flex flex-col items-center gap-6",
                 children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "cinematic-title text-white text-3xl md:text-6xl glitch-slow px-4 mb-3", children: BRIEFING_TEXTS[step - 1].text }),
-                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "cinematic-accent text-joker text-xs md:text-xl flicker-fast px-4", children: BRIEFING_TEXTS[step - 1].accent })
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "cinematic-title text-white text-5xl md:text-8xl glitch-slow px-4 font-black tracking-tight leading-none", children: BRIEFING_TEXTS[step - 1].text }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "cinematic-accent text-joker text-lg md:text-3xl flicker-fast px-4 font-medium tracking-wide max-w-2xl", children: BRIEFING_TEXTS[step - 1].accent })
                 ]
               },
               step
@@ -70149,11 +70851,26 @@ void main() {
                 animate: { opacity: 1, scale: 1 },
                 className: "flex flex-col items-center",
                 children: [
-                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-12 relative group", children: [
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "cinematic-label text-[9px] text-red-500/60 mb-4 text-center", children: "TEMPO_ALLA_DETONAZIONE" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "cinematic-title text-7xl md:text-8xl text-red-600 tabular-nums drop-shadow-[0_0_30px_rgba(220,38,38,0.6)] camera-shake", style: { letterSpacing: "-0.02em" }, children: "03:00" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -inset-8 border border-red-600/20 animate-pulse" }),
-                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -inset-1 border border-red-600/40 opacity-0 group-hover:opacity-100 transition-opacity" })
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "mb-14 relative group w-[380px] md:w-[620px]", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none flex items-center justify-center w-full h-full z-0 opacity-40", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("svg", { viewBox: "0 0 200 80", className: "w-full h-full drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]", preserveAspectRatio: "none", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx(
+                        "path",
+                        {
+                          d: "M 20 5 L 180 5 L 195 20 L 195 60 L 180 75 L 20 75 L 5 60 L 5 20 Z",
+                          fill: "rgba(20,0,0,0.8)",
+                          stroke: "#ef4444",
+                          strokeWidth: "1.5"
+                        }
+                      ),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M 5 30 L 5 20 L 15 10", stroke: "#ef4444", strokeWidth: "3", fill: "none" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("path", { d: "M 195 50 L 195 60 L 185 70", stroke: "#ef4444", strokeWidth: "3", fill: "none" })
+                    ] }) }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 py-8 flex flex-col items-center justify-center overflow-visible", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "cinematic-label text-sm md:text-base text-red-500/80 mb-4 text-center tracking-[0.6em] uppercase animate-pulse", children: "TEMPO_ALLA_DETONAZIONE" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-8xl md:text-[10rem] text-red-600 font-mono font-black drop-shadow-[0_0_40px_rgba(220,38,38,0.8)] camera-shake px-4", style: { letterSpacing: "0.05em" }, children: "03:00" })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-[linear-gradient(rgba(255,0,0,0.1)_1px,transparent_1px)] bg-[size:100%_4px] pointer-events-none rounded-xl" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute -inset-4 border border-red-600/10 animate-pulse pointer-events-none" })
                   ] }),
                   /* @__PURE__ */ jsxRuntimeExports.jsxs(
                     motion.button,
@@ -70161,9 +70878,9 @@ void main() {
                       onClick: onBegin,
                       whileHover: { scale: 1.02 },
                       whileTap: { scale: 0.98 },
-                      className: "group relative w-[280px] md:w-[400px] py-5 md:py-6 bg-black border-2 border-gold text-gold rounded-sm overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(250,204,21,0.5)]",
+                      className: "group relative w-[320px] md:w-[520px] py-6 md:py-8 bg-black border-2 border-gold text-gold rounded-sm overflow-hidden transition-all duration-500 hover:shadow-[0_0_50px_rgba(250,204,21,0.5)]",
                       children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cinematic-label font-['Share_Tech_Mono',monospace] relative z-10 text-[10px] md:text-xs block", style: { letterSpacing: "0.5em" }, children: "ACCETTA LA SFIDA" }),
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "cinematic-label font-['Share_Tech_Mono',monospace] relative z-10 text-sm md:text-lg block", style: { letterSpacing: "0.5em" }, children: "ACCETTA LA SFIDA" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-gold opacity-0 group-hover:opacity-10 transition-opacity duration-300" }),
                         /* @__PURE__ */ jsxRuntimeExports.jsx(
                           motion.div,
@@ -70432,49 +71149,122 @@ void main() {
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none z-40 border-[40px] border-black" })
     ] });
   }
+  const LAUGH_INTERVAL_MIN_MS = 55e3;
+  const LAUGH_INTERVAL_MAX_MS = 7e4;
+  const INITIAL_DELAY_MIN_MS = 15e3;
+  const INITIAL_DELAY_MAX_MS = 25e3;
+  const PLAYBACK_RATE_MIN = 0.62;
+  const PLAYBACK_RATE_MAX = 0.75;
+  const VOLUME_MIN = 0.08;
+  const VOLUME_MAX = 0.28;
   function JokerAudioManager({ isActive, isMuted, isPaused }) {
-    const templateAudioRef = reactExports.useRef(null);
-    const nextLaughTimeoutRef = reactExports.useRef(null);
+    const audioCtxRef = reactExports.useRef(null);
+    const audioBufferRef = reactExports.useRef(null);
+    const nextTimerRef = reactExports.useRef(null);
+    const isLoadedRef = reactExports.useRef(false);
     reactExports.useEffect(() => {
-      try {
-        const audio = new Audio("./assets/audio/RisataJoker.wav");
-        templateAudioRef.current = audio;
-      } catch (error2) {
-        console.error("Failed to load Joker laugh audio:", error2);
-      }
+      const loadBuffer = async () => {
+        try {
+          const ctx = new AudioContext();
+          audioCtxRef.current = ctx;
+          const response = await fetch("./assets/audio/RisataJoker.wav");
+          const arrayBuffer = await response.arrayBuffer();
+          const decoded = await ctx.decodeAudioData(arrayBuffer);
+          audioBufferRef.current = decoded;
+          isLoadedRef.current = true;
+        } catch (err) {
+          console.warn("[JokerAudio] Impossibile caricare RisataJoker.wav", err);
+        }
+      };
+      loadBuffer();
       return () => {
-        if (nextLaughTimeoutRef.current) clearTimeout(nextLaughTimeoutRef.current);
+        if (nextTimerRef.current) clearTimeout(nextTimerRef.current);
       };
     }, []);
-    const playLaugh = () => {
-      if (!templateAudioRef.current || isMuted || isPaused || !isActive) return;
-      const randomVolume = 0.05 + Math.random() * 0.35;
-      const clone = templateAudioRef.current.cloneNode();
-      clone.volume = randomVolume;
-      clone.play().catch(() => {
-      });
+    const playSpatialized = () => {
+      const ctx = audioCtxRef.current;
+      const buffer = audioBufferRef.current;
+      if (!ctx || !buffer || !isLoadedRef.current) return;
+      if (isMuted || isPaused || !isActive) return;
+      if (ctx.state === "suspended") {
+        ctx.resume().catch(() => {
+        });
+      }
+      const playbackRate = PLAYBACK_RATE_MIN + Math.random() * (PLAYBACK_RATE_MAX - PLAYBACK_RATE_MIN);
+      const volume = VOLUME_MIN + Math.random() * (VOLUME_MAX - VOLUME_MIN);
+      const panValue = (Math.random() * 2 - 1) * 0.88;
+      const cutoffHz = 700 + Math.random() * 1400;
+      const echo1Time = 0.3 + Math.random() * 0.25;
+      const echo2Time = 0.75 + Math.random() * 0.45;
+      const source = ctx.createBufferSource();
+      source.buffer = buffer;
+      source.playbackRate.value = playbackRate;
+      const filter2 = ctx.createBiquadFilter();
+      filter2.type = "lowpass";
+      filter2.frequency.value = cutoffHz;
+      filter2.Q.value = 0.8;
+      const panner = ctx.createStereoPanner();
+      panner.pan.value = panValue;
+      const gainMain = ctx.createGain();
+      gainMain.gain.value = volume;
+      const delay1 = ctx.createDelay(2);
+      delay1.delayTime.value = echo1Time;
+      const gainEcho1 = ctx.createGain();
+      gainEcho1.gain.value = volume * 0.38;
+      const pannerEcho1 = ctx.createStereoPanner();
+      pannerEcho1.pan.value = panValue * -0.4;
+      const delay2 = ctx.createDelay(2);
+      delay2.delayTime.value = echo2Time;
+      const gainEcho2 = ctx.createGain();
+      gainEcho2.gain.value = volume * 0.18;
+      const pannerEcho2 = ctx.createStereoPanner();
+      pannerEcho2.pan.value = panValue * -0.65;
+      source.connect(filter2);
+      filter2.connect(panner);
+      panner.connect(gainMain);
+      gainMain.connect(ctx.destination);
+      filter2.connect(delay1);
+      delay1.connect(pannerEcho1);
+      pannerEcho1.connect(gainEcho1);
+      gainEcho1.connect(ctx.destination);
+      filter2.connect(delay2);
+      delay2.connect(pannerEcho2);
+      pannerEcho2.connect(gainEcho2);
+      gainEcho2.connect(ctx.destination);
+      source.start();
+      const duration = buffer.duration / playbackRate + echo2Time + 0.5;
+      source.stop(ctx.currentTime + duration);
+      source.onended = () => {
+        source.disconnect();
+        filter2.disconnect();
+        panner.disconnect();
+        gainMain.disconnect();
+        delay1.disconnect();
+        pannerEcho1.disconnect();
+        gainEcho1.disconnect();
+        delay2.disconnect();
+        pannerEcho2.disconnect();
+        gainEcho2.disconnect();
+      };
     };
     reactExports.useEffect(() => {
-      const scheduleNextLaugh = () => {
-        if (nextLaughTimeoutRef.current) clearTimeout(nextLaughTimeoutRef.current);
-        if (!isActive || isPaused) return;
-        const delay2 = 4e3 + Math.random() * 8e3;
-        nextLaughTimeoutRef.current = setTimeout(() => {
-          playLaugh();
-          scheduleNextLaugh();
+      if (nextTimerRef.current) {
+        clearTimeout(nextTimerRef.current);
+        nextTimerRef.current = null;
+      }
+      if (!isActive || isPaused) return;
+      const schedule = (isFirst) => {
+        const minMs = isFirst ? INITIAL_DELAY_MIN_MS : LAUGH_INTERVAL_MIN_MS;
+        const maxMs = isFirst ? INITIAL_DELAY_MAX_MS : LAUGH_INTERVAL_MAX_MS;
+        const delay2 = minMs + Math.random() * (maxMs - minMs);
+        nextTimerRef.current = setTimeout(() => {
+          playSpatialized();
+          schedule(false);
         }, delay2);
       };
-      if (isActive && !isPaused) {
-        const initialDelay = 2e3 + Math.random() * 3e3;
-        nextLaughTimeoutRef.current = setTimeout(() => {
-          playLaugh();
-          scheduleNextLaugh();
-        }, initialDelay);
-      } else {
-        if (nextLaughTimeoutRef.current) clearTimeout(nextLaughTimeoutRef.current);
-      }
+      schedule(true);
       return () => {
-        if (nextLaughTimeoutRef.current) clearTimeout(nextLaughTimeoutRef.current);
+        if (nextTimerRef.current) clearTimeout(nextTimerRef.current);
       };
     }, [isActive, isPaused, isMuted]);
     return null;
@@ -70592,86 +71382,24 @@ void main() {
     };
   }
   function useAudioSystem(isMuted) {
-    const audioRef = reactExports.useRef(null);
     reactExports.useEffect(() => {
-      const audio = new Audio("./assets/audio/SiglaBatman.wav");
-      audio.loop = true;
-      audio.volume = 0.4;
-      audio.muted = isMuted;
-      audioRef.current = audio;
-      const tryPlay = () => {
-        audio.play().catch(() => {
-          const unlock = () => {
-            audio.play().catch(() => {
-            });
-            window.removeEventListener("click", unlock);
-          };
-          window.addEventListener("click", unlock);
-        });
-      };
-      tryPlay();
-      return () => {
-        audio.pause();
-        audio.src = "";
-      };
+      BatcavernAudio.preload();
     }, []);
     reactExports.useEffect(() => {
-      if (audioRef.current) audioRef.current.muted = isMuted;
+      BatcavernAudio.setMuted(isMuted);
     }, [isMuted]);
-    const playMusic = reactExports.useCallback((time2 = 20, volume = 0.4) => {
-      if (audioRef.current) {
-        audioRef.current.currentTime = time2;
-        audioRef.current.volume = volume;
-        audioRef.current.play().catch(() => {
-        });
-      }
-    }, []);
-    const pauseMusic = reactExports.useCallback(() => {
-      if (audioRef.current) {
-        audioRef.current.pause();
-      }
-    }, []);
-    const fadeOutMusic = reactExports.useCallback((callback) => {
-      if (audioRef.current) {
-        let currentVol = audioRef.current.volume;
-        const fadeOut = setInterval(() => {
-          currentVol = Math.max(0, currentVol - 0.05);
-          if (audioRef.current) audioRef.current.volume = currentVol;
-          if (currentVol <= 0) {
-            clearInterval(fadeOut);
-            if (audioRef.current) {
-              audioRef.current.pause();
-              audioRef.current.volume = 0.4;
-            }
-            if (callback) callback();
-          }
-        }, 80);
-      } else {
-        if (callback) callback();
-      }
-    }, []);
-    const fadeInMusic = reactExports.useCallback((targetVol = 0.4, startVol = 0.05, duration = 100) => {
-      if (audioRef.current) {
-        audioRef.current.volume = startVol;
-        audioRef.current.play().catch(() => {
-        });
-        let currentVol = startVol;
-        const fadeIn = setInterval(() => {
-          currentVol = Math.min(targetVol, currentVol + 0.05);
-          if (audioRef.current) audioRef.current.volume = currentVol;
-          if (currentVol >= targetVol) clearInterval(fadeIn);
-        }, duration);
-      }
-    }, []);
-    return { audioRef, playMusic, pauseMusic, fadeOutMusic, fadeInMusic };
+    return {
+      // Esposto per compatibilità con App.tsx (accesso diretto all'istanza)
+      audioRef: { current: BatcavernAudio.getInstance() }
+    };
   }
-  const CinematicVideoPlayer$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => CinematicVideoPlayer$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-aKi-Kp_w.js", document.baseURI).href));
-  const SharedPanoramaCanvas$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => SharedPanoramaCanvas$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-aKi-Kp_w.js", document.baseURI).href));
-  const BatmanCamera$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => BatmanCamera$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-aKi-Kp_w.js", document.baseURI).href));
-  const Pricing$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => Pricing$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-aKi-Kp_w.js", document.baseURI).href));
-  const Checkout$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => Checkout$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-aKi-Kp_w.js", document.baseURI).href));
-  const FinalReveal$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => FinalReveal$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-aKi-Kp_w.js", document.baseURI).href));
-  const ThankYouPage$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => ThankYouPage$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-aKi-Kp_w.js", document.baseURI).href));
+  const CinematicVideoPlayer$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => CinematicVideoPlayer$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-Cnf-tg3O.js", document.baseURI).href));
+  const SharedPanoramaCanvas$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => SharedPanoramaCanvas$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-Cnf-tg3O.js", document.baseURI).href));
+  const BatmanCamera$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => BatmanCamera$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-Cnf-tg3O.js", document.baseURI).href));
+  const BatcomputerBootOverlay$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => BatcomputerBootOverlay$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-Cnf-tg3O.js", document.baseURI).href));
+  const Checkout$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => Checkout$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-Cnf-tg3O.js", document.baseURI).href));
+  const FinalReveal$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => FinalReveal$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-Cnf-tg3O.js", document.baseURI).href));
+  const ThankYouPage$2 = reactExports.lazy(() => __vitePreload(() => Promise.resolve().then(() => ThankYouPage$1), false ? __VITE_PRELOAD__ : void 0, _documentCurrentScript && _documentCurrentScript.tagName.toUpperCase() === "SCRIPT" && _documentCurrentScript.src || new URL("assets/index-Cnf-tg3O.js", document.baseURI).href));
   function App() {
     const [phase, setPhaseInternal] = reactExports.useState("intro");
     const setPhase = reactExports.useCallback((newPhase) => {
@@ -70691,6 +71419,7 @@ void main() {
         setPanoramaSceneInternal(newScene);
       });
     }, []);
+    const [showBootOverlay, setShowBootOverlay] = reactExports.useState(false);
     const { isMobile, forceMobile, setForceMobile } = useMobileDetection();
     const isVideoTransition = phase === "transition1" || phase === "transition2";
     const handleTimeUp = reactExports.useCallback(() => setMissionStatus("failed"), []);
@@ -70704,13 +71433,7 @@ void main() {
     const [speedrunUnlocked, setSpeedrunUnlocked] = reactExports.useState(false);
     const [finalTimeTaken, setFinalTimeTaken] = reactExports.useState(0);
     const [purchasedQuantity, setPurchasedQuantity] = reactExports.useState(1);
-    const {
-      audioRef,
-      playMusic,
-      pauseMusic,
-      fadeOutMusic,
-      fadeInMusic
-    } = useAudioSystem(isMuted);
+    useAudioSystem(isMuted);
     reactExports.useEffect(() => {
       if (completedCount === 5 && missionStatus === "active") {
         const timeTaken = initialTime - timeLeft;
@@ -70736,18 +71459,14 @@ void main() {
     const changePhase = (newPhase) => {
       if (isTransitioning) return;
       if (phase === "intro" && newPhase === "batcomputer") {
-        setCompletedCount(0);
-        setTimerResetKey((prev) => prev + 1);
-        resetTimer();
-        setShowBonusFeedback(false);
-        setMissionStatus("active");
-        playMusic(20, 0.4);
+        setPhase("batcomputer");
+        setShowBootOverlay(true);
+        return;
       }
       if (newPhase === "breather") {
         setMissionStatus("succeeded");
         setFinalTimeTaken(0);
         setSpeedrunUnlocked(false);
-        fadeOutMusic();
         setIsTransitioning(true);
         setTimeout(() => {
           setPhase("breather");
@@ -70759,7 +71478,6 @@ void main() {
           setIsTransitioning(true);
           setTimeout(() => {
             setPhase("reveal");
-            fadeInMusic(0.4, 0.05, 100);
           }, 400);
           setTimeout(() => {
             setIsTransitioning(false);
@@ -70784,10 +71502,15 @@ void main() {
       resetTimer();
       setShowBonusFeedback(false);
       setSpeedrunUnlocked(false);
-      pauseMusic();
-      if (audioRef.current) {
-        audioRef.current.currentTime = 20;
-      }
+      setShowBootOverlay(false);
+    };
+    const handleStartMission = () => {
+      setShowBootOverlay(false);
+      setCompletedCount(0);
+      setTimerResetKey((prev) => prev + 1);
+      resetTimer();
+      setShowBonusFeedback(false);
+      setMissionStatus("active");
     };
     const handleSkipPhase = () => {
       setIsTransitioning(false);
@@ -70866,7 +71589,7 @@ void main() {
           className: "bg-black/60 border border-gold/30 hover:border-gold text-gold/80 hover:text-gold transition-all duration-200 px-3 py-1.5 text-[9px] rounded-sm backdrop-blur-sm focus:outline-none cursor-pointer font-mono tracking-wider",
           title: "Salta alla fase successiva (Dev)",
           children: [
-            "⚡ Salta a: ",
+            "Salta a: ",
             phase === "intro" ? "BatComputer 360" : phase === "batcomputer" ? "Transizione 1 (Video)" : phase === "transition1" ? "Armeria 360" : phase === "armeria" ? "Transizione 2 (Video)" : phase === "transition2" ? "BatMobile 360" : phase === "batmobile" ? "Vittoria" : phase === "breather" ? "Vittoria" : phase === "reveal" ? "Showreel" : phase === "showreel" ? "Checkout" : phase === "checkout" ? "Thank You" : "Intro"
           ]
         }
@@ -70942,6 +71665,7 @@ void main() {
             }
           }
         ) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: phase === "batcomputer" && showBootOverlay && /* @__PURE__ */ jsxRuntimeExports.jsx(BatcomputerBootOverlay$2, { onComplete: handleStartMission }) }),
         /* @__PURE__ */ jsxRuntimeExports.jsxs(AnimatePresence, { children: [
           phase === "transition1" && /* @__PURE__ */ jsxRuntimeExports.jsx(
             motion.div,
@@ -71010,10 +71734,7 @@ void main() {
             "breather"
           ),
           phase === "reveal" && /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(FinalReveal$2, { timeTaken: finalTimeTaken, onComplete: () => changePhase("showreel"), isPaused }, "reveal") }),
-          phase === "showreel" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(reactExports.Suspense, { fallback: null, children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(BatmanCamera$2, { onPreorder: () => changePhase("checkout") }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx(Pricing$2, { speedrunUnlocked, onPreorder: () => changePhase("checkout") })
-          ] }) }, "showreel"),
+          phase === "showreel" && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10", children: /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(BatmanCamera$2, { onPreorder: () => changePhase("checkout") }) }) }, "showreel"),
           phase === "checkout" && /* @__PURE__ */ jsxRuntimeExports.jsx(reactExports.Suspense, { fallback: null, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
             Checkout$2,
             {
@@ -79954,7 +80675,7 @@ No matching component was found for:
               tex.dispose();
               return;
             }
-            console.log(`[Panorama] ✅ Texture loaded for ${scene}: ${urls[idx]}, size: ${(_a = tex.image) == null ? void 0 : _a.width}x${(_b2 = tex.image) == null ? void 0 : _b2.height}`);
+            console.log(`[Panorama] SUCCESS: Texture loaded for ${scene}: ${urls[idx]}, size: ${(_a = tex.image) == null ? void 0 : _a.width}x${(_b2 = tex.image) == null ? void 0 : _b2.height}`);
             tex.colorSpace = SRGBColorSpace;
             setTexture(tex);
             setIsLoading(false);
@@ -79965,7 +80686,7 @@ No matching component was found for:
             }
           },
           (err) => {
-            console.error(`[Panorama] ❌ Failed to load ${urls[idx]}:`, err);
+            console.error(`[Panorama] ERROR: Failed to load ${urls[idx]}:`, err);
             tryLoad(idx + 1);
           }
         );
@@ -80061,344 +80782,542 @@ No matching component was found for:
   const SHOW_THRESHOLD = 120;
   const CONCURRENCY_LIMIT = 60;
   const pad = (num) => num.toString().padStart(4, "0");
+  function DepthText({
+    isActive,
+    children,
+    yAnchor = "50%",
+    yTranslate = "-50%",
+    alignX = "left",
+    xInset = "5vw",
+    innerClass = "",
+    backZIndex = 5,
+    frontZIndex = 60,
+    crossDelay = 700
+  }) {
+    const [phase, setPhase] = reactExports.useState("idle");
+    const timersRef = reactExports.useRef([]);
+    reactExports.useEffect(() => {
+      timersRef.current.forEach(clearTimeout);
+      timersRef.current = [];
+      if (isActive) {
+        setPhase("behind");
+        timersRef.current.push(setTimeout(() => setPhase("crossing"), crossDelay));
+        timersRef.current.push(setTimeout(() => setPhase("front"), crossDelay + 450));
+      } else {
+        if (phase !== "idle") {
+          setPhase("exiting");
+          timersRef.current.push(setTimeout(() => setPhase("idle"), 700));
+        }
+      }
+      return () => timersRef.current.forEach(clearTimeout);
+    }, [isActive]);
+    if (phase === "idle") return null;
+    const backVisible = phase === "behind";
+    const backOpacity = backVisible ? 0.55 : 0;
+    const backScale = backVisible ? 0.82 : 0.72;
+    const backBlurPx = backVisible ? 0 : 6;
+    const backY = backVisible ? 0 : 12;
+    const backBrightness = backVisible ? 0.85 : 0.4;
+    const frontVisible = phase === "front";
+    const frontCross = phase === "crossing";
+    const frontExit = phase === "exiting";
+    const frontOpacity = frontVisible ? 1 : frontCross ? 0.85 : frontExit ? 0 : 0;
+    const frontScale = frontVisible ? 1 : frontCross ? 1.06 : frontExit ? 0.9 : 0.9;
+    const frontBlurPx = frontCross ? 1.2 : 0;
+    const frontY = frontVisible ? 0 : frontCross ? -6 : frontExit ? 10 : 8;
+    const frontBrightness = frontCross ? 1.4 : 1;
+    const baseStyle = {
+      position: "absolute",
+      top: yAnchor,
+      transform: `translateY(${yTranslate})`,
+      ...alignX === "left" ? { left: xInset } : {},
+      ...alignX === "right" ? { right: xInset } : {},
+      ...alignX === "center" ? { left: "50%", transform: `translateY(${yTranslate}) translateX(-50%)` } : {},
+      pointerEvents: "none"
+    };
+    const transitionStr = "opacity 0.45s cubic-bezier(0.23,1,0.32,1), transform 0.45s cubic-bezier(0.23,1,0.32,1), filter 0.45s ease";
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { ...baseStyle, zIndex: backZIndex }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          className: innerClass,
+          style: {
+            opacity: backOpacity,
+            transform: `scale(${backScale}) translateY(${backY}px)`,
+            filter: `blur(${backBlurPx}px) brightness(${backBrightness})`,
+            transition: transitionStr,
+            transformOrigin: alignX === "right" ? "right center" : alignX === "center" ? "center" : "left center"
+          },
+          children
+        }
+      ) }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { ...baseStyle, zIndex: frontZIndex }, children: [
+        frontCross && /* @__PURE__ */ jsxRuntimeExports.jsx(
+          motion.div,
+          {
+            initial: { opacity: 0, scale: 0.6 },
+            animate: { opacity: [0, 0.5, 0], scale: [0.7, 2, 3] },
+            transition: { duration: 0.45, ease: "easeOut" },
+            style: {
+              position: "absolute",
+              inset: "-30px",
+              borderRadius: 8,
+              background: "radial-gradient(ellipse at center, rgba(255,215,0,0.25) 0%, transparent 65%)",
+              pointerEvents: "none"
+            }
+          },
+          "burst"
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "div",
+          {
+            className: innerClass,
+            style: {
+              opacity: frontOpacity,
+              transform: `scale(${frontScale}) translateY(${frontY}px)`,
+              filter: `blur(${frontBlurPx}px) brightness(${frontBrightness})`,
+              transition: transitionStr,
+              transformOrigin: alignX === "right" ? "right center" : alignX === "center" ? "center" : "left center"
+            },
+            children
+          }
+        )
+      ] })
+    ] });
+  }
+  function FinalCTA({ progress: progress2, onPreorder }) {
+    const t2 = Math.max(0, Math.min(1, (progress2 - 0.875) / 0.125));
+    if (t2 === 0) return null;
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: {
+        position: "absolute",
+        top: "15%",
+        left: "50%",
+        transform: `translateX(-50%) scale(${0.8 + 0.2 * t2})`,
+        zIndex: 5,
+        opacity: t2,
+        pointerEvents: "none",
+        textAlign: "center"
+      }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(
+          "h1",
+          {
+            style: {
+              fontSize: "clamp(32px, 5vw, 80px)",
+              fontWeight: 900,
+              color: "#FFD700",
+              textTransform: "uppercase",
+              letterSpacing: "0.08em",
+              lineHeight: 1,
+              whiteSpace: "nowrap",
+              textShadow: "0 0 20px rgba(255,215,0,0.5), 0 0 50px rgba(255,215,0,0.2)"
+            },
+            children: "L'EREDITÀ È TUA"
+          }
+        ),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: {
+          fontFamily: "monospace",
+          fontSize: "clamp(10px, 1.2vw, 14px)",
+          letterSpacing: "0.6em",
+          color: "rgba(255,215,0,0.7)",
+          textTransform: "uppercase",
+          marginTop: "16px",
+          textShadow: "0 0 20px rgba(255,215,0,0.3)"
+        }, children: "EDIZIONE LIMITATA · 500 ESEMPLARI" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsx(
+        "div",
+        {
+          style: {
+            position: "absolute",
+            bottom: "12%",
+            left: "50%",
+            transform: `translateX(-50%) translateY(${(1 - t2) * 40}px)`,
+            zIndex: 65,
+            opacity: t2,
+            pointerEvents: t2 > 0.8 ? "auto" : "none"
+          },
+          children: /* @__PURE__ */ jsxRuntimeExports.jsx(PreorderButtonInner, { btnGlitch: false, onPreorder })
+        }
+      )
+    ] });
+  }
+  function PreorderButtonInner({ btnGlitch, onPreorder }) {
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative", children: [
+      btnGlitch && /* @__PURE__ */ jsxRuntimeExports.jsxs(jsxRuntimeExports.Fragment, { children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 flex items-center justify-center", style: { transform: "translateX(-3px)", color: "rgba(255,150,20,0.7)", fontSize: "clamp(12px, 1.2vw, 14px)", fontFamily: "monospace", letterSpacing: "0.3em", fontWeight: 700, textTransform: "uppercase", mixBlendMode: "screen", pointerEvents: "none", zIndex: 2 }, children: "PREORDINA IL CAVALIERE" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 flex items-center justify-center", style: { transform: "translateX(3px)", color: "rgba(100,220,255,0.4)", fontSize: "clamp(12px, 1.2vw, 14px)", fontFamily: "monospace", letterSpacing: "0.3em", fontWeight: 700, textTransform: "uppercase", mixBlendMode: "screen", pointerEvents: "none", zIndex: 2 }, children: "PREORDINA IL CAVALIERE" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs(
+        motion.button,
+        {
+          onClick: onPreorder,
+          whileHover: { scale: 1.05 },
+          whileTap: { scale: 0.95 },
+          style: {
+            position: "relative",
+            padding: "20px 48px",
+            background: "rgba(10, 10, 10, 0.85)",
+            border: "2px solid rgba(255,215,0,0.9)",
+            color: "#FFD700",
+            fontFamily: "monospace",
+            fontSize: "clamp(12px, 1.2vw, 16px)",
+            letterSpacing: "0.4em",
+            fontWeight: 700,
+            textTransform: "uppercase",
+            cursor: "pointer",
+            backdropFilter: "blur(12px)",
+            boxShadow: "0 0 50px rgba(255,215,0,0.4), inset 0 0 20px rgba(255,215,0,0.1)",
+            overflow: "hidden",
+            minWidth: "320px"
+          },
+          animate: {
+            boxShadow: [
+              "0 0 40px rgba(255,215,0,0.3), inset 0 0 15px rgba(255,215,0,0.05)",
+              "0 0 70px rgba(255,215,0,0.6), inset 0 0 35px rgba(255,215,0,0.15)",
+              "0 0 40px rgba(255,215,0,0.3), inset 0 0 15px rgba(255,215,0,0.05)"
+            ]
+          },
+          transition: { duration: 2.5, repeat: Infinity, ease: "easeInOut" },
+          children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { style: { position: "relative", zIndex: 1 }, children: "PREORDINA IL CAVALIERE" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              motion.div,
+              {
+                style: { position: "absolute", top: 0, left: "-100%", width: "60%", height: "100%", background: "linear-gradient(90deg, transparent, rgba(255,215,0,0.15), transparent)", pointerEvents: "none" },
+                animate: { left: ["−100%", "150%"] },
+                transition: { duration: 2.5, repeat: Infinity, ease: "linear", delay: 0.5 }
+              }
+            ),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { animate: { opacity: [0.3, 1, 0.3] }, transition: { duration: 2, repeat: Infinity }, style: { position: "absolute", top: 6, left: 6, width: 12, height: 12, borderTop: "2px solid #FFD700", borderLeft: "2px solid #FFD700" } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { animate: { opacity: [0.3, 1, 0.3] }, transition: { duration: 2, repeat: Infinity, delay: 0.5 }, style: { position: "absolute", top: 6, right: 6, width: 12, height: 12, borderTop: "2px solid #FFD700", borderRight: "2px solid #FFD700" } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { animate: { opacity: [0.3, 1, 0.3] }, transition: { duration: 2, repeat: Infinity, delay: 1 }, style: { position: "absolute", bottom: 6, left: 6, width: 12, height: 12, borderBottom: "2px solid #FFD700", borderLeft: "2px solid #FFD700" } }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { animate: { opacity: [0.3, 1, 0.3] }, transition: { duration: 2, repeat: Infinity, delay: 1.5 }, style: { position: "absolute", bottom: 6, right: 6, width: 12, height: 12, borderBottom: "2px solid #FFD700", borderRight: "2px solid #FFD700" } })
+          ]
+        }
+      )
+    ] });
+  }
+  const BEATS = [
+    {
+      side: "left",
+      title: ["SCULTURA DI", "PRECISIONE"],
+      sub: "Ogni ombra di Gotham scolpita con ossessione",
+      zDepth: "01"
+    },
+    {
+      side: "right",
+      title: ["MATERIALI", "D'ELITE"],
+      sub: "Finitura da pezzo da museo, non da scaffale",
+      zDepth: "02"
+    },
+    {
+      side: "left",
+      title: ["EDIZIONE", "LIMITATA"],
+      sub: "Solo 500 esemplari al mondo. Il tuo porta un numero.",
+      zDepth: "03"
+    },
+    {
+      side: "right",
+      title: ["PRESENZA", "LEGGENDARIA"],
+      sub: "Non arredamento. Una presenza.",
+      zDepth: "04"
+    }
+  ];
+  function BeatCard({ beat, isActive, index }) {
+    const isLeft = beat.side === "left";
+    return /* @__PURE__ */ jsxRuntimeExports.jsx(
+      DepthText,
+      {
+        isActive,
+        yAnchor: "50%",
+        yTranslate: "-50%",
+        alignX: beat.side,
+        xInset: "5vw",
+        backZIndex: 5,
+        frontZIndex: 60,
+        crossDelay: 650,
+        innerClass: isLeft ? "text-left" : "text-right",
+        children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { maxWidth: "44vw" }, children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { fontFamily: "monospace", fontSize: "clamp(7px, 0.7vw, 10px)", letterSpacing: "0.45em", color: "rgba(255,215,0,0.55)", marginBottom: 10, textTransform: "uppercase" }, children: [
+            "◈ DEPTH_",
+            beat.zDepth,
+            " / ",
+            isLeft ? "SINISTRA" : "DESTRA"
+          ] }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { children: beat.title.map((line, i2) => /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontSize: "clamp(42px, 7.5vw, 120px)", fontWeight: 900, color: "#FFD700", textTransform: "uppercase", letterSpacing: "0.06em", lineHeight: 0.9, textShadow: "0px 8px 40px rgba(0,0,0,0.96), 0px 0px 30px rgba(255,215,0,0.45)", display: "block" }, children: line }, i2)) }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { height: 1, width: "55%", marginTop: 14, marginBottom: 12, background: `linear-gradient(${isLeft ? "90deg" : "270deg"}, rgba(255,215,0,0.7), transparent)`, marginLeft: isLeft ? 0 : "auto", marginRight: isLeft ? "auto" : 0 } }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("p", { style: { fontSize: "clamp(10px, 1.1vw, 15px)", color: "rgba(255,255,255,0.8)", textTransform: "uppercase", letterSpacing: "0.28em", fontFamily: "monospace", lineHeight: 1.6, textShadow: "0px 2px 12px rgba(0,0,0,0.98)", textAlign: isLeft ? "left" : "right" }, children: beat.sub })
+        ] })
+      }
+    );
+  }
+  function HudOverlay({ progress: progress2 }) {
+    const frame2 = Math.min(Math.round(progress2 * 800), 800);
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "absolute", inset: 0, zIndex: 70, pointerEvents: "none" }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "absolute", top: 24, left: 24, borderTop: "1px solid rgba(255,215,0,0.3)", borderLeft: "1px solid rgba(255,215,0,0.3)", padding: "10px 16px" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontFamily: "monospace", fontSize: 8, color: "rgba(255,215,0,0.6)", letterSpacing: "0.45em" }, children: "BATCAM_ID: B-KNIGHT-87" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { fontFamily: "monospace", fontSize: 8, color: "rgba(255,255,255,0.25)", letterSpacing: "0.35em", marginTop: 4 }, children: [
+          "FRAME: ",
+          String(frame2).padStart(4, "0"),
+          " / 0800"
+        ] })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "absolute", top: 24, right: 24, borderTop: "1px solid rgba(255,215,0,0.3)", borderRight: "1px solid rgba(255,215,0,0.3)", padding: "10px 16px", textAlign: "right" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontFamily: "monospace", fontSize: 8, color: "rgba(255,215,0,0.6)", letterSpacing: "0.45em" }, children: "COORD: 40.712 N" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontFamily: "monospace", fontSize: 8, color: "rgba(255,255,255,0.25)", letterSpacing: "0.35em", marginTop: 4 }, children: "LONG: 74.006 O" })
+      ] }),
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", opacity: 0.06 }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 1, height: 36, background: "rgba(255,215,0,0.9)", margin: "0 auto" } }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 36, height: 1, background: "rgba(255,215,0,0.9)", marginTop: -18, marginLeft: -18 } })
+      ] })
+    ] });
+  }
   function BatmanCamera({ onPreorder }) {
     const containerRef = reactExports.useRef(null);
     const canvasRef = reactExports.useRef(null);
     const imagesRef = reactExports.useRef([]);
     const [loadedCount, setLoadedCount] = reactExports.useState(0);
     const [isLoaded, setIsLoaded] = reactExports.useState(false);
-    const { scrollYProgress } = useScroll({
-      target: containerRef,
-      offset: ["start start", "end end"]
-    });
-    const smoothProgress = useSpring(scrollYProgress, {
-      stiffness: 150,
-      damping: 40,
-      restDelta: 1e-3
-    });
+    const [progress2, setProgress] = reactExports.useState(0);
     const [activeBeat, setActiveBeat] = reactExports.useState(-1);
-    useMotionValueEvent(smoothProgress, "change", (p2) => {
-      if (p2 > 0.08 && p2 < 0.25) setActiveBeat(0);
-      else if (p2 > 0.28 && p2 < 0.45) setActiveBeat(1);
-      else if (p2 > 0.48 && p2 < 0.65) setActiveBeat(2);
-      else if (p2 > 0.68 && p2 < 0.9) setActiveBeat(3);
+    const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end end"] });
+    const smooth = useSpring(scrollYProgress, { stiffness: 150, damping: 40, restDelta: 1e-3 });
+    useMotionValueEvent(smooth, "change", (p2) => {
+      setProgress(p2);
+      if (p2 > 0.05 && p2 < 0.26) setActiveBeat(0);
+      else if (p2 > 0.28 && p2 < 0.48) setActiveBeat(1);
+      else if (p2 > 0.5 && p2 < 0.7) setActiveBeat(2);
+      else if (p2 > 0.72 && p2 < 0.87) setActiveBeat(3);
       else setActiveBeat(-1);
     });
-    const [progress2, setProgress] = reactExports.useState(0);
     reactExports.useEffect(() => {
-      const unsubscribe = scrollYProgress.on("change", (latest) => {
-        setProgress(latest);
-        if (Math.round(latest * 100) % 10 === 0) {
-          console.log("[BatmanCamera] scroll progress:", latest.toFixed(3));
-        }
+      let count = 0, isMounted = true, currentIndex = 1;
+      const loadImage = (i2) => new Promise((resolve2) => {
+        const img = new Image();
+        img.fetchPriority = i2 <= SHOW_THRESHOLD ? "high" : "low";
+        img.src = `${IMAGE_PREFIX}${pad(i2)}${IMAGE_SUFFIX}`;
+        const onDone = () => {
+          if (!isMounted) return resolve2();
+          count++;
+          setLoadedCount(count);
+          if (count >= SHOW_THRESHOLD) setIsLoaded(true);
+          resolve2();
+        };
+        img.onload = img.onerror = onDone;
+        imagesRef.current[i2 - 1] = img;
       });
-      return unsubscribe;
-    }, [scrollYProgress]);
-    reactExports.useEffect(() => {
-      let count = 0;
-      let isMounted = true;
-      let currentIndex = 1;
-      const loadImage = (index) => {
-        return new Promise((resolve2) => {
-          const img = new Image();
-          img.fetchPriority = index <= SHOW_THRESHOLD ? "high" : "low";
-          img.src = `${IMAGE_PREFIX}${pad(index)}${IMAGE_SUFFIX}`;
-          const onFinish = () => {
-            if (!isMounted) return resolve2();
-            count++;
-            setLoadedCount(count);
-            if (count >= SHOW_THRESHOLD) setIsLoaded(true);
-            resolve2();
-          };
-          img.onload = onFinish;
-          img.onerror = onFinish;
-          imagesRef.current[index - 1] = img;
-        });
+      const phase1 = async () => {
+        await Promise.all(Array(Math.min(SHOW_THRESHOLD, CONCURRENCY_LIMIT)).fill(null).map(async () => {
+          while (currentIndex <= SHOW_THRESHOLD && isMounted) await loadImage(currentIndex++);
+        }));
       };
-      const runPriorityPhase = async () => {
-        const workers = Array(Math.min(SHOW_THRESHOLD, CONCURRENCY_LIMIT)).fill(null).map(async () => {
-          while (currentIndex <= SHOW_THRESHOLD && isMounted) {
-            const index = currentIndex++;
-            await loadImage(index);
-          }
-        });
-        await Promise.all(workers);
+      const phase2 = async () => {
+        await Promise.all(Array(CONCURRENCY_LIMIT).fill(null).map(async () => {
+          while (currentIndex <= TOTAL_FRAMES && isMounted) await loadImage(currentIndex++);
+        }));
       };
-      const runBackgroundPhase = async () => {
-        const workers = Array(CONCURRENCY_LIMIT).fill(null).map(async () => {
-          while (currentIndex <= TOTAL_FRAMES && isMounted) {
-            const index = currentIndex++;
-            await loadImage(index);
-          }
-        });
-        await Promise.all(workers);
-      };
-      const run2 = async () => {
-        await runPriorityPhase();
-        if (isMounted) await runBackgroundPhase();
-      };
-      run2();
+      (async () => {
+        await phase1();
+        if (isMounted) await phase2();
+      })();
       return () => {
         isMounted = false;
       };
     }, []);
     reactExports.useEffect(() => {
-      const canvas = canvasRef.current;
-      if (!canvas) return;
-      const ctx = canvas.getContext("2d");
+      const cv = canvasRef.current;
+      if (!cv) return;
+      const ctx = cv.getContext("2d");
       if (!ctx) return;
       const render = () => {
-        const progressValue = smoothProgress.get();
-        const frameIndex = Math.min(Math.max(1, Math.floor(progressValue * TOTAL_FRAMES)), TOTAL_FRAMES);
+        const p2 = smooth.get();
+        const frameIndex = Math.min(Math.max(1, Math.floor(p2 * TOTAL_FRAMES)), TOTAL_FRAMES);
         let img = imagesRef.current[frameIndex - 1];
         if (!img || !img.complete || img.naturalWidth === 0) {
           for (let i2 = frameIndex - 1; i2 >= 0; i2--) {
-            if (imagesRef.current[i2] && imagesRef.current[i2].complete && imagesRef.current[i2].naturalWidth !== 0) {
-              img = imagesRef.current[i2];
+            const fi = imagesRef.current[i2];
+            if ((fi == null ? void 0 : fi.complete) && fi.naturalWidth !== 0) {
+              img = fi;
               break;
             }
           }
         }
-        if (img && img.complete && img.naturalWidth !== 0) {
-          const { width, height } = canvas;
-          const imgRatio = img.width / img.height;
-          const canvasRatio = width / height;
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        if ((img == null ? void 0 : img.complete) && img.naturalWidth !== 0) {
+          const { width: W2, height: H } = cv;
+          const ir = img.width / img.height, cr = W2 / H;
           let dw, dh, ox, oy;
-          if (imgRatio > canvasRatio) {
-            dh = height;
-            dw = height * imgRatio;
-            ox = (width - dw) / 2;
+          if (ir > cr) {
+            dh = H;
+            dw = H * ir;
+            ox = (W2 - dw) / 2;
             oy = 0;
           } else {
-            dw = width;
-            dh = width / imgRatio;
+            dw = W2;
+            dh = W2 / ir;
             ox = 0;
-            oy = (height - dh) / 2;
+            oy = (H - dh) / 2;
           }
-          ctx.clearRect(0, 0, width, height);
-          ctx.drawImage(img, ox, oy, dw, dh);
+          let scale2 = 1;
+          if (p2 > 0.875) {
+            const t2 = (p2 - 0.875) / 0.125;
+            scale2 = 1 - t2 * 0.25;
+          }
+          ctx.save();
+          ctx.translate(W2 / 2, H / 2);
+          ctx.scale(scale2, scale2);
+          ctx.drawImage(img, ox - W2 / 2, oy - H / 2, dw, dh);
+          ctx.restore();
         }
       };
-      const unsubscribe = smoothProgress.on("change", render);
-      const handleResize = () => {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+      const unsub = smooth.on("change", render);
+      const onResize = () => {
+        cv.width = window.innerWidth;
+        cv.height = window.innerHeight;
         render();
       };
-      window.addEventListener("resize", handleResize);
-      handleResize();
+      window.addEventListener("resize", onResize);
+      onResize();
       return () => {
-        unsubscribe();
-        window.removeEventListener("resize", handleResize);
+        unsub();
+        window.removeEventListener("resize", onResize);
       };
-    }, [smoothProgress]);
-    const glitchVariants = {
-      initial: {
-        opacity: 0,
-        clipPath: "polygon(0 0, 100% 0, 100% 0, 0 0)",
-        filter: "brightness(2)"
-      },
-      animate: {
-        opacity: 1,
-        clipPath: [
-          "polygon(0 20%, 100% 20%, 100% 40%, 0 40%)",
-          "polygon(0 80%, 100% 80%, 100% 100%, 0 100%)",
-          "polygon(0 0, 100% 100%, 100% 0, 0 100%)",
-          "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
-        ],
-        filter: ["brightness(2) contrast(1.5)", "brightness(1.5) contrast(2)", "brightness(1) contrast(1)"],
-        x: [-15, 15, -10, 5, 0],
-        transition: { duration: 0.4, times: [0, 0.2, 0.4, 0.6, 1] }
-      },
-      exit: {
-        opacity: 0,
-        filter: ["brightness(1) contrast(1)", "brightness(2) contrast(2)", "brightness(0) contrast(0)"],
-        x: [0, -15, 15, -10, 0],
-        clipPath: [
-          "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
-          "polygon(0 40%, 100% 40%, 100% 60%, 0 60%)",
-          "polygon(0 100%, 100% 100%, 100% 100%, 0 100%)"
-        ],
-        transition: { duration: 0.3 }
-      }
-    };
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: containerRef, className: "relative h-[800vh]", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 w-full h-full z-10 pointer-events-none overflow-hidden", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx("canvas", { ref: canvasRef, className: "absolute inset-0 w-full h-full object-contain z-10" }),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "absolute inset-0 z-20 opacity-40 pointer-events-none", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-24 left-10 w-32 h-32 border-t border-l border-white/20 p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-[8px] font-mono text-gold uppercase tracking-tighter", children: [
-            "ID: B-KNIGHT-87",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-            "SCAN: ACTIVE"
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-24 right-10 w-32 h-32 border-t border-r border-white/20 text-right p-4", children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-[8px] font-mono text-gold uppercase tracking-widest", children: [
-            "COORD: 40.712 N",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-            "LONG: 74.006 O"
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hud-axis-x" }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "hud-axis-y" })
-        ] }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 z-[60] pointer-events-none overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(AnimatePresence, { children: [
-          activeBeat === 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            motion.div,
-            {
-              variants: glitchVariants,
-              initial: "initial",
-              animate: "animate",
-              exit: "exit",
-              className: "absolute top-1/2 -translate-y-1/2 left-8 md:left-24 max-w-[40vw]",
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "h2",
-                  {
-                    className: "text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4",
-                    style: { textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" },
-                    children: [
-                      "SCULTURA DI",
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                      "PRECISIONE"
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "p",
-                  {
-                    className: "text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light",
-                    style: { textShadow: "0px 2px 10px rgba(0,0,0,0.95)" },
-                    children: "Ogni ombra di Gotham scolpita con ossessione"
-                  }
-                )
-              ]
-            },
-            "beat0"
-          ),
-          activeBeat === 1 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            motion.div,
-            {
-              variants: glitchVariants,
-              initial: "initial",
-              animate: "animate",
-              exit: "exit",
-              className: "absolute top-1/2 -translate-y-1/2 right-8 md:right-24 max-w-[40vw] text-right",
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "h2",
-                  {
-                    className: "text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4",
-                    style: { textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" },
-                    children: [
-                      "MATERIALI",
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                      "D'ELITE"
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "p",
-                  {
-                    className: "text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light",
-                    style: { textShadow: "0px 2px 10px rgba(0,0,0,0.95)" },
-                    children: "Finitura da pezzo da museo, non da scaffale"
-                  }
-                )
-              ]
-            },
-            "beat1"
-          ),
-          activeBeat === 2 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            motion.div,
-            {
-              variants: glitchVariants,
-              initial: "initial",
-              animate: "animate",
-              exit: "exit",
-              className: "absolute top-1/2 -translate-y-1/2 left-8 md:left-24 max-w-[40vw]",
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "h2",
-                  {
-                    className: "text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4",
-                    style: { textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" },
-                    children: [
-                      "EDIZIONE",
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                      "LIMITATA"
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "p",
-                  {
-                    className: "text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light",
-                    style: { textShadow: "0px 2px 10px rgba(0,0,0,0.95)" },
-                    children: "Solo 500 esemplari al mondo. Il tuo porta un numero."
-                  }
-                )
-              ]
-            },
-            "beat2"
-          ),
-          activeBeat === 3 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-            motion.div,
-            {
-              variants: glitchVariants,
-              initial: "initial",
-              animate: "animate",
-              exit: "exit",
-              className: "absolute top-1/2 -translate-y-1/2 right-8 md:right-24 max-w-[40vw] text-right",
-              children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "h2",
-                  {
-                    className: "text-[7vw] md:text-[4vw] font-black text-[#FFD700] uppercase tracking-[0.1em] leading-[0.9] mb-4",
-                    style: { textShadow: "0px 10px 40px rgba(0,0,0,0.95), 0px 0px 20px rgba(255,215,0,0.4)" },
-                    children: [
-                      "PRESENZA",
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                      "LEGGENDARIA"
-                    ]
-                  }
-                ),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "p",
-                  {
-                    className: "text-white uppercase tracking-[0.3em] text-[10px] md:text-sm font-light",
-                    style: { textShadow: "0px 2px 10px rgba(0,0,0,0.95)" },
-                    children: "Non arredamento. Una presenza."
-                  }
-                )
-              ]
-            },
-            "beat3"
-          )
-        ] }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 z-40 pointer-events-none", style: { background: "radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%)" } })
+    }, [smooth]);
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { ref: containerRef, style: { position: "relative", height: "800vh", overflowX: "hidden" }, children: [
+      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { position: "fixed", inset: 0, width: "100%", height: "100%", overflow: "hidden" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(TechBackground, {}),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("canvas", { ref: canvasRef, style: { position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: 10, pointerEvents: "none" } }),
+        BEATS.map((b2, i2) => /* @__PURE__ */ jsxRuntimeExports.jsx(BeatCard, { beat: b2, isActive: activeBeat === i2, index: i2 }, i2)),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(FinalCTA, { progress: progress2, onPreorder }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx(HudOverlay, { progress: progress2 })
       ] }),
-      /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: !isLoaded && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        motion.div,
-        {
-          initial: { opacity: 1 },
-          exit: { opacity: 0 },
-          className: "fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-gold font-mono text-[10px] tracking-[1em] mb-4", children: "CARICAMENTO_DATI" }),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "w-48 h-1 bg-white/10 rounded-full overflow-hidden", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
-              motion.div,
-              {
-                className: "h-full bg-gold",
-                initial: { width: 0 },
-                animate: { width: `${loadedCount / TOTAL_FRAMES * 100}%` }
-              }
-            ) })
-          ]
-        }
-      ) })
+      /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: !isLoaded && /* @__PURE__ */ jsxRuntimeExports.jsxs(motion.div, { initial: { opacity: 1 }, exit: { opacity: 0 }, transition: { duration: 1 }, style: { position: "fixed", inset: 0, zIndex: 200, background: "#000", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }, children: [
+        /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { animate: { opacity: [0.2, 0.8, 0.2] }, transition: { duration: 2, repeat: Infinity }, style: { fontSize: 48, marginBottom: 24, filter: "drop-shadow(0 0 20px rgba(255,215,0,0.4))" } }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { fontFamily: "monospace", fontSize: 10, color: "rgba(255,215,0,0.7)", letterSpacing: "1em", marginBottom: 20 }, children: "CARICAMENTO" }),
+        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { style: { width: 200, height: 2, background: "rgba(255,215,0,0.1)", borderRadius: 1, overflow: "hidden", marginBottom: 10 }, children: /* @__PURE__ */ jsxRuntimeExports.jsx(motion.div, { style: { height: "100%", background: "rgba(255,215,0,0.6)", transformOrigin: "left" }, animate: { scaleX: loadedCount / TOTAL_FRAMES }, transition: { type: "tween", duration: 0.3 } }) }),
+        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { style: { fontFamily: "monospace", fontSize: 9, color: "rgba(255,215,0,0.3)", letterSpacing: "0.5em" }, children: [
+          Math.round(loadedCount / TOTAL_FRAMES * 100),
+          "%"
+        ] })
+      ] }) })
     ] });
   }
   const BatmanCamera$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
     __proto__: null,
     default: BatmanCamera
+  }, Symbol.toStringTag, { value: "Module" }));
+  function BatcomputerBootOverlay({ onComplete }) {
+    const [bootSequence, setBootSequence] = reactExports.useState(0);
+    reactExports.useEffect(() => {
+      const t1 = setTimeout(() => setBootSequence(1), 300);
+      const t2 = setTimeout(() => setBootSequence(2), 1e3);
+      const t3 = setTimeout(() => setBootSequence(3), 1800);
+      return () => {
+        clearTimeout(t1);
+        clearTimeout(t2);
+        clearTimeout(t3);
+      };
+    }, []);
+    return /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      motion.div,
+      {
+        initial: { opacity: 0 },
+        animate: { opacity: 1 },
+        exit: { opacity: 0, transition: { duration: 0.8 } },
+        className: "fixed inset-0 z-[200000] bg-black/95 text-white font-sans flex flex-col items-center justify-center p-6 select-none overflow-y-auto pointer-events-auto",
+        children: [
+          /* @__PURE__ */ jsxRuntimeExports.jsx(TechBackground, { theme: "gold" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.85)_100%)] z-0" }),
+          /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "relative z-10 w-full max-w-5xl flex flex-col items-center gap-8 md:gap-10 text-center py-10", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: bootSequence >= 1 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              motion.div,
+              {
+                initial: { opacity: 0, y: -20 },
+                animate: { opacity: 1, y: 0 },
+                className: "flex flex-col items-center max-w-4xl",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-gold text-[10px] md:text-xs tracking-[0.4em] mb-4 font-mono font-bold uppercase border border-gold/30 px-3 py-1 bg-gold/5", children: "BATCOMPUTER // EMERGENCY PROTOCOL" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("h1", { className: "text-white text-6xl md:text-8xl font-black tracking-tighter uppercase mb-2 drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]", children: "ALLARME BATCAVERNA" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-white text-6xl md:text-[5rem] font-mono font-black tracking-widest drop-shadow-[0_0_20px_rgba(255,255,255,0.4)] my-4", style: { letterSpacing: "0.05em" }, children: "03:00" }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-white/90 text-lg md:text-2xl font-medium tracking-wide leading-relaxed max-w-3xl mt-2", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-joker font-bold", children: "Joker" }),
+                    " ha attivato un ordigno nella Batcaverna. Individua tutti gli indizi e neutralizza la minaccia prima dello scadere del tempo."
+                  ] })
+                ]
+              }
+            ) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: bootSequence >= 2 && /* @__PURE__ */ jsxRuntimeExports.jsxs(
+              motion.div,
+              {
+                initial: { opacity: 0, scale: 0.95 },
+                animate: { opacity: 1, scale: 1 },
+                transition: { duration: 0.6 },
+                className: "flex flex-col w-full bg-black/80 border-t-2 border-gold p-8 md:p-12 backdrop-blur-md relative shadow-[0_0_40px_rgba(0,0,0,0.8)]",
+                children: [
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center text-center mb-10 pb-8 border-b border-white/10", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-gold text-3xl md:text-4xl font-black tracking-widest uppercase mb-6", children: "MISSIONE" }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-white text-lg md:text-xl leading-relaxed max-w-2xl space-y-2", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { children: [
+                        "Il ",
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-joker font-bold", children: "Joker" }),
+                        " ha nascosto 5 indizi nella Batcaverna."
+                      ] }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Ogni indizio contiene informazioni necessarie per disattivare la bomba." }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { children: "Trovali tutti prima che il timer raggiunga lo zero." })
+                    ] })
+                  ] }),
+                  /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-6 text-center items-start", children: [
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-gold font-bold tracking-widest text-lg uppercase", children: "ESPLORA L'AMBIENTE" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white/80 text-sm md:text-base leading-relaxed", children: "Muovi il cursore ai bordi dello schermo per esplorare la Batcaverna a 360°." })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-gold font-bold tracking-widest text-lg uppercase", children: "TROVA GLI INDIZI" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("img", { src: "./assets/images/JollyJokerCard.jpg", alt: "Joker Card", className: "w-12 h-16 object-cover rounded shadow-[0_0_10px_rgba(57,255,20,0.3)] border border-joker/50 my-1" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "text-white/80 text-sm md:text-base leading-relaxed", children: [
+                        "Individua le ",
+                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-joker font-bold", children: "Joker Cards" }),
+                        " nascoste nell'oscurità."
+                      ] })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-gold font-bold tracking-widest text-lg uppercase", children: "RISOLVI GLI ENIGMI" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white/80 text-sm md:text-base leading-relaxed", children: "Rispondi correttamente alle domande poste dal Joker per procedere." })
+                    ] }),
+                    /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center gap-3", children: [
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("h3", { className: "text-gold font-bold tracking-widest text-lg uppercase", children: "BATTI IL TEMPO" }),
+                      /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white/80 text-sm md:text-base leading-relaxed", children: "Hai a disposizione 3 minuti. Se il timer scade, la missione fallisce." })
+                    ] })
+                  ] })
+                ]
+              }
+            ) }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx(AnimatePresence, { children: bootSequence >= 3 && /* @__PURE__ */ jsxRuntimeExports.jsx(
+              motion.div,
+              {
+                initial: { opacity: 0, y: 20 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.5 },
+                className: "flex flex-col items-center gap-8 mt-2",
+                children: /* @__PURE__ */ jsxRuntimeExports.jsx(
+                  "button",
+                  {
+                    onClick: onComplete,
+                    className: "group relative px-12 py-5 bg-gold text-black text-xl md:text-2xl font-black tracking-widest uppercase transition-all duration-300 hover:bg-white hover:shadow-[0_0_50px_rgba(250,204,21,0.6)] hover:scale-105 rounded-sm overflow-hidden",
+                    children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "relative z-10 flex items-center gap-3", children: "INIZIA LA MISSIONE" })
+                  }
+                )
+              }
+            ) })
+          ] })
+        ]
+      }
+    );
+  }
+  const BatcomputerBootOverlay$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+    __proto__: null,
+    default: BatcomputerBootOverlay
   }, Symbol.toStringTag, { value: "Module" }));
   function BatmanText({
     children,
@@ -80438,81 +81357,6 @@ No matching component was found for:
       }
     );
   }
-  function Pricing({ speedrunUnlocked, onPreorder }) {
-    return /* @__PURE__ */ jsxRuntimeExports.jsxs("section", { id: "pricing", className: "bg-black py-40 px-6 relative overflow-hidden border-t border-white/5 z-20", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none opacity-20", children: /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 left-0 w-full h-full", style: { backgroundImage: "radial-gradient(#333 1px, transparent 1px)", backgroundSize: "30px 30px" } }) }),
-      /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "max-w-7xl mx-auto relative z-10 flex flex-col items-center", children: [
-        /* @__PURE__ */ jsxRuntimeExports.jsx(BatmanText, { className: "absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none", children: /* @__PURE__ */ jsxRuntimeExports.jsx("h2", { className: "text-[150px] md:text-[300px] font-black text-white/[0.03] tracking-tighter uppercase whitespace-nowrap", children: "IL CAVALIERE OSCURO" }) }),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          motion.div,
-          {
-            initial: { width: 0 },
-            whileInView: { width: "100px" },
-            className: "h-[1px] bg-gold/50 mb-12"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-center mb-16 relative", children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx(BatmanText, { delay: 0.1, children: /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gold text-[10px] font-mono mb-4 tracking-[1em] uppercase block flicker", children: "Accesso_Terminale // Autorizzato // RADICE_GOTHAM" }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(BatmanText, { delay: 0.2, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("h2", { className: "text-6xl md:text-9xl font-black tracking-tighter text-white uppercase leading-none mb-6 glitch-med ghost-rgb", children: [
-            "L'EREDITÀ ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-            " ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-transparent", style: { WebkitTextStroke: "1px rgba(255, 215, 0, 0.4)" }, children: "È TUA" })
-          ] }) }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx(BatmanText, { delay: 0.3, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("p", { className: "max-w-xl mx-auto text-white/80 text-sm md:text-base font-medium tracking-wide uppercase leading-relaxed px-4 text-jump", children: [
-            "Non è una statua. È un simbolo forgiato nell’oscurità — il giuramento di un uomo che ha scelto di diventare leggenda. ",
-            /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-            "500 esemplari. Nessuna ristampa. Nessun secondo giro. Assicurati il tuo ora."
-          ] }) })
-        ] }),
-        speedrunUnlocked && /* @__PURE__ */ jsxRuntimeExports.jsxs(
-          motion.div,
-          {
-            initial: { scale: 0.9, opacity: 0 },
-            whileInView: { scale: 1, opacity: 1 },
-            className: "mb-12 border border-gold bg-gold/10 px-8 py-5 max-w-xl text-center backdrop-blur-md rounded-sm relative",
-            children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 left-0 w-2 h-2 border-t border-l border-gold" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute top-0 right-0 w-2 h-2 border-t border-r border-gold" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 left-0 w-2 h-2 border-b border-l border-gold" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r border-gold" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] font-mono text-gold tracking-[0.3em] uppercase font-bold mb-1", children: "IMPRESA SBLOCCATA" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-white text-base font-black tracking-wider uppercase mb-1", children: "Hai la velocità del Cavaliere Oscuro." }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "text-gold font-mono text-xs tracking-wider uppercase font-bold", children: [
-                "Codice: ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "underline select-all text-white font-mono font-black text-sm", children: "SPEEDRUN15" }),
-                " (-15%)"
-              ] })
-            ]
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx(
-          BatmanButton,
-          {
-            onClick: onPreorder,
-            variant: "primary",
-            showCorners: true,
-            showGlow: true,
-            className: "scale-125 md:scale-150 my-12",
-            children: "PREORDINA IL CAVALIERE"
-          }
-        ),
-        /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "mt-24 grid grid-cols-2 md:grid-cols-4 gap-12 text-center opacity-60", children: [
-          { label: "UNITÀ", value: "87/500", delay: 0.4 },
-          { label: "STATO", value: "ULTIMA_DISPONIBILITÀ", delay: 0.5 },
-          { label: "CERT.", value: "AUTENTICO", delay: 0.6 },
-          { label: "PREZZO", value: "STIMA Q4", delay: 0.7 }
-        ].map((item) => /* @__PURE__ */ jsxRuntimeExports.jsx(BatmanText, { delay: item.delay, children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { children: [
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] font-mono text-gold mb-1", children: item.label }),
-          /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs font-black text-white tracking-widest", children: item.value })
-        ] }) }, item.label)) })
-      ] })
-    ] });
-  }
-  const Pricing$1 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
-    __proto__: null,
-    default: Pricing
-  }, Symbol.toStringTag, { value: "Module" }));
   const STATUE_PRICE = 700;
   const SHIPPING_COST = 60;
   function Checkout({ speedrunUnlocked = false, onClose, onSuccess }) {
@@ -80903,24 +81747,6 @@ No matching component was found for:
       const s = sec % 60;
       return `${m2}:${s.toString().padStart(2, "0")}`;
     };
-    const leaderboard = reactExports.useMemo(() => {
-      const list = [
-        { name: "Agente 009", time: 42 },
-        { name: "Agente 003", time: 54 },
-        { name: "Agente 012", time: 65 },
-        { name: "Agente 007", time: 72 },
-        { name: "Agente 015", time: 81 },
-        { name: "Agente 004", time: 90 },
-        { name: "Agente 008", time: 105 },
-        { name: "Agente 011", time: 122 },
-        { name: "Agente 002", time: 135 },
-        { name: "Agente 014", time: 158 }
-      ];
-      if (timeTaken > 0) {
-        list.push({ name: "TU (AGENTE)", time: timeTaken });
-      }
-      return list.sort((a2, b2) => a2.time - b2.time).slice(0, 10);
-    }, [timeTaken]);
     const handleCopy = () => {
       const text = `Ho disinnescato la bomba del Joker nella Batcaverna in ${formatSeconds(timeTaken)}! Sblocca la tua statua Wayne Tech.`;
       navigator.clipboard.writeText(text);
@@ -80928,89 +81754,44 @@ No matching component was found for:
       setTimeout(() => setCopied(false), 2e3);
     };
     return /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "fixed inset-0 z-[200] bg-black flex items-center justify-center overflow-hidden", children: [
-      /* @__PURE__ */ jsxRuntimeExports.jsxs(
-        motion.div,
-        {
-          initial: { opacity: 0 },
-          animate: { opacity: 0.3 },
-          className: "absolute inset-0 z-0",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsx(
-              "img",
-              {
-                src: "./assets/textures/BatCaverna360_BatComputerArea.png",
-                alt: "Batcomputer",
-                className: "w-full h-full object-cover filter grayscale contrast-125"
-              }
-            ),
-            /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 bg-black/60" })
-          ]
-        }
-      ),
-      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10 w-full max-w-5xl mx-auto px-6 py-12 flex flex-col items-center max-h-screen overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsxs(
+      /* @__PURE__ */ jsxRuntimeExports.jsx(TechBackground, {}),
+      /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "relative z-10 w-full max-w-5xl mx-auto px-6 py-12 flex flex-col items-center max-h-screen overflow-y-auto", children: /* @__PURE__ */ jsxRuntimeExports.jsx(
         motion.div,
         {
           initial: { opacity: 0, y: 20 },
           animate: { opacity: 1, y: 0 },
           transition: { duration: 0.8 },
-          className: "w-full grid md:grid-cols-2 gap-12 items-center",
-          children: [
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center md:items-start text-center md:text-left space-y-6", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gold text-[9px] font-mono tracking-[0.4em] uppercase block", children: "Wayne Tech // Analisi Post-Missione" }),
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "text-4xl md:text-6xl font-black italic text-white tracking-tighter uppercase glitch-med leading-none", children: [
-                "BOMBA ",
-                /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gold", children: "DISINNESCATA" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white/80 text-sm md:text-base leading-relaxed max-w-md font-medium", children: "“Complimenti, Bats… Per una volta non era mia intenzione farti saltare in aria. Goditi pure la tua preziosa reliquia — te la sei guadagnata.”" }),
-              timeTaken > 0 && /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gold/5 border border-gold/20 p-4 w-full max-w-md font-mono text-left space-y-2", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] text-gold/60 uppercase tracking-widest", children: "Tempo di Completamento" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-2xl font-black text-white", children: formatSeconds(timeTaken) }),
-                timeTaken < 90 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] text-green-400 uppercase tracking-wider font-bold animate-pulse", children: "★ VELOCITÀ LEGGENDARIA: SCONTO 15% SBLOCCATO" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx(
-                  "button",
-                  {
-                    onClick: handleCopy,
-                    className: "mt-2 text-[9px] text-white/50 hover:text-white underline uppercase tracking-widest transition-colors block text-left",
-                    children: copied ? "Link Copiato!" : "Copia il Risultato & Condividi"
-                  }
-                )
-              ] }),
+          className: "w-full flex flex-col items-center gap-12 text-center",
+          children: /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex flex-col items-center text-center space-y-6 w-full", children: [
+            /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gold text-sm font-mono tracking-[0.4em] uppercase block", children: "Wayne Tech // Analisi Post-Missione" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("h1", { className: "text-6xl md:text-8xl font-black italic text-white tracking-tighter uppercase glitch-med leading-none", children: [
+              "BOMBA ",
+              /* @__PURE__ */ jsxRuntimeExports.jsx("br", {}),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-gold", children: "DISINNESCATA" })
+            ] }),
+            /* @__PURE__ */ jsxRuntimeExports.jsx("p", { className: "text-white/80 text-lg md:text-2xl leading-relaxed max-w-3xl font-medium", children: "“Complimenti, Bats… Per una volta non era mia intenzione farti saltare in aria. Goditi pure la tua preziosa reliquia — te la sei guadagnata.”" }),
+            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "bg-gold/5 border border-gold/20 p-6 w-full max-w-lg font-mono text-center space-y-3", children: [
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-xs text-gold/60 uppercase tracking-widest", children: "Tempo di Completamento" }),
+              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-4xl md:text-5xl font-black text-white", children: formatSeconds(timeTaken) }),
+              timeTaken < 90 && timeTaken > 0 && /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "text-[9px] text-green-400 uppercase tracking-wider font-bold animate-pulse", children: "VELOCITÀ LEGGENDARIA: SCONTO 15% SBLOCCATO" }),
               /* @__PURE__ */ jsxRuntimeExports.jsx(
                 "button",
                 {
-                  onClick: onComplete,
-                  className: "mt-6 px-8 py-4 bg-gold text-black font-black uppercase tracking-widest text-xs hover:bg-white hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all pointer-events-auto",
-                  children: "Scopri la Statua"
+                  onClick: handleCopy,
+                  className: "mt-2 text-[9px] text-white/50 hover:text-white underline uppercase tracking-widest transition-colors block text-left",
+                  children: copied ? "Link Copiato!" : "Copia il Risultato & Condividi"
                 }
               )
             ] }),
-            /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "border border-white/10 bg-black/60 p-6 md:p-8 backdrop-blur-md rounded-sm w-full flex flex-col gap-4 max-h-[450px] overflow-y-auto pointer-events-auto", children: [
-              /* @__PURE__ */ jsxRuntimeExports.jsxs("div", { className: "flex justify-between items-center border-b border-white/10 pb-3", children: [
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[10px] font-mono text-gold tracking-widest uppercase font-bold", children: "Classifica Agenti" }),
-                /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "text-[8px] font-mono text-white/40 uppercase", children: "Top 10 — Rete Wayne" })
-              ] }),
-              /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "space-y-2", children: leaderboard.map((agent, index) => {
-                const isUser = agent.name === "TU (AGENTE)";
-                return /* @__PURE__ */ jsxRuntimeExports.jsxs(
-                  "div",
-                  {
-                    className: `flex justify-between items-center py-2 px-3 font-mono text-xs transition-colors rounded-sm
-                      ${isUser ? "bg-gold/15 border border-gold/40 text-gold" : "text-white/70 border border-transparent hover:bg-white/5"}
-                    `,
-                    children: [
-                      /* @__PURE__ */ jsxRuntimeExports.jsxs("span", { className: "flex items-center gap-2", children: [
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: "opacity-40 text-[9px]", children: (index + 1).toString().padStart(2, "0") }),
-                        /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: isUser ? "font-bold" : "", children: agent.name })
-                      ] }),
-                      /* @__PURE__ */ jsxRuntimeExports.jsx("span", { className: `font-bold ${isUser ? "text-gold" : "text-white/50"}`, children: formatSeconds(agent.time) })
-                    ]
-                  },
-                  index
-                );
-              }) })
-            ] })
-          ]
+            /* @__PURE__ */ jsxRuntimeExports.jsx(
+              "button",
+              {
+                onClick: onComplete,
+                className: "mt-6 px-12 py-6 bg-gold text-black font-black uppercase tracking-widest text-base md:text-xl hover:bg-white hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all pointer-events-auto",
+                children: "Scopri la Statua"
+              }
+            )
+          ] })
         }
       ) }),
       /* @__PURE__ */ jsxRuntimeExports.jsx("div", { className: "absolute inset-0 pointer-events-none z-20 border-[40px] border-black" }),
@@ -81028,16 +81809,6 @@ No matching component was found for:
       const d = /* @__PURE__ */ new Date();
       return d.toLocaleDateString("it-IT", { year: "numeric", month: "2-digit", day: "2-digit" });
     });
-    reactExports.useEffect(() => {
-      const audio = new Audio("./assets/audio/SiglaBatman.wav");
-      audio.currentTime = 0;
-      audio.volume = 0.1;
-      audio.play().catch(() => {
-      });
-      return () => {
-        audio.pause();
-      };
-    }, []);
     return /* @__PURE__ */ jsxRuntimeExports.jsxs(
       motion.div,
       {

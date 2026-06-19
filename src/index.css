@@ -1,13 +1,189 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+/* ══════════════════════════════════════════════════════════════════
+   FIGMA DESIGN SYSTEM — WebsiteBatman87thAnniversaryLimitedEditionExperience
+   Estratto da tutti e 4 i frame:
+     • Atoms       (node: 72-1716)
+     • Molecule    (node: 36-1447)
+     • Organisms   (node: 36-1478)
+     • Templates   (node: 57-1597)
+   Nomi delle variabili CSS = nomi esatti Figma Variable Collections
+══════════════════════════════════════════════════════════════════ */
+
+/* ── Fonts ───────────────────────────────────────────────────────── */
+/* Space Grotesk → font primario (tutti i testi Atoms/Molecule/Organisms/Templates) */
+/* Inter         → font icone (IconSet_Atoms: ▶, ⏸, ⏮) */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;700;900&display=swap');
 @import "tailwindcss";
 
+/* ── Tailwind Theme ──────────────────────────────────────────────── */
 @theme {
-  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  /* Font families */
+  --font-SpaceGrotesk: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-Inter:        "Inter",         ui-sans-serif, system-ui, sans-serif;
+
+  /* Aliases (compatibilità col codice esistente) */
+  --font-sans:      "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-cinematic: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-terminal: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --color-gold: rgb(250, 204, 21);
+  --font-terminal:  "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono:      "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-icon:      "Inter",         ui-sans-serif, system-ui, sans-serif;
+
+  /* Alias Tailwind (usati nelle classi text-gold, text-joker ecc.) */
+  --color-gold:  #FFD700;
   --color-joker: #39FF14;
+
+  /* Border Radius */
+  --radius-sm:   5px;
+  --radius-md:   6px;
+  --radius-pill: 18px;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES — Variable Collections (nomi esatti Figma)
+══════════════════════════════════════════════════════════════════ */
+:root {
+
+  /* ────────────────────────────────────────────────────────────────
+     Collection: colors
+     Palette primitiva — valori grezzi
+  ──────────────────────────────────────────────────────────────── */
+  --colors-yellow:       #FFD700;
+  --colors-black:        #000000;
+  --colors-white:        #FFFFFF;
+  --colors-red-light:    #FF0000;
+  --colors-red-dark:     #880000;
+  --colors-green-light:  #39FF14;
+  --colors-green-dark:   #158300;
+  --colors-gray-light:   #C4C4C4;
+  --colors-gray-medium:  #535353;
+  --colors-gray-dark:    #2A2A2A;
+  --colors-purple-light: #6600C5;
+  --colors-purple-dark:  #29004F;
+
+
+  /* ────────────────────────────────────────────────────────────────
+     Collection: texts
+     Variabili semantiche di testo — referenziano colors
+  ──────────────────────────────────────────────────────────────── */
+  --texts-text-title-primary:   var(--colors-yellow);       /* #FFD700 */
+  --texts-text-title-secondary: var(--colors-purple-light); /* #6600C5 */
+  --texts-text-body-primary:    var(--colors-white);        /* #FFFFFF */
+  --texts-text-body-secondary:  var(--colors-black);        /* #000000 */
+
+
+  /* ────────────────────────────────────────────────────────────────
+     Collection: buttons
+     Variabili semantiche dei bottoni — referenziano colors
+  ──────────────────────────────────────────────────────────────── */
+
+  /* — Primary (default) ─────────────────────────────────────────── */
+  --buttons-primary-active:              var(--colors-black);       /* bg     Active   */
+  --buttons-on-primary-active:           var(--colors-yellow);      /* label  Active   */
+  --buttons-on-primary-stroke-active:    var(--colors-yellow);      /* border Active   */
+
+  --buttons-primary-over:                var(--colors-yellow);      /* bg     Hover    */
+  --buttons-on-primary-over:             var(--colors-black);       /* label  Hover    */
+  --buttons-on-primary-stroke-over:      var(--colors-black);       /* border Hover    */
+
+  --buttons-primary-disabled:            var(--colors-gray-medium); /* bg     Disabled */
+  --buttons-on-primary-disabled:         var(--colors-gray-light);  /* label  Disabled */
+  --buttons-on-primary-stroke-disabled:  var(--colors-gray-dark);   /* border Disabled */
+
+  /* — Primary Joker ─────────────────────────────────────────────── */
+  --buttons-primary-active-joker:            var(--colors-black);        /* bg     Active-Joker */
+  --buttons-on-primary-active-joker:         var(--colors-purple-light); /* label  Active-Joker */
+  --buttons-on-primary-stroke-active-joker:  var(--colors-purple-light); /* border Active-Joker */
+
+  --buttons-primary-over-joker:              var(--colors-purple-light); /* bg     Hover-Joker  */
+  --buttons-on-primary-over-joker:           var(--colors-black);        /* label  Hover-Joker  */
+  --buttons-on-primary-stroke-over-joker:    var(--colors-purple-dark);  /* border Hover-Joker  */
+
+  /* — Primary Riddle ────────────────────────────────────────────── */
+  --buttons-primary-active-riddle:             var(--colors-white); /* bg     Riddle-Normal */
+  --buttons-on-primary-active-riddle:          var(--colors-black); /* label  Riddle-Normal */
+  --buttons-on-primary-stroke-active-riddle:   var(--colors-black); /* border Riddle-Normal */
+
+  /* — Primary Riddle False ──────────────────────────────────────── */
+  --buttons-primary-active-riddle-false:           var(--colors-red-light); /* bg     Riddle-False */
+  --buttons-on-primary-stroke-active-riddle-false: var(--colors-red-dark);  /* border Riddle-False */
+
+  /* — Primary Riddle True ───────────────────────────────────────── */
+  --buttons-primary-active-riddle-true:           var(--colors-green-light); /* bg     Riddle-True */
+  --buttons-on-primary-stroke-active-riddle-true: var(--colors-green-dark);  /* border Riddle-True */
+
+  /* — Primary Checkout ──────────────────────────────────────────── */
+  --buttons-primary-active-checkout:            var(--colors-gray-medium); /* bg     Checkout-Active  */
+  --buttons-on-primary-active-checkout:         var(--colors-gray-light);  /* label  Checkout-Active  */
+  --buttons-on-primary-stroke-active-checkout:  var(--colors-gray-dark);   /* border Checkout-Active  */
+
+  --buttons-primary-tapped-checkout:            var(--colors-gray-medium); /* bg     Checkout-Tapped  */
+  --buttons-on-primary-tapped-checkout:         var(--colors-white);       /* label  Checkout-Tapped  */
+  --buttons-on-primary-stroke-tapped-checkout:  var(--colors-yellow);      /* border Checkout-Tapped  */
+
+
+  /* ────────────────────────────────────────────────────────────────
+     Effect Styles — DROP_SHADOW glow, blur 14px (da Figma Atoms)
+     Usati su tutti i componenti: LogoBatman_Atoms, Cursor_Atoms,
+     X_Atoms, Buttons_Atoms, Timer_Atoms, Storytelling_Atoms...
+  ──────────────────────────────────────────────────────────────── */
+  --effect-glow-yellow:          0 0 14px var(--colors-yellow);
+  --effect-glow-yellow-lg:       0 0 14px var(--colors-yellow), 0 0 30px rgba(255,215,0,0.5);
+  --effect-glow-green-light:     0 0 14px var(--colors-green-light);
+  --effect-glow-green-light-lg:  0 0 14px var(--colors-green-light), 0 0 30px rgba(57,255,20,0.5);
+  --effect-glow-red-light:       0 0 14px rgba(255,0,0,0.25);
+  --effect-glow-red-light-lg:    0 0 14px var(--colors-red-light);
+  --effect-glow-purple-light:    0 0 14px var(--colors-purple-light);
+  --effect-glow-purple-light-lg: 0 0 14px var(--colors-purple-light), 0 0 30px rgba(102,0,197,0.5);
+
+
+  /* ────────────────────────────────────────────────────────────────
+     Border Radius (da Figma Atoms)
+  ──────────────────────────────────────────────────────────────── */
+  --radius-atoms-sm:   5px;   /* ButtonClues_Atoms, ResponseCertificate_Atoms */
+  --radius-atoms-md:   6px;   /* CluesFront_Atoms, CluesBack_Atoms            */
+  --radius-atoms-pill: 18px;  /* Buttons_Atoms (Size=1..5, pill shape)        */
+
+
+  /* ────────────────────────────────────────────────────────────────
+     ALIASES — compatibilità col codice React esistente
+     (non modificare — referenziano le Collections sopra)
+  ──────────────────────────────────────────────────────────────── */
+  --ds-gold:        var(--colors-yellow);
+  --ds-joker:       var(--colors-green-light);
+  --ds-danger:      var(--colors-red-light);
+  --ds-purple:      var(--colors-purple-light);
+  --ds-black:       var(--colors-black);
+  --ds-white:       var(--colors-white);
+  --ds-gray-mid:    var(--colors-gray-medium);
+  --ds-gray-lt:     var(--colors-gray-light);
+  --ds-gray-btn:    var(--colors-gray-light);
+  --ds-surface:     var(--colors-gray-dark);
+
+  --ds-glow-gold:       var(--effect-glow-yellow);
+  --ds-glow-joker:      var(--effect-glow-green-light);
+  --ds-glow-danger:     var(--effect-glow-red-light);
+  --ds-glow-purple:     var(--effect-glow-purple-light);
+  --ds-glow-gold-lg:    var(--effect-glow-yellow-lg);
+  --ds-glow-joker-lg:   var(--effect-glow-green-light-lg);
+  --ds-glow-purple-lg:  var(--effect-glow-purple-light-lg);
+
+  --ds-radius-sm:   var(--radius-atoms-sm);
+  --ds-radius-md:   var(--radius-atoms-md);
+  --ds-radius-pill: var(--radius-atoms-pill);
+
+  --ds-text-xs:    12px;
+  --ds-text-sm:    15px;
+  --ds-text-base:  16px;
+  --ds-text-lg:    20px;
+  --ds-text-xl:    30px;
+  --ds-text-2xl:   40px;
+  --ds-text-3xl:   80px;
+  --ds-text-icon:  10px;
+  --ds-fw-regular: 400;
+  --ds-fw-bold:    700;
+  --ds-fw-black:   900;
+  --ds-ls-tight:   -6px;
+  --ds-ls-icon:    -1.34px;
+  --ds-ls-normal:  0;
 }
 
 @layer base {
