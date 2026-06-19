@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════════════════════════
    FIGMA DESIGN SYSTEM — WebsiteBatman87thAnniversaryLimitedEditionExperience
    Estratto da tutti e 4 i frame:
-     • Atoms       (node: 72-1716)
+     • Atoms       (node: 39-1383)
      • Molecule    (node: 36-1447)
      • Organisms   (node: 36-1478)
      • Templates   (node: 57-1597)
@@ -38,137 +38,153 @@
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   CSS CUSTOM PROPERTIES — Variable Collections (nomi esatti Figma)
+   CSS CUSTOM PROPERTIES — identiche al Figma Design System
 ══════════════════════════════════════════════════════════════════ */
 :root {
 
-  /* ────────────────────────────────────────────────────────────────
+  /* ════════════════════════════════════════════════════════════════
      Collection: colors
-     Palette primitiva — valori grezzi
-  ──────────────────────────────────────────────────────────────── */
-  --colors-yellow:       #FFD700;
-  --colors-black:        #000000;
-  --colors-white:        #FFFFFF;
-  --colors-red-light:    #FF0000;
-  --colors-red-dark:     #880000;
-  --colors-green-light:  #39FF14;
-  --colors-green-dark:   #158300;
-  --colors-gray-light:   #C4C4C4;
-  --colors-gray-medium:  #535353;
-  --colors-gray-dark:    #2A2A2A;
-  --colors-purple-light: #6600C5;
-  --colors-purple-dark:  #29004F;
+     ════════════════════════════════════════════════════════════════ */
+  --yellow:        #FFD700;
+  --black:         #000000;
+  --white:         #FFFFFF;
+  --red-light:     #FF0000;
+  --red-dark:      #880000;
+  --green-light:   #39FF14;
+  --green-dark:    #158300;
+  --gray-light:    #C4C4C4;
+  --gray-medium:   #535353;
+  --gray-dark:     #2A2A2A;
+  --purple-light:  #6600C5;
+  --purple-dark:   #29004F;
 
 
-  /* ────────────────────────────────────────────────────────────────
+  /* ════════════════════════════════════════════════════════════════
      Collection: texts
-     Variabili semantiche di testo — referenziano colors
-  ──────────────────────────────────────────────────────────────── */
-  --texts-text-title-primary:   var(--colors-yellow);       /* #FFD700 */
-  --texts-text-title-secondary: var(--colors-purple-light); /* #6600C5 */
-  --texts-text-body-primary:    var(--colors-white);        /* #FFFFFF */
-  --texts-text-body-secondary:  var(--colors-black);        /* #000000 */
+     ════════════════════════════════════════════════════════════════ */
+  --text-title-primary:   var(--yellow);
+  --text-title-secondary: var(--purple-light);
+  --text-body-primary:    var(--white);
+  --text-body-secondary:  var(--black);
 
 
-  /* ────────────────────────────────────────────────────────────────
+  /* ════════════════════════════════════════════════════════════════
      Collection: buttons
-     Variabili semantiche dei bottoni — referenziano colors
-  ──────────────────────────────────────────────────────────────── */
+     ════════════════════════════════════════════════════════════════ */
+  --primary-active:                        var(--black);
+  --on-primary-active:                     var(--yellow);
+  --on-primary-stroke-active:              var(--yellow);
 
-  /* — Primary (default) ─────────────────────────────────────────── */
-  --buttons-primary-active:              var(--colors-black);       /* bg     Active   */
-  --buttons-on-primary-active:           var(--colors-yellow);      /* label  Active   */
-  --buttons-on-primary-stroke-active:    var(--colors-yellow);      /* border Active   */
+  --primary-over:                          var(--yellow);
+  --on-primary-over:                       var(--black);
+  --on-primary-stroke-over:                var(--black);
 
-  --buttons-primary-over:                var(--colors-yellow);      /* bg     Hover    */
-  --buttons-on-primary-over:             var(--colors-black);       /* label  Hover    */
-  --buttons-on-primary-stroke-over:      var(--colors-black);       /* border Hover    */
+  --primary-disabled:                      var(--gray-medium);
+  --on-primary-disabled:                   var(--gray-light);
+  --on-primary-stroke-disabled:            var(--gray-dark);
 
-  --buttons-primary-disabled:            var(--colors-gray-medium); /* bg     Disabled */
-  --buttons-on-primary-disabled:         var(--colors-gray-light);  /* label  Disabled */
-  --buttons-on-primary-stroke-disabled:  var(--colors-gray-dark);   /* border Disabled */
+  --on-primary-active-joker:               var(--purple-light);
+  --on-primary-stroke-over-joker:          var(--purple-dark);
+  --primary-over-joker:                    var(--purple-light);
+  --on-primary-over-joker:                 var(--black);
+  --on-primary-stroke-active-joker:        var(--purple-light);
+  --primary-active-joker:                  var(--black);
 
-  /* — Primary Joker ─────────────────────────────────────────────── */
-  --buttons-primary-active-joker:            var(--colors-black);        /* bg     Active-Joker */
-  --buttons-on-primary-active-joker:         var(--colors-purple-light); /* label  Active-Joker */
-  --buttons-on-primary-stroke-active-joker:  var(--colors-purple-light); /* border Active-Joker */
+  --on-primary-active-riddle:              var(--black);
+  --primary-active-riddle:                 var(--white);
+  --on-primary-stroke-active-riddle:       var(--black);
 
-  --buttons-primary-over-joker:              var(--colors-purple-light); /* bg     Hover-Joker  */
-  --buttons-on-primary-over-joker:           var(--colors-black);        /* label  Hover-Joker  */
-  --buttons-on-primary-stroke-over-joker:    var(--colors-purple-dark);  /* border Hover-Joker  */
+  --primary-active-riddle-false:           var(--red-light);
+  --on-primary-stroke-active-riddle-false: var(--red-dark);
 
-  /* — Primary Riddle ────────────────────────────────────────────── */
-  --buttons-primary-active-riddle:             var(--colors-white); /* bg     Riddle-Normal */
-  --buttons-on-primary-active-riddle:          var(--colors-black); /* label  Riddle-Normal */
-  --buttons-on-primary-stroke-active-riddle:   var(--colors-black); /* border Riddle-Normal */
+  --primary-active-riddle-true:            var(--green-light);
+  --on-primary-stroke-active-riddle-true:  var(--green-dark);
 
-  /* — Primary Riddle False ──────────────────────────────────────── */
-  --buttons-primary-active-riddle-false:           var(--colors-red-light); /* bg     Riddle-False */
-  --buttons-on-primary-stroke-active-riddle-false: var(--colors-red-dark);  /* border Riddle-False */
+  --on-primary-active-checkout:            var(--gray-light);
+  --primary-active-checkout:               var(--gray-medium);
+  --on-primary-stroke-active-checkout:     var(--gray-dark);
 
-  /* — Primary Riddle True ───────────────────────────────────────── */
-  --buttons-primary-active-riddle-true:           var(--colors-green-light); /* bg     Riddle-True */
-  --buttons-on-primary-stroke-active-riddle-true: var(--colors-green-dark);  /* border Riddle-True */
-
-  /* — Primary Checkout ──────────────────────────────────────────── */
-  --buttons-primary-active-checkout:            var(--colors-gray-medium); /* bg     Checkout-Active  */
-  --buttons-on-primary-active-checkout:         var(--colors-gray-light);  /* label  Checkout-Active  */
-  --buttons-on-primary-stroke-active-checkout:  var(--colors-gray-dark);   /* border Checkout-Active  */
-
-  --buttons-primary-tapped-checkout:            var(--colors-gray-medium); /* bg     Checkout-Tapped  */
-  --buttons-on-primary-tapped-checkout:         var(--colors-white);       /* label  Checkout-Tapped  */
-  --buttons-on-primary-stroke-tapped-checkout:  var(--colors-yellow);      /* border Checkout-Tapped  */
+  --on-primary-tapped-checkout:            var(--white);
+  --primary-tapped-checkout:               var(--gray-medium);
+  --on-primary-stroke-tapped-checkout:     var(--yellow);
 
 
-  /* ────────────────────────────────────────────────────────────────
-     Effect Styles — DROP_SHADOW glow, blur 14px (da Figma Atoms)
-     Usati su tutti i componenti: LogoBatman_Atoms, Cursor_Atoms,
-     X_Atoms, Buttons_Atoms, Timer_Atoms, Storytelling_Atoms...
-  ──────────────────────────────────────────────────────────────── */
-  --effect-glow-yellow:          0 0 14px var(--colors-yellow);
-  --effect-glow-yellow-lg:       0 0 14px var(--colors-yellow), 0 0 30px rgba(255,215,0,0.5);
-  --effect-glow-green-light:     0 0 14px var(--colors-green-light);
-  --effect-glow-green-light-lg:  0 0 14px var(--colors-green-light), 0 0 30px rgba(57,255,20,0.5);
-  --effect-glow-red-light:       0 0 14px rgba(255,0,0,0.25);
-  --effect-glow-red-light-lg:    0 0 14px var(--colors-red-light);
-  --effect-glow-purple-light:    0 0 14px var(--colors-purple-light);
-  --effect-glow-purple-light-lg: 0 0 14px var(--colors-purple-light), 0 0 30px rgba(102,0,197,0.5);
+  /* ════════════════════════════════════════════════════════════════
+     Text Styles
+     ════════════════════════════════════════════════════════════════ */
+  /* display — Space Grotesk Bold 80/81 */
+  --text-style-display-fontFamily:     "Space Grotesk";
+  --text-style-display-fontSize:       80px;
+  --text-style-display-fontWeight:     700;
+  --text-style-display-lineHeight:     81px;
+
+  /* h1 — Space Grotesk Bold 40/41 */
+  --text-style-h1-fontFamily:          "Space Grotesk";
+  --text-style-h1-fontSize:            40px;
+  --text-style-h1-fontWeight:          700;
+  --text-style-h1-lineHeight:          41px;
+
+  /* h2 — Space Grotesk Bold 30/31 */
+  --text-style-h2-fontFamily:          "Space Grotesk";
+  --text-style-h2-fontSize:            30px;
+  --text-style-h2-fontWeight:          700;
+  --text-style-h2-lineHeight:          31px;
+
+  /* body — Space Grotesk Regular 20/21 */
+  --text-style-body-fontFamily:        "Space Grotesk";
+  --text-style-body-fontSize:          20px;
+  --text-style-body-fontWeight:        400;
+  --text-style-body-lineHeight:        21px;
+
+  /* body-small — Space Grotesk Regular 16/17 */
+  --text-style-body-small-fontFamily:  "Space Grotesk";
+  --text-style-body-small-fontSize:    16px;
+  --text-style-body-small-fontWeight:  400;
+  --text-style-body-small-lineHeight:  17px;
+
+  /* caption — Space Grotesk Regular 12/13 */
+  --text-style-caption-fontFamily:     "Space Grotesk";
+  --text-style-caption-fontSize:       12px;
+  --text-style-caption-fontWeight:     400;
+  --text-style-caption-lineHeight:     13px;
 
 
-  /* ────────────────────────────────────────────────────────────────
-     Border Radius (da Figma Atoms)
-  ──────────────────────────────────────────────────────────────── */
-  --radius-atoms-sm:   5px;   /* ButtonClues_Atoms, ResponseCertificate_Atoms */
-  --radius-atoms-md:   6px;   /* CluesFront_Atoms, CluesBack_Atoms            */
-  --radius-atoms-pill: 18px;  /* Buttons_Atoms (Size=1..5, pill shape)        */
+  /* ════════════════════════════════════════════════════════════════
+     Effect Styles
+     position x 0  position y 0  Blur 14  spread 0
+     ════════════════════════════════════════════════════════════════ */
+  --green-dropshadow:  0 0 14px var(--green-light);
+  --yellow-dropshadow: 0 0 14px var(--yellow);
+  --red-dropshadow:    0 0 14px var(--red-light);
+  --purple-dropshadow: 0 0 14px var(--purple-light);
 
 
-  /* ────────────────────────────────────────────────────────────────
+  /* ════════════════════════════════════════════════════════════════
      ALIASES — compatibilità col codice React esistente
-     (non modificare — referenziano le Collections sopra)
-  ──────────────────────────────────────────────────────────────── */
-  --ds-gold:        var(--colors-yellow);
-  --ds-joker:       var(--colors-green-light);
-  --ds-danger:      var(--colors-red-light);
-  --ds-purple:      var(--colors-purple-light);
-  --ds-black:       var(--colors-black);
-  --ds-white:       var(--colors-white);
-  --ds-gray-mid:    var(--colors-gray-medium);
-  --ds-gray-lt:     var(--colors-gray-light);
-  --ds-gray-btn:    var(--colors-gray-light);
-  --ds-surface:     var(--colors-gray-dark);
+     (non modificare — referenziano le variabili Figma sopra)
+     ════════════════════════════════════════════════════════════════ */
+  --ds-gold:        var(--yellow);
+  --ds-joker:       var(--green-light);
+  --ds-danger:      var(--red-light);
+  --ds-purple:      var(--purple-light);
+  --ds-black:       var(--black);
+  --ds-white:       var(--white);
+  --ds-gray-mid:    var(--gray-medium);
+  --ds-gray-lt:     var(--gray-light);
+  --ds-gray-btn:    var(--gray-light);
+  --ds-surface:     var(--gray-dark);
 
-  --ds-glow-gold:       var(--effect-glow-yellow);
-  --ds-glow-joker:      var(--effect-glow-green-light);
-  --ds-glow-danger:     var(--effect-glow-red-light);
-  --ds-glow-purple:     var(--effect-glow-purple-light);
-  --ds-glow-gold-lg:    var(--effect-glow-yellow-lg);
-  --ds-glow-joker-lg:   var(--effect-glow-green-light-lg);
-  --ds-glow-purple-lg:  var(--effect-glow-purple-light-lg);
+  --ds-glow-gold:       var(--yellow-dropshadow);
+  --ds-glow-joker:      var(--green-dropshadow);
+  --ds-glow-danger:     var(--red-dropshadow);
+  --ds-glow-purple:     var(--purple-dropshadow);
+  --ds-glow-gold-lg:    0 0 14px var(--yellow),       0 0 30px rgba(255,215,0,0.5);
+  --ds-glow-joker-lg:   0 0 14px var(--green-light),  0 0 30px rgba(57,255,20,0.5);
+  --ds-glow-purple-lg:  0 0 14px var(--purple-light), 0 0 30px rgba(102,0,197,0.5);
 
-  --ds-radius-sm:   var(--radius-atoms-sm);
-  --ds-radius-md:   var(--radius-atoms-md);
-  --ds-radius-pill: var(--radius-atoms-pill);
+  --ds-radius-sm:   5px;
+  --ds-radius-md:   6px;
+  --ds-radius-pill: 18px;
 
   --ds-text-xs:    12px;
   --ds-text-sm:    15px;
@@ -185,7 +201,6 @@
   --ds-ls-icon:    -1.34px;
   --ds-ls-normal:  0;
 }
-
 @layer base {
   html {
     background-color: #000000;
