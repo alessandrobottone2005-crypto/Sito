@@ -8,7 +8,7 @@ interface IntroScreenProps {
 }
 
 const BRIEFING_TEXTS = [
-  { text: "Batman 2 ...", accent: "Ho lasciato un regalino nella tua preziosa caverna..." },
+  { text: "Batman ...", accent: "Ho lasciato un regalino nella tua preziosa caverna..." },
   { text: "Non è il solito giocattolo,", accent: "ma qualcosa che farà il botto." },
   { text: "Trova i miei 5 indizi.", accent: "Dimostrami che il Grande Pipistrello sa ancora giocare." },
   { text: "Il tempo scorre.", accent: "Tic tac, Batsy..." },
