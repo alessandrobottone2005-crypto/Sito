@@ -3,7 +3,7 @@ import { motion, useScroll, useSpring, AnimatePresence, useMotionValueEvent } fr
 
 const TOTAL_FRAMES = 800;
 const IMAGE_PREFIX = "./assets/showreel/";
-const IMAGE_SUFFIX = ".png";
+const IMAGE_SUFFIX = ".webp";
 const SHOW_THRESHOLD = 120;
 const CONCURRENCY_LIMIT = 60;
 

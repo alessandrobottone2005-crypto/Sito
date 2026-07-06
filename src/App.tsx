@@ -1,21 +1,23 @@
 import { useState, useEffect, useRef, useCallback, Suspense, startTransition } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import Navbar from "./components/layout/Navbar";
+import Footer from "./components/layout/Footer";
 import { lazy } from "react";
-import IntroScreen from "./components/cinematic/IntroScreen";
+import IntroScreen from "./sections/IntroScreen";
 import TransitionOverlay from "./components/transitions/TransitionOverlay";
 import ExplosionOverlay from "./components/transitions/ExplosionOverlay";
 import JokerAudioManager from "./components/joker/JokerAudioManager";
 import AssetPreloader from "./components/transitions/AssetPreloader";
 import type { PanoramaScene } from "./components/cinematic/SharedPanoramaCanvas";
+import BatmanButton from "./components/ui/BatmanButton";
 
 const CinematicVideoPlayer = lazy(() => import("./components/cinematic/CinematicVideoPlayer"));
 const SharedPanoramaCanvas = lazy(() => import("./components/cinematic/SharedPanoramaCanvas"));
 const BatmanCamera = lazy(() => import("./components/cinematic/BatmanCamera"));
 const BatcomputerBootOverlay = lazy(() => import("./components/ui/BatcomputerBootOverlay"));
-const Checkout = lazy(() => import("./components/showreel/Checkout"));
-const FinalReveal = lazy(() => import("./components/showreel/FinalReveal"));
-const ThankYouPage = lazy(() => import("./components/showreel/ThankYouPage"));
+const Checkout = lazy(() => import("./sections/Checkout"));
+const FinalReveal = lazy(() => import("./sections/FinalReveal"));
+const ThankYouPage = lazy(() => import("./sections/ThankYouPage"));
 import { useMobileDetection } from "./hooks/useMobileDetection";
 import { useMissionTimer } from "./hooks/useMissionTimer";
 import { useAudioSystem } from "./hooks/useAudioSystem";
@@ -69,6 +71,7 @@ export default function App() {
   // Timer logic
   const {
     timeLeft,
+    elapsedSeconds,
     initialTime,
     timerABGroup,
     bonusTimeGranted,
@@ -81,6 +84,7 @@ export default function App() {
   const [speedrunUnlocked, setSpeedrunUnlocked] = useState(false);
   const [finalTimeTaken, setFinalTimeTaken] = useState(0);
   const [purchasedQuantity, setPurchasedQuantity] = useState(1);
+  const [purchasedTotal, setPurchasedTotal] = useState(0);
 
   // Audio system — solo sincronizzazione mute, la riproduzione è gestita
   // dal singleton BatcavernAudio avviato in IntroScreen.
@@ -89,13 +93,13 @@ export default function App() {
   // Success Condition
   useEffect(() => {
     if (completedCount === 5 && missionStatus === "active") {
-      const timeTaken = initialTime - timeLeft;
+      // elapsedSeconds = tempo reale trascorso (esclude pause e transizioni)
+      const timeTaken = elapsedSeconds;
       setFinalTimeTaken(timeTaken);
       
       // Speedrun Easter Egg check (under 90 seconds)
-      if (timeTaken < 90) {
+      if (timeTaken < 90 && timeTaken > 0) {
         setSpeedrunUnlocked(true);
-
       } else {
         setSpeedrunUnlocked(false);
       }
@@ -103,22 +107,23 @@ export default function App() {
       setMissionStatus("succeeded");
       changePhase("breather");
     }
-  }, [completedCount, missionStatus, initialTime, timeLeft]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completedCount, missionStatus]);
 
   // Bonus Time Check: when user finds first 2 clues
   useEffect(() => {
     if (completedCount === 2 && missionStatus === "active") {
-      const timeElapsed = initialTime - timeLeft;
-      if (timeElapsed <= 45 && grantBonusTime(60)) {
+      // Usa elapsedSeconds (tempo reale) per check accurato
+      if (elapsedSeconds <= 45 && grantBonusTime(60)) {
         setShowBonusFeedback(true);
-
         setTimeout(() => setShowBonusFeedback(false), 4000);
       }
     }
-  }, [completedCount, missionStatus, initialTime, timeLeft, grantBonusTime]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [completedCount, missionStatus]);
 
   // Unified phase change with transition overlay
-  const changePhase = (newPhase: Phase) => {
+  const changePhase = useCallback((newPhase: Phase) => {
     if (isTransitioning) return;
 
     if (phase === "intro" && newPhase === "batcomputer") {
@@ -128,10 +133,6 @@ export default function App() {
     }
 
     if (newPhase === "breather") {
-      setMissionStatus("succeeded");
-      setFinalTimeTaken(0);
-      setSpeedrunUnlocked(false);
-
       // La musica NON si interrompe — continua in background senza soluzione
       // di continuità. Il singleton BatcavernAudio gestisce il loop permanente.
       setIsTransitioning(true);
@@ -150,7 +151,7 @@ export default function App() {
     setIsTransitioning(true);
     setTimeout(() => { setPhase(newPhase); }, 400);
     setTimeout(() => { setIsTransitioning(false); }, 1000);
-  };
+  }, [isTransitioning, phase, setPhase]);
 
   const handleResetMission = () => {
     setMissionStatus("idle");
@@ -175,49 +176,77 @@ export default function App() {
     // La musica è già in riproduzione dal singleton — nessun restart
   };
 
-  const handleSkipPhase = () => {
+  const handleSkipPhase = useCallback(() => {
     setIsTransitioning(false); // bypass potential lock
 
     if (phase === "intro") {
       setPanoramaScene("batcomputer");
-      changePhase("batcomputer");
+      setPhase("batcomputer");
     } else if (phase === "batcomputer") {
       setPanoramaScene("armeria");
       setCompletedCount(2);
-      changePhase("transition1");
+      setPhase("transition1");
     } else if (phase === "transition1") {
       setPanoramaScene("armeria");
-      changePhase("armeria");
+      setPhase("armeria");
     } else if (phase === "armeria") {
       setPanoramaScene("batmobile");
       setCompletedCount(3);
-      changePhase("transition2");
+      setPhase("transition2");
     } else if (phase === "transition2") {
       setPanoramaScene("batmobile");
-      changePhase("batmobile");
+      setPhase("batmobile");
     } else if (phase === "batmobile" || phase === "breather") {
       setMissionStatus("succeeded");
       setCompletedCount(5);
-      changePhase("reveal");
+      setPhase("reveal");
     } else if (phase === "reveal") {
-      changePhase("showreel");
+      setPhase("showreel");
     } else if (phase === "showreel") {
-      changePhase("checkout");
+      setPhase("checkout");
     } else if (phase === "checkout") {
       setPurchasedQuantity(1);
-      changePhase("thankyou");
+      setPhase("thankyou");
     } else if (phase === "thankyou") {
       handleResetMission();
     }
-  };
+  }, [phase]);
+
+  const handlePrevPhase = useCallback(() => {
+    setIsTransitioning(false); // bypass potential lock
+
+    if (phase === "thankyou") {
+      setPhase("checkout");
+    } else if (phase === "checkout") {
+      setPhase("showreel");
+    } else if (phase === "showreel") {
+      setPhase("reveal");
+    } else if (phase === "reveal") {
+      setPhase("batmobile");
+    } else if (phase === "batmobile" || phase === "breather") {
+      setPanoramaScene("batmobile");
+      setPhase("transition2");
+    } else if (phase === "transition2") {
+      setPanoramaScene("armeria");
+      setPhase("armeria");
+    } else if (phase === "armeria") {
+      setPanoramaScene("armeria");
+      setPhase("transition1");
+    } else if (phase === "transition1") {
+      setPanoramaScene("batcomputer");
+      setPhase("batcomputer");
+    } else if (phase === "batcomputer") {
+      setPhase("intro");
+    }
+  }, [phase]);
 
   // Easter Egg Shortcut: Command + 1 to skip to Showreel
+  // E navigazione tramite frecce (ArrowRight, ArrowLeft)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       // CMD + 1 (Mac) or CTRL + 1 (Windows/Linux)
       if ((e.metaKey || e.ctrlKey) && e.key === "1") {
         e.preventDefault();
-
 
         // Update states to simulate completion
         setMissionStatus("succeeded");
@@ -226,11 +255,23 @@ export default function App() {
         // Trigger the transition to showreel
         changePhase("showreel");
       }
+      
+      // Freccia destra: vai alla fase successiva
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        handleSkipPhase();
+      }
+      
+      // Freccia sinistra: torna alla fase precedente
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        handlePrevPhase();
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [phase, isTransitioning]); // Include dependencies to ensure we have current state if needed
+  }, [phase, isTransitioning, handleSkipPhase, handlePrevPhase]);
 
   // Determine if the shared panorama canvas should be visible
   const panoramaPhases: Phase[] = ["batcomputer", "transition1", "armeria", "transition2", "batmobile"];
@@ -244,47 +285,33 @@ export default function App() {
   // Joker laugh is active during investigation phases, but stops at victory (reveal)
   const isJokerActive = ["batcomputer", "transition1", "armeria", "transition2", "batmobile"].includes(phase) && missionStatus === "active";
 
+  const handleProgress = useCallback((count: number) => {
+    setCompletedCount(count);
+  }, []);
+
+  const handleNextPanorama = useCallback(() => {
+    if (panoramaScene === "batcomputer") {
+      setPhase("transition1");
+      setTimeout(() => setPanoramaScene("armeria"), 100);
+    } else if (panoramaScene === "armeria") {
+      setPhase("transition2");
+      setTimeout(() => setPanoramaScene("batmobile"), 100);
+    } else if (panoramaScene === "batmobile") {
+      changePhase("breather");
+    }
+  }, [panoramaScene, setPhase, setPanoramaScene, changePhase]);
+
+  const handleToggleMute = useCallback(() => setIsMuted(prev => !prev), []);
+  const handleTogglePause = useCallback(() => setIsPaused(prev => !prev), []);
+  const handleBackFromCheckout = useCallback(() => changePhase("showreel"), [changePhase]);
+  const handleGoToCheckout = useCallback(() => changePhase("checkout"), [changePhase]);
+
   return (
     <div className="bg-black min-h-screen relative overflow-x-hidden">
       <AssetPreloader />
-      <Navbar
-        isMuted={isMuted}
-        onToggleMute={() => setIsMuted(!isMuted)}
-        showBack={phase === "checkout"}
-        onBack={() => changePhase("showreel")}
-        showPause={["batcomputer", "armeria", "batmobile"].includes(phase)}
-        isPaused={isPaused}
-        onTogglePause={() => setIsPaused(!isPaused)}
-        completedCount={["batcomputer", "armeria", "batmobile"].includes(phase) ? completedCount : undefined}
-        totalClues={5}
-        timeLeft={timeLeft}
-        missionActive={missionStatus === "active"}
-        showPreorder={phase === "showreel"}
-        onPreorder={() => changePhase("checkout")}
-      />
+      {/* Moved Navbar below everything else */}
 
-      {/* ── DEV ONLY: Skip Phase Button ────────────────────────────────────── */}
-      <div className="fixed bottom-4 right-4 z-[300000] pointer-events-auto select-none">
-        <button
-          onClick={handleSkipPhase}
-          className="bg-black/60 border border-gold/30 hover:border-gold text-gold/80 hover:text-gold transition-all duration-200 px-3 py-1.5 text-[9px] rounded-sm backdrop-blur-sm focus:outline-none cursor-pointer font-mono tracking-wider"
-          title="Salta alla fase successiva (Dev)"
-        >
-          Salta a: {
-            phase === "intro" ? "BatComputer 360" :
-            phase === "batcomputer" ? "Transizione 1 (Video)" :
-            phase === "transition1" ? "Armeria 360" :
-            phase === "armeria" ? "Transizione 2 (Video)" :
-            phase === "transition2" ? "BatMobile 360" :
-            phase === "batmobile" ? "Vittoria" :
-            phase === "breather" ? "Vittoria" :
-            phase === "reveal" ? "Showreel" :
-            phase === "showreel" ? "Checkout" :
-            phase === "checkout" ? "Thank You" :
-            "Intro"
-          }
-        </button>
-      </div>
+
 
       {/* Bonus Time Alert */}
       <AnimatePresence>
@@ -325,22 +352,26 @@ export default function App() {
               L'esplorazione immersiva a 360° della Batcaverna richiede un monitor desktop e un mouse. Solo così potrai individuare tutti gli indizi del Joker.
             </p>
             <div className="w-full flex flex-col gap-4 mt-4 pointer-events-auto">
-              <button
+              <BatmanButton
+                variant="secondary"
+                size={20}
+                className="w-full"
                 onClick={() => {
                   setMissionStatus("succeeded");
                   setSpeedrunUnlocked(false);
                   changePhase("showreel");
                 }}
-                className="w-full py-4 bg-gold text-black font-black uppercase tracking-widest text-xs transition-all hover:bg-white hover:shadow-[0_0_30px_rgba(250,204,21,0.4)]"
               >
                 Vai direttamente alla Statua & Preordina
-              </button>
-              <button
+              </BatmanButton>
+              <BatmanButton
+                variant="ghost"
+                size={20}
+                className="w-full"
                 onClick={() => setForceMobile(true)}
-                className="w-full py-4 border border-white/20 text-white/50 font-black uppercase tracking-widest text-xs hover:text-white hover:border-white transition-colors"
               >
-                Continua l’Esplorazione a 360°
-              </button>
+                Continua l'Esplorazione a 360°
+              </BatmanButton>
             </div>
           </div>
         </div>
@@ -360,22 +391,12 @@ export default function App() {
           <Suspense fallback={<div className="absolute inset-0 bg-black flex items-center justify-center text-gold font-mono text-xs">CARICAMENTO AREA...</div>}>
             <SharedPanoramaCanvas
               scene={panoramaScene}
-              onProgress={(count) => setCompletedCount(count)}
+              onProgress={handleProgress}
               baseCompleted={baseCompleted}
               isPaused={isPaused}
               isMuted={isMuted}
               isMissionActive={missionStatus === "active"}
-              onNext={() => {
-                if (panoramaScene === "batcomputer") {
-                  setPhase("transition1");
-                  setTimeout(() => setPanoramaScene("armeria"), 100);
-                } else if (panoramaScene === "armeria") {
-                  setPhase("transition2");
-                  setTimeout(() => setPanoramaScene("batmobile"), 100);
-                } else if (panoramaScene === "batmobile") {
-                  changePhase("breather");
-                }
-              }}
+              onNext={handleNextPanorama}
             />
           </Suspense>
         )}
@@ -383,7 +404,7 @@ export default function App() {
         {/* ── BATCOMPUTER BOOT OVERLAY ────────────────────────────────────── */}
         <AnimatePresence>
           {phase === "batcomputer" && showBootOverlay && (
-            <BatcomputerBootOverlay onComplete={handleStartMission} />
+            <BatcomputerBootOverlay onComplete={handleStartMission} initialTime={initialTime} />
           )}
         </AnimatePresence>
 
@@ -432,10 +453,17 @@ export default function App() {
         <AnimatePresence mode="wait">
           {phase === "intro" && (
             <motion.div key="intro" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 1 }}>
-              <IntroScreen onBegin={() => {
-                setPanoramaScene("batcomputer");
-                changePhase("batcomputer");
-              }} />
+              <IntroScreen 
+                onBegin={() => {
+                  setPanoramaScene("batcomputer");
+                  changePhase("batcomputer");
+                }}
+                initialTime={initialTime}
+                isMuted={isMuted}
+                onToggleMute={() => setIsMuted(!isMuted)}
+                isPaused={isPaused}
+                onTogglePause={() => setIsPaused(!isPaused)}
+              />
             </motion.div>
           )}
 
@@ -452,7 +480,7 @@ export default function App() {
                 transition={{ duration: 2, repeat: Infinity }}
                 className="text-center space-y-2"
               >
-                <div className="text-[10px] font-mono text-green-500 tracking-[0.8em] uppercase font-bold">
+                <div className="text-[10px] font-mono text-[#FFD700] tracking-[0.8em] uppercase font-bold">
                   NEUTRALIZZAZIONE COMPLETATA… MINACCIA ELIMINATA.
                 </div>
                 <div className="text-[8px] font-mono text-white/30 tracking-[0.5em] uppercase">
@@ -473,6 +501,7 @@ export default function App() {
               <Suspense fallback={null}>
                 <BatmanCamera onPreorder={() => changePhase("checkout")} />
               </Suspense>
+              <Footer />
             </div>
           )}
 
@@ -482,8 +511,9 @@ export default function App() {
                 key="checkout" 
                 speedrunUnlocked={speedrunUnlocked} 
                 onClose={() => changePhase("showreel")} 
-                onSuccess={(qty) => {
+                onSuccess={(qty, total) => {
                   setPurchasedQuantity(qty);
+                  setPurchasedTotal(total);
                   changePhase("thankyou");
                 }}
               />
@@ -495,6 +525,7 @@ export default function App() {
               <ThankYouPage
                 key="thankyou"
                 quantity={purchasedQuantity}
+                totalPaid={purchasedTotal}
                 onReturnHome={() => handleResetMission()}
                 onViewStatue={() => changePhase("showreel")}
               />
@@ -533,6 +564,31 @@ export default function App() {
         isActive={isJokerActive}
         isMuted={isMuted}
         isPaused={isPaused}
+      />
+      {/* Moved Navbar below everything else so it renders last */}
+      <Navbar
+        phase={
+          (["intro", "transition1", "transition2", "breather"].includes(phase) || (phase === "batcomputer" && showBootOverlay))
+            ? "intro"
+            : ["batcomputer", "armeria", "batmobile"].includes(phase)
+              ? "gamification"
+              : phase === "reveal"
+                ? "reveal"
+                : phase === "showreel"
+                  ? "showreel"
+                  : phase === "checkout"
+                    ? "checkout"
+                    : "thankyou"
+        }
+        isMuted={isMuted}
+        onToggleMute={handleToggleMute}
+        isPaused={isPaused}
+        onTogglePause={handleTogglePause}
+        completedCount={completedCount}
+        totalClues={5}
+        timeLeft={missionStatus === "active" ? timeLeft : undefined}
+        onPreorder={handleGoToCheckout}
+        onBack={handleBackFromCheckout}
       />
     </div>
   );

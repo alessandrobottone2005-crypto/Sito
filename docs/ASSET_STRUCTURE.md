@@ -31,8 +31,11 @@ Componenti UI e texture flat 2D.
 - `batman-cursor.png`
 
 ### 🎞 `showreel/`
-Sequenza di frame in `.png` ad altissima frequenza per lo scroll-jacking (`BatmanCamera.tsx`).
-- I file sono enumerati come `0001.png` fino a `0800.png`.
+Sequenza di frame in `.png` per lo scroll-jacking (`BatmanCamera.tsx`).
+- **800 frame totali**, enumerati come `0001.png` fino a `0800.png`.
+- **Risoluzione**: 4K (3840×2160px) — altissima qualità, esportati in produzione definitiva.
+- **Frame rate originale**: 25 FPS.
+- **Sfondo**: trasparente (canale alpha PNG — nessun colore di sfondo composito).
 - Il componente li carica in background (batching basato su un priority threshold).
 
 ---

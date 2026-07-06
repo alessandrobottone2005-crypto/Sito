@@ -31,9 +31,14 @@ const BATMOBILE_RIDDLES = [
 ];
 
 function PanoramaSphere({ texture, onClick }: { texture: THREE.Texture, onClick?: () => void }) {
+  // Configura la texture per limitare al massimo la sgranatura nei limiti della risoluzione
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  texture.generateMipmaps = false; 
+
   return (
     <mesh key={texture.uuid} scale={[-1, 1, 1]} rotation={[0, -Math.PI / 2, 0]} onClick={onClick}>
-      <sphereGeometry args={[500, 60, 40]} />
+      <sphereGeometry args={[500, 128, 128]} />
       <meshBasicMaterial map={texture} side={THREE.BackSide} />
     </mesh>
   );
@@ -56,6 +61,7 @@ interface ClueMeshProps {
 
 function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, onSuccess, isPaused, hoveredCountRef, isHintActive, hintPhase, onBecomeVisible }: ClueMeshProps) {
   const [hovered, setHovered] = useState(false);
+  const [isFlyingAway, setIsFlyingAway] = useState(false);
   const meshRef = useRef<THREE.Group>(null);
   const targetWorldPos = useRef(new THREE.Vector3());
   const becameVisibleRef = useRef(false);
@@ -118,30 +124,37 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
   // Calcola le proprietà dinamiche del glow in base alla fase hint
   const hintGlowMap: Record<number, { shadow: string; borderColor: string; bg: string }> = {
     0: {
-      shadow: "0 0 20px rgba(57, 255, 20, 0.2), inset 0 0 10px rgba(57, 255, 20, 0.1)",
-      borderColor: "rgba(57, 255, 20, 0.8)",
+      shadow: "0 0 20px rgba(102, 0, 197, 0.2), inset 0 0 10px rgba(102, 0, 197, 0.1)",
+      borderColor: "rgba(102, 0, 197, 0.8)",
       bg: "rgba(0,0,0,0.9)",
     },
     1: {
-      shadow: "0 0 40px rgba(57, 255, 20, 0.5), inset 0 0 20px rgba(57, 255, 20, 0.25)",
-      borderColor: "rgba(57, 255, 20, 0.95)",
-      bg: "rgba(5, 20, 5, 0.92)",
+      shadow: "0 0 40px rgba(102, 0, 197, 0.5), inset 0 0 20px rgba(102, 0, 197, 0.25)",
+      borderColor: "rgba(102, 0, 197, 0.95)",
+      bg: "rgba(10, 0, 20, 0.92)",
     },
     2: {
-      shadow: "0 0 70px rgba(57, 255, 20, 0.75), inset 0 0 30px rgba(57, 255, 20, 0.4), 0 0 120px rgba(57, 255, 20, 0.3)",
-      borderColor: "#39FF14",
-      bg: "rgba(5, 25, 5, 0.95)",
+      shadow: "0 0 70px rgba(102, 0, 197, 0.75), inset 0 0 30px rgba(102, 0, 197, 0.4), 0 0 120px rgba(102, 0, 197, 0.3)",
+      borderColor: "#6600C5",
+      bg: "rgba(15, 0, 30, 0.95)",
     },
     3: {
-      shadow: "0 0 100px rgba(57, 255, 20, 1.0), inset 0 0 50px rgba(57, 255, 20, 0.6), 0 0 200px rgba(57, 255, 20, 0.5)",
-      borderColor: "#39FF14",
-      bg: "rgba(10, 35, 10, 0.97)",
+      shadow: "0 0 100px rgba(102, 0, 197, 1.0), inset 0 0 50px rgba(102, 0, 197, 0.6), 0 0 200px rgba(102, 0, 197, 0.5)",
+      borderColor: "#6600C5",
+      bg: "rgba(20, 0, 40, 0.97)",
     },
   };
 
   const currentHint = isHintActive ? (hintGlowMap[hintPhase] ?? hintGlowMap[0]) : hintGlowMap[0];
 
-  if (isCompleted) return null;
+  const handleSuccess = () => {
+    setIsFlyingAway(true);
+    setTimeout(() => {
+      onSuccess();
+    }, 800);
+  };
+
+  if (isCompleted && !isFlyingAway) return null;
   return (
     <group ref={meshRef}>
       <Html transform distanceFactor={60} zIndexRange={[100, 0]} center>
@@ -162,9 +175,9 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
               height: hintPhase === 3 ? [220, 280, 220] : [180, 230, 180],
               opacity: hintPhase === 3 ? [0.25, 0.45, 0.25] : [0.15, 0.3, 0.15],
               background: [
-                "radial-gradient(circle, rgba(57,255,20,0.4) 0%, rgba(57,255,20,0) 70%)",
-                "radial-gradient(circle, rgba(57,255,20,0.7) 0%, rgba(57,255,20,0) 70%)",
-                "radial-gradient(circle, rgba(57,255,20,0.4) 0%, rgba(57,255,20,0) 70%)",
+                "radial-gradient(circle, rgba(102,0,197,0.4) 0%, rgba(102,0,197,0) 70%)",
+                "radial-gradient(circle, rgba(102,0,197,0.7) 0%, rgba(102,0,197,0) 70%)",
+                "radial-gradient(circle, rgba(102,0,197,0.4) 0%, rgba(102,0,197,0) 70%)",
               ],
             }}
             transition={{
@@ -179,14 +192,19 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
           onPointerEnter={(e) => { e.stopPropagation(); setHovered(true); }}
           onPointerLeave={() => { setHovered(false); }}
           onClick={(e) => { e.stopPropagation(); if (!isActive && !isPaused) onClick(); }}
-          animate={{
+          animate={isFlyingAway ? {
+            scale: 0.1,
+            y: typeof window !== 'undefined' && window.innerWidth < 768 ? window.innerHeight / 2 - 60 : -(typeof window !== 'undefined' ? window.innerHeight : 1000) / 2 + 50,
+            x: typeof window !== 'undefined' && window.innerWidth < 768 ? -window.innerWidth / 2 + 60 : -(typeof window !== 'undefined' ? window.innerWidth : 1000) / 2 + 350,
+            opacity: 0,
+          } : {
             borderColor: hovered || isActive
-              ? "#39FF14"
+              ? "#6600C5"
               : isHintActive
-              ? [currentHint.borderColor, "#39FF14", currentHint.borderColor]
-              : "rgba(57, 255, 20, 0.8)",
+              ? [currentHint.borderColor, "#6600C5", currentHint.borderColor]
+              : "rgba(102, 0, 197, 0.8)",
             boxShadow: hovered || isActive
-              ? "0 0 80px rgba(57, 255, 20, 0.9), inset 0 0 30px rgba(57, 255, 20, 0.5)"
+              ? "0 0 80px rgba(102, 0, 197, 0.9), inset 0 0 30px rgba(102, 0, 197, 0.5)"
               : isHintActive
               ? [
                   currentHint.shadow,
@@ -196,21 +214,25 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
                   currentHint.shadow,
                 ]
               : [
-                  "0 0 20px rgba(57, 255, 20, 0.2), inset 0 0 10px rgba(57, 255, 20, 0.1)",
-                  "0 0 60px rgba(57, 255, 20, 0.7), inset 0 0 25px rgba(57, 255, 20, 0.4)",
-                  "0 0 20px rgba(57, 255, 20, 0.2), inset 0 0 10px rgba(57, 255, 20, 0.1)",
+                  "0 0 20px rgba(102, 0, 197, 0.2), inset 0 0 10px rgba(102, 0, 197, 0.1)",
+                  "0 0 60px rgba(102, 0, 197, 0.7), inset 0 0 25px rgba(102, 0, 197, 0.4)",
+                  "0 0 20px rgba(102, 0, 197, 0.2), inset 0 0 10px rgba(102, 0, 197, 0.1)",
                 ],
-            scale: hovered || isActive ? 1.05 : isHintActive ? [1, 1.06, 1, 1.04, 1] : [1, 1.05, 1],
+            scale: isActive ? 1.05 : hovered ? 1.05 : isHintActive ? [1, 1.06, 1, 1.04, 1] : [1, 1.05, 1],
             // Fluttuazione lenta della card quando hint attivo
             y: isHintActive && !isActive ? [0, -4, 0, -2, 0] : 0,
+            opacity: 1,
           }}
-          transition={{
+          transition={isFlyingAway ? {
+            duration: 0.8,
+            ease: "easeInOut"
+          } : {
             boxShadow: {
               duration: isHintActive ? (hintPhase === 3 ? 1.2 : 2.0) : 1.5,
               repeat: Infinity,
               ease: "easeInOut",
             },
-            scale: {
+            scale: isActive ? { duration: 0.3 } : {
               duration: isHintActive ? (hintPhase === 3 ? 1.0 : 1.8) : 1.5,
               repeat: Infinity,
               ease: "easeInOut",
@@ -245,7 +267,7 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
                 borderRadius: 10,
                 pointerEvents: "none",
                 background:
-                  "linear-gradient(135deg, rgba(57,255,20,0.08) 0%, transparent 50%, rgba(57,255,20,0.04) 100%)",
+                  "linear-gradient(135deg, rgba(102,0,197,0.08) 0%, transparent 50%, rgba(102,0,197,0.04) 100%)",
               }}
               animate={{ opacity: [0.6, 1, 0.6] }}
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
@@ -257,19 +279,21 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
               animate={{
                 opacity: isHintActive ? [0.8, 1, 0.8] : [0.7, 0.9, 0.7],
                 filter: isHintActive
-                  ? ["drop-shadow(0 0 15px #39FF14)", "drop-shadow(0 0 35px #39FF14)", "drop-shadow(0 0 15px #39FF14)"]
-                  : ["drop-shadow(0 0 10px #39FF14)", "drop-shadow(0 0 10px #39FF14)"],
+                  ? ["drop-shadow(0 0 15px #6600C5)", "drop-shadow(0 0 35px #6600C5)", "drop-shadow(0 0 15px #6600C5)"]
+                  : ["drop-shadow(0 0 10px #6600C5)", "drop-shadow(0 0 10px #6600C5)"],
               }}
               transition={{
                 duration: isHintActive ? (hintPhase === 3 ? 1.0 : 1.8) : 1.5,
                 repeat: Infinity,
                 ease: "easeInOut",
               }}
-              style={{ width: "100%", height: "100%", borderRadius: 8, overflow: "hidden" }}
+              style={{ width: "100%", height: "100%", borderRadius: 8, overflow: "hidden", willChange: "filter, transform" }}
             >
               <img 
-                src="./assets/images/JollyJokerCard.jpg" 
+                src="./assets/images/JollyJokerCard_Front.jpg" 
                 alt="Jolly Joker" 
+                loading="lazy"
+                decoding="async"
                 style={{ width: "100%", height: "100%", objectFit: "cover" }} 
               />
             </motion.div>
@@ -289,7 +313,7 @@ function ClueMesh({ position, riddle, onClick, isCompleted, isActive, onClose, o
               riddle={riddle.riddle}
               options={riddle.options}
               correctAnswer={riddle.correctAnswer}
-              onSuccess={onSuccess}
+              onSuccess={handleSuccess}
               onClose={onClose}
               isFlipped={isActive}
               isPaused={isPaused}
@@ -316,7 +340,7 @@ function SceneContent({ texture, scene, cardPositions, activeCardId, completedId
       {texture && <PanoramaSphere texture={texture} onClick={() => { if (activeCardId !== null && !isPaused) onCloseCard(); }} />}
       {cardPositions && riddles.map((r, i) => (
         <ClueMesh
-          key={`${scene}-${r.id}`}
+          key={r.id}
           position={cardPositions[i]}
           riddle={r}
           onClick={() => onCardClick(r.id)}
@@ -386,17 +410,22 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
     setCardPositions(null);
   }, [scene]);
 
-  // Card positions
+  // Card positions — fixed per scene for reproducibility (BUG-021)
   useEffect(() => {
-    const count = scene === "armeria" ? 1 : 2;
-    const pts: [number, number, number][] = [];
-    let tries = 0;
-    while (pts.length < count && tries++ < 300) {
-      const phi = Math.random() * 1.8 + 0.6, theta = Math.random() * Math.PI * 2;
-      const p: [number, number, number] = [200 * Math.sin(phi) * Math.cos(theta), 200 * Math.cos(phi), 200 * Math.sin(phi) * Math.sin(theta)];
-      if (!pts.some(q => Math.hypot(q[0] - p[0], q[1] - p[1], q[2] - p[2]) < 120)) pts.push(p);
-    }
-    setCardPositions(pts);
+    const POSITIONS: Record<string, [number, number, number][]> = {
+      batcomputer: [
+        [190, -30, 60],
+        [-160, -20, 120],
+      ],
+      armeria: [
+        [170, 40, -100],
+      ],
+      batmobile: [
+        [-180, -10, 80],
+        [120, 30, -170],
+      ],
+    };
+    setCardPositions(POSITIONS[scene] ?? []);
   }, [scene]);
 
   // Load texture — cleanup ONLY disposes what belongs to this effect instance
@@ -405,22 +434,26 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
     let myVideo: HTMLVideoElement | null = null;
     let myTex: THREE.Texture | null = null;
 
-    if (scene === "batcomputer") {
+    // ── Helper: carica una VideoTexture con fallback a JPG statico ──────
+    const loadVideoScene = (
+      videoSrc: string,
+      staticFallbackSrc: string,
+      sceneLabel: string
+    ) => {
       const video = document.createElement("video");
-      video.src = "./assets/videos/BatCaverna360_BatComputerArea.mp4";
+      video.src = videoSrc;
       video.loop = true;
       video.muted = true;
       video.playsInline = true;
       video.crossOrigin = "anonymous";
       myVideo = video;
 
-      // Fallback: load static image if video texture fails (e.g. file:// security)
       const loadStaticFallback = () => {
         if (!active) return;
-        console.log("[Panorama] Video texture not usable, loading static fallback for batcomputer");
+        console.log(`[Panorama] Video texture not usable, loading static fallback for ${sceneLabel}`);
         const loader = new THREE.TextureLoader();
         loader.load(
-          "./assets/textures/BatCaverna360_BatComputerArea.jpg",
+          staticFallbackSrc,
           (tex) => {
             if (!active) { tex.dispose(); return; }
             tex.colorSpace = THREE.SRGBColorSpace;
@@ -430,7 +463,7 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
           },
           undefined,
           (err) => {
-            console.error("[Panorama] Static fallback also failed:", err);
+            console.error(`[Panorama] Static fallback also failed for ${sceneLabel}:`, err);
             if (active) setIsLoading(false);
           }
         );
@@ -441,25 +474,21 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
       myTex = tex;
       videoRef.current = video;
 
-      // Check if video can be used as a WebGL texture (fails in file://)
       let videoTextureWorking = false;
 
       const onPlaying = () => {
         if (!active) return;
-        // Try drawing a frame to a test canvas to detect tainted canvas
         try {
           const testCanvas = document.createElement("canvas");
           testCanvas.width = 4;
           testCanvas.height = 4;
           const ctx = testCanvas.getContext("2d");
           ctx?.drawImage(video, 0, 0, 4, 4);
-          ctx?.getImageData(0, 0, 1, 1); // this throws if tainted
-          // If we get here, video texture is usable
+          ctx?.getImageData(0, 0, 1, 1);
           videoTextureWorking = true;
           setTexture(tex);
           setIsLoading(false);
         } catch (e) {
-          // Video is tainted (file:// security), use static fallback
           video.pause();
           loadStaticFallback();
         }
@@ -473,16 +502,11 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
       video.addEventListener("playing", onPlaying, { once: true });
       video.addEventListener("error", onError, { once: true });
       video.load();
-      video.play().catch(() => {
-        // Autoplay blocked or file:// error — go straight to fallback
-        loadStaticFallback();
-      });
+      video.play().catch(() => loadStaticFallback());
 
       const safety = setTimeout(() => {
         if (!active) return;
-        if (!videoTextureWorking) {
-          loadStaticFallback();
-        }
+        if (!videoTextureWorking) loadStaticFallback();
       }, 4000);
 
       return () => {
@@ -495,57 +519,32 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
         video.load();
         videoRef.current = null;
       };
+    };
+
+    // ── BatComputer: video animato 360° ──────────────────────────────────
+    if (scene === "batcomputer") {
+      return loadVideoScene(
+        "./assets/textures/BatCaverna360_BatComputerArea.mp4",
+        "./assets/textures/BatCaverna360_BatComputerArea.jpg",
+        "batcomputer"
+      );
     }
 
-
-    // Static texture
-    const urls = scene === "armeria"
-      ? ["./assets/textures/BatCaverna360_ArmeriaArea.jpg", "./assets/textures/BatCaverna360_ArmeriaArea.png"]
-      : ["./assets/textures/BatCaverna360_BatMobileArea.jpg", "./assets/textures/BatCaverna360_BatMobileArea.png"];
-
-    console.log(`[Panorama] Loading texture for scene: ${scene}, urls:`, urls);
-
-    const loader = new THREE.TextureLoader();
-    const tryLoad = (idx: number) => {
-      if (!active || idx >= urls.length) {
-        console.warn(`[Panorama] All texture URLs exhausted for scene: ${scene}`);
-        if (active) setIsLoading(false);
-        return;
-      }
-      console.log(`[Panorama] Attempting to load: ${urls[idx]}`);
-      loader.load(urls[idx],
-        (tex) => {
-          if (!active) { tex.dispose(); return; }
-          console.log(`[Panorama] SUCCESS: Texture loaded for ${scene}: ${urls[idx]}, size: ${tex.image?.width}x${tex.image?.height}`);
-          tex.colorSpace = THREE.SRGBColorSpace;
-          myTex = tex;
-          setTexture(tex);
-          setIsLoading(false);
-        },
-        (progress) => {
-          if (progress.total > 0) {
-            console.log(`[Panorama] Loading ${urls[idx]}: ${Math.round(progress.loaded / progress.total * 100)}%`);
-          }
-        },
-        (err) => {
-          console.error(`[Panorama] ERROR: Failed to load ${urls[idx]}:`, err);
-          tryLoad(idx + 1);
-        }
+    // ── Armeria: video animato 360° ───────────────────────────────────────
+    if (scene === "armeria") {
+      return loadVideoScene(
+        "./assets/textures/BatCaverna360_ArmeriaArea.mp4",
+        "./assets/textures/BatCaverna360_ArmeriaArea.jpg",
+        "armeria"
       );
-    };
-    tryLoad(0);
-    const safety = setTimeout(() => {
-      if (active) {
-        console.warn(`[Panorama] ⏰ Safety timer fired for scene: ${scene} — texture may not have loaded`);
-        setIsLoading(false);
-      }
-    }, 8000);
+    }
 
-    return () => {
-      active = false;
-      clearTimeout(safety);
-      // DO NOT dispose myTex here — let it be replaced in state.
-    };
+    // ── BatMobile: video animato 360° ─────────────────────────────────────
+    return loadVideoScene(
+      "./assets/textures/BatCaverna360_BatMobileArea.mp4",
+      "./assets/textures/BatCaverna360_BatMobileArea.jpg",
+      "batmobile"
+    );
   }, [scene]);
 
   // Pause/resume video
@@ -569,7 +568,7 @@ function SharedPanoramaCanvas({ scene, onProgress, baseCompleted, isPaused, onNe
     }
   }, [completedIds, baseCompleted, scene, onProgress, onNext, resetHint, handleNextHintTarget]);
 
-  const areaLabel = scene === "batcomputer" ? "Bat-Cave // Area Batcomputer" : scene === "armeria" ? "Area Armeria" : "Area Batmobile";
+  const areaLabel = scene === "batcomputer" ? "Batcaverna // Area Batcomputer" : scene === "armeria" ? "Area Armeria" : "Area Batmobile";
   const hoveredCountRef = useRef(0);
 
   return (

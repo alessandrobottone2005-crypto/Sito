@@ -109,7 +109,7 @@ function Phase1Glitch({ active }: { active: boolean }) {
                 top: `${pct}%`,
                 height: i % 2 === 0 ? 1 : 2,
                 background: i % 2 === 0
-                  ? "rgba(57, 255, 20, 0.3)"
+                  ? "rgba(102, 0, 197, 0.3)"
                   : "rgba(255, 255, 255, 0.08)",
                 filter: "blur(0.5px)",
               }}
@@ -139,9 +139,9 @@ function Phase2Flicker() {
       className="absolute inset-0"
       animate={{
         background: [
-          "radial-gradient(ellipse at 50% 50%, rgba(57,255,20,0) 0%, rgba(0,0,0,0) 100%)",
-          "radial-gradient(ellipse at 50% 50%, rgba(57,255,20,0.04) 0%, rgba(0,0,0,0) 70%)",
-          "radial-gradient(ellipse at 50% 50%, rgba(57,255,20,0) 0%, rgba(0,0,0,0) 100%)",
+          "radial-gradient(ellipse at 50% 50%, rgba(102,0,197,0) 0%, rgba(0,0,0,0) 100%)",
+          "radial-gradient(ellipse at 50% 50%, rgba(102,0,197,0.06) 0%, rgba(0,0,0,0) 70%)",
+          "radial-gradient(ellipse at 50% 50%, rgba(102,0,197,0) 0%, rgba(0,0,0,0) 100%)",
         ],
       }}
       transition={{
@@ -160,9 +160,9 @@ function Phase3ChromaticAberration() {
     <>
       {/* Scanlines leggere */}
       <div
-        className="absolute inset-0 opacity-[0.03]"
+        className="absolute inset-0 opacity-[0.05]"
         style={{
-          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(57,255,20,0.5) 2px, rgba(57,255,20,0.5) 3px)",
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(102,0,197,0.5) 2px, rgba(102,0,197,0.5) 3px)",
         }}
       />
       {/* Aberrazione cromatica — layer rosso spostato */}
@@ -197,7 +197,7 @@ function JokerVignette({ phase }: { phase: 0 | 1 | 2 | 3 }) {
       className="absolute inset-0"
       animate={{ opacity: 1 }}
       style={{
-        background: `radial-gradient(ellipse at center, transparent 40%, rgba(57,255,20,${intensity}) 100%)`,
+        background: `radial-gradient(ellipse at center, transparent 40%, rgba(102,0,197,${intensity}) 100%)`,
         mixBlendMode: "screen",
       }}
     />
@@ -227,8 +227,8 @@ function JokerNarrativeTag({ phase }: { phase: 0 | 1 | 2 | 3 }) {
           <span
             className="text-[9px] font-mono tracking-[0.5em] uppercase"
             style={{
-              color: "rgba(57, 255, 20, 0.7)",
-              textShadow: "0 0 12px rgba(57,255,20,0.6), 0 0 4px rgba(57,255,20,0.3)",
+              color: "rgba(102, 0, 197, 0.7)",
+              textShadow: "0 0 12px rgba(102,0,197,0.6), 0 0 4px rgba(102,0,197,0.3)",
               letterSpacing: "0.5em",
             }}
           >

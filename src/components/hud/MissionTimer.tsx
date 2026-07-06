@@ -3,61 +3,145 @@ import { motion, AnimatePresence } from "motion/react";
 interface MissionTimerProps {
   timeLeft: number;
   isPaused: boolean;
+  compact?: boolean;
 }
 
-export default function MissionTimer({ timeLeft, isPaused }: MissionTimerProps) {
+export default function MissionTimer({ timeLeft, isPaused, compact = false }: MissionTimerProps) {
 
   const minutes = Math.floor(timeLeft / 60);
   const seconds = timeLeft % 60;
   const formattedTime = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 
   const isWarning = timeLeft <= 30 && timeLeft > 10;
-  const isUrgent = timeLeft <= 10 && timeLeft > 0;
+  const isUrgent = timeLeft <= 10;
 
+  const urgentColor = '#ef4444';
+  const normalColor = '#6600C5';
+  const activeColor = isUrgent ? urgentColor : normalColor;
+  const activeShadow = isUrgent ? 'rgba(239,68,68,1)' : 'rgba(102,0,197,1)';
+
+  // ── Compact: small inline pill for navbar ──────────────────────
+  if (compact) {
+    return (
+      <div
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "6px 12px",
+          borderRadius: 18,
+          background: "#000",
+          border: `1px solid ${activeColor}`,
+          boxShadow: `0px 0px 10px ${activeShadow}`,
+        }}
+        className={isUrgent ? 'animate-pulse' : ''}
+      >
+        <span style={{
+          fontFamily: "Space Grotesk, sans-serif",
+          fontSize: 10,
+          fontWeight: 400,
+          color: activeColor,
+          letterSpacing: "0.1em",
+          textShadow: `0px 0px 8px ${activeShadow}`,
+          textTransform: "uppercase",
+          whiteSpace: "nowrap",
+        }}>
+          {isUrgent ? "⚠" : "⏱"}
+        </span>
+        <span
+          className={isUrgent ? 'camera-shake' : ''}
+          style={{
+            fontFamily: "Space Grotesk, sans-serif",
+            fontSize: 16,
+            fontWeight: 700,
+            color: activeColor,
+            textShadow: `0px 0px 10px ${activeShadow}`,
+            letterSpacing: "0.05em",
+            lineHeight: 1,
+          }}
+        >
+          {formattedTime}
+        </span>
+      </div>
+    );
+  }
+
+  // ── Full size timer ────────────────────────────────────────────
   return (
     <div className="relative flex items-center justify-center mt-2 group">
-      {/* Decorative SVG HUD Frame */}
-      <div className="absolute inset-0 pointer-events-none flex items-center justify-center w-full h-full scale-125 z-0 opacity-80">
-        <svg viewBox="0 0 200 80" className="w-full h-full drop-shadow-lg" preserveAspectRatio="none">
-          <path 
-            d="M 20 5 L 180 5 L 195 20 L 195 60 L 180 75 L 20 75 L 5 60 L 5 20 Z" 
-            fill="rgba(0,0,0,0.6)" 
-            stroke={isUrgent ? "#ef4444" : isWarning ? "#f97316" : "#eab308"} 
-            strokeWidth="2" 
-            className="transition-colors duration-500"
-          />
-          {/* Corner accents */}
-          <path d="M 5 30 L 5 20 L 15 10" stroke={isUrgent ? "#ef4444" : "#eab308"} strokeWidth="3" fill="none" />
-          <path d="M 195 50 L 195 60 L 185 70" stroke={isUrgent ? "#ef4444" : "#eab308"} strokeWidth="3" fill="none" />
-        </svg>
-      </div>
-
       {/* Navbar Timer Display */}
-      <div className={`
-        relative px-8 md:px-12 py-2 md:py-3 transition-all duration-500 flex flex-col items-center
-        ${isUrgent ? 'text-red-500 scale-110' : isWarning ? 'text-orange-400 scale-105' : 'text-gold hover:scale-105'}
-      `}>
-        
-        {/* Scanline overlay */}
-        <div className="absolute inset-0 pointer-events-none bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:100%_3px] opacity-30 z-0 rounded-md overflow-hidden" />
-
-        <div className="relative z-10 flex flex-col items-center">
-          <div className={`text-[8px] md:text-[9px] uppercase tracking-[0.4em] md:tracking-[0.6em] mb-0.5 opacity-90 font-mono font-bold ${isUrgent ? 'animate-pulse text-red-400' : ''}`}>
-            {isUrgent ? '!!! DETONAZIONE IMMINENTE !!!' : 'DETONAZIONE IN'}
+      <div 
+        data-color="purple" 
+        data-size="small" 
+        style={{
+          width: 221, 
+          padding: 20, 
+          flexDirection: 'column', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          gap: 20, 
+          display: 'inline-flex'
+        }}
+        className={isUrgent ? 'animate-pulse' : ''}
+      >
+        <div style={{
+          width: 191, 
+          background: 'var(--black, black)', 
+          boxShadow: `0px 0px 14px ${activeColor}`, 
+          borderRadius: 18, 
+          flexDirection: 'column', 
+          justifyContent: 'flex-start', 
+          alignItems: 'center', 
+          display: 'flex'
+        }}>
+          <div style={{
+            alignSelf: 'stretch', 
+            padding: 10, 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            gap: 10, 
+            display: 'inline-flex'
+          }}>
+            <div style={{
+              textAlign: 'center', 
+              justifyContent: 'center', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              color: activeColor, 
+              fontSize: 12, 
+              fontFamily: 'Space Grotesk, sans-serif', 
+              fontWeight: 400, 
+              lineHeight: '13px', 
+              wordWrap: 'break-word', 
+              textShadow: `0px 0px 14px ${activeShadow}`
+            }}>
+              {isUrgent ? 'DETONAZIONE IMMINENTE' : 'TEMPO_ALLA_DETONAZIONE'}
+            </div>
           </div>
-          {/* Removed tracking-tighter and tabular-nums to prevent cutting, added pr-2 just in case */}
-          <div className={`text-2xl md:text-4xl font-black font-mono pr-2 pl-2 ${isUrgent ? 'camera-shake text-red-500 drop-shadow-[0_0_20px_rgba(239,68,68,1)]' : isWarning ? 'drop-shadow-[0_0_15px_rgba(249,115,22,0.8)]' : 'drop-shadow-[0_0_15px_rgba(250,204,21,0.6)]'}`}>
-            {formattedTime}
+          <div style={{
+            padding: 10, 
+            justifyContent: 'center', 
+            alignItems: 'center', 
+            gap: 10, 
+            display: 'inline-flex'
+          }}>
+            <div className={isUrgent ? 'camera-shake' : ''} style={{
+              textAlign: 'center', 
+              justifyContent: 'center', 
+              display: 'flex', 
+              flexDirection: 'column', 
+              color: activeColor, 
+              fontSize: 40, 
+              fontFamily: 'Space Grotesk, sans-serif', 
+              fontWeight: 700, 
+              lineHeight: '41px', 
+              wordWrap: 'break-word', 
+              textShadow: `0px 0px 14px ${activeShadow}`
+            }}>
+              {formattedTime}
+            </div>
           </div>
         </div>
-        
-        {/* Intense Glow effect */}
-        <div className={`
-          absolute inset-0 -z-10 blur-[30px] transition-opacity duration-500
-          ${isUrgent ? 'bg-red-600/60 opacity-100' : 
-            isWarning ? 'bg-orange-500/40 opacity-80' : 
-            'bg-gold/30 opacity-60'}
-        `} />
       </div>
 
       {/* Fullscreen Countdown for last 10 seconds */}
@@ -67,7 +151,7 @@ export default function MissionTimer({ timeLeft, isPaused }: MissionTimerProps) 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200000] pointer-events-none flex items-center justify-center bg-red-950/20 backdrop-blur-[2px]"
+            className="fixed inset-0 z-[200000] pointer-events-none flex items-center justify-center bg-yellow-950/20 backdrop-blur-[2px]"
           >
             <motion.div
               key={timeLeft}
@@ -75,17 +159,17 @@ export default function MissionTimer({ timeLeft, isPaused }: MissionTimerProps) 
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="text-[40vw] md:text-[30rem] font-black text-red-600 italic tracking-tighter drop-shadow-[0_0_50px_rgba(220,38,38,0.8)]"
+              className="text-[40vw] md:text-[30rem] font-black text-[#FFD700] italic tracking-tighter drop-shadow-[0_0_50px_rgba(255,215,0,0.8)]"
             >
               {seconds}
             </motion.div>
             
             {/* Urgent UI Overlays */}
-            <div className="absolute inset-0 border-[10px] md:border-[20px] border-red-600/20 animate-pulse pointer-events-none" />
-            <div className="absolute top-1/2 left-2 md:left-10 -translate-y-1/2 text-red-600/40 text-[8px] md:text-xs font-black uppercase tracking-[0.5em] md:tracking-[1em] rotate-180 [writing-mode:vertical-lr]">
+            <div className="absolute inset-0 border-[10px] md:border-[20px] border-[#FFD700]/20 animate-pulse pointer-events-none" />
+            <div className="absolute top-1/2 left-2 md:left-10 -translate-y-1/2 text-[#FFD700]/40 text-[8px] md:text-xs font-black uppercase tracking-[0.5em] md:tracking-[1em] rotate-180 [writing-mode:vertical-lr]">
               SEQUENZA_EMERGENZA_ATTIVA
             </div>
-            <div className="absolute top-1/2 right-2 md:right-10 -translate-y-1/2 text-red-600/40 text-[8px] md:text-xs font-black uppercase tracking-[0.5em] md:tracking-[1em] [writing-mode:vertical-lr]">
+            <div className="absolute top-1/2 right-2 md:right-10 -translate-y-1/2 text-[#FFD700]/40 text-[8px] md:text-xs font-black uppercase tracking-[0.5em] md:tracking-[1em] [writing-mode:vertical-lr]">
               COLLASSO_SISTEMA_IMMINENTE
             </div>
           </motion.div>

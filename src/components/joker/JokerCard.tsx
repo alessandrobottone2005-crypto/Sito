@@ -44,6 +44,7 @@ export default function JokerCard({
 }: JokerCardProps) {
   const [error, setError] = useState(false);
   const [isSolved, setIsSolved] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<string | null>(null);
 
   const handleClose = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -52,7 +53,9 @@ export default function JokerCard({
   };
 
   const handleOptionClick = (option: string) => {
-    if (isSolved || isPaused) return;
+    if (isSolved || isPaused || error) return;
+
+    setSelectedOption(option);
 
     if (option === correctAnswer) {
       setIsSolved(true);
@@ -66,7 +69,10 @@ export default function JokerCard({
       setError(true);
       playBeep(150, 'sawtooth', 0.5);
       
-      setTimeout(() => setError(false), 600);
+      setTimeout(() => {
+        setError(false);
+        setSelectedOption(null);
+      }, 600);
     }
   };
 
@@ -83,23 +89,23 @@ export default function JokerCard({
           x: { duration: 0.4 }
         }}
       >
-        {/* Front side (Retro Carta) */}
-        <div className="absolute inset-0 w-full h-full backface-hidden bg-black border-2 border-white/10 rounded-2xl overflow-hidden shadow-2xl group">
+        {/* ── FRONT SIDE (Retro Carta) ─────────────────────────────── */}
+        <div className="absolute inset-0 w-full h-full backface-hidden bg-black rounded-2xl overflow-hidden shadow-2xl group">
           <img 
-            src="./assets/images/JollyJokerCard.jpg" 
+            src="./assets/images/JollyJokerCard_Front.jpg" 
             alt="Joker Hint" 
-            className="absolute inset-0 w-full h-full object-cover opacity-90"
+            className="absolute inset-0 w-full h-full object-cover opacity-90 scale-105"
           />
           
-          {/* Pulsing Green Glow Border - INTENSIFIED */}
+          {/* Pulsing Purple Glow Border */}
           <motion.div 
             className="absolute inset-0 border-2 border-joker rounded-2xl pointer-events-none"
             animate={{ 
               opacity: [0.5, 1, 0.5],
               boxShadow: [
-                "inset 0 0 30px rgba(57, 255, 20, 0.4), 0 0 20px rgba(57, 255, 20, 0.3)",
-                "inset 0 0 60px rgba(57, 255, 20, 0.8), 0 0 50px rgba(57, 255, 20, 0.9)",
-                "inset 0 0 30px rgba(57, 255, 20, 0.4), 0 0 20px rgba(57, 255, 20, 0.3)"
+                "inset 0 0 30px rgba(102, 0, 197, 0.4), 0 0 20px rgba(102, 0, 197, 0.3)",
+                "inset 0 0 60px rgba(102, 0, 197, 0.8), 0 0 50px rgba(102, 0, 197, 0.9)",
+                "inset 0 0 30px rgba(102, 0, 197, 0.4), 0 0 20px rgba(102, 0, 197, 0.3)"
               ]
             }}
             transition={{ 
@@ -112,90 +118,181 @@ export default function JokerCard({
           <div className="absolute inset-0 bg-joker/5 group-hover:bg-joker/10 transition-colors pointer-events-none" />
         </div>
 
-        {/* Back side (Riddle & Multiple Choice) */}
-        <div className={`absolute inset-0 w-full h-full backface-hidden rotate-y-180 bg-black overflow-hidden border-2 rounded-2xl p-8 flex flex-col items-center justify-center transition-all duration-500 ${isSolved ? "border-joker shadow-[0_0_80px_rgba(57,255,20,0.4)]" : error ? "border-red-500 shadow-[0_0_40px_rgba(239,68,68,0.3)]" : "border-joker/30 shadow-[0_0_50px_rgba(57,255,20,0.15)]"}`}>
-          
+        {/* ── BACK SIDE (Single Column Figma Layout) ─────────────────────────────── */}
+        <div
+          className={`absolute inset-0 w-full h-full backface-hidden rotate-y-180 overflow-hidden rounded-2xl transition-all duration-500
+            ${isSolved
+              ? "border-transparent shadow-[0_0_100px_rgba(57,255,20,0.8)]"
+              : error
+              ? "border-transparent shadow-[0_0_100px_rgba(255,0,0,0.8)]"
+              : "border-transparent shadow-[0_0_50px_rgba(102,0,197,0.15)]"
+            }`}
+          style={{ background: "#000" }}
+        >
+          {/* Background Image */}
           <div className="absolute inset-0 pointer-events-none z-0">
             <img 
               src="./assets/images/JollyJokerCard_Back.jpg" 
               alt="Card Background" 
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover scale-105"
             />
           </div>
 
-          <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
-            {/* Glitch Effect Overlay when solved */}
-          {isSolved && (
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: [0, 1, 0, 1, 0] }}
-              transition={{ duration: 0.5, repeat: Infinity }}
-              className="absolute inset-0 bg-joker/5 pointer-events-none rounded-2xl"
-            />
-          )}
+          <div className="relative z-10 flex flex-col items-center justify-center w-full h-full p-8">
+            {/* Badges Overlay */}
+            <div className="absolute top-10 left-0 right-0 flex justify-center z-50">
+              <AnimatePresence mode="wait">
+                {isSolved && (
+                  <motion.div
+                    key="correct"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    style={{
+                      background: "#39FF14",
+                      color: "#010013",
+                      padding: "10px 20px",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      fontFamily: "Space Grotesk",
+                      fontWeight: 500,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                      boxShadow: "0 0 20px rgba(57, 255, 20, 0.4)"
+                    }}
+                  >
+                    RISPOSTA CORRETTA
+                  </motion.div>
+                )}
+                {error && (
+                  <motion.div
+                    key="error"
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    style={{
+                      background: "#FF0000",
+                      color: "#010013",
+                      padding: "10px 20px",
+                      borderRadius: "6px",
+                      fontSize: "13px",
+                      fontFamily: "Space Grotesk",
+                      fontWeight: 500,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.05em",
+                      boxShadow: "0 0 20px rgba(255, 0, 0, 0.4)"
+                    }}
+                  >
+                    RISPOSTA ERRATA
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
 
-
-
-          {isSolved && (
-            <motion.h3 
-              animate={{ color: "#7f1d1d" }}
-              className="text-red-900 text-[11px] tracking-[0.4em] font-bold uppercase mb-8 font-serif bg-white/50 px-3 py-1 rounded backdrop-blur-sm"
+            <div
+              style={{
+                textAlign: "center",
+                display: "flex",
+                flexDirection: "column",
+                color: "#FFFFFF",
+                fontSize: 18,
+                fontFamily: "Space Grotesk",
+                fontWeight: 400,
+                lineHeight: "24px",
+                wordWrap: "break-word",
+                fontStyle: "italic",
+                marginBottom: "2.5rem",
+                padding: "0 10px"
+              }}
             >
-              RISPOSTA CORRETTA
-            </motion.h3>
-          )}
-          
-          <p className="text-black text-center text-xl md:text-2xl font-bold leading-relaxed mb-10 italic px-4 font-serif">
-            "{riddle}"
-          </p>
+              {`"${riddle}"`}
+            </div>
 
-          <div className="grid grid-cols-1 gap-3 w-full px-2">
-            {options.map((option, idx) => (
-              <motion.button
-                key={idx}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleOptionClick(option);
-                }}
-                className={`
-                  relative w-full py-4 px-6 bg-white/50 backdrop-blur-md border-2 transition-all duration-300 group overflow-hidden
-                  ${isSolved && option === correctAnswer 
-                    ? "border-green-700 text-green-900 bg-green-500/40 shadow-[0_0_15px_rgba(34,197,94,0.4)]" 
-                    : "border-black/40 text-black hover:border-red-800 hover:text-red-900 hover:bg-red-500/20 hover:shadow-[0_0_10px_rgba(220,38,38,0.3)]"}
-                  rounded-lg
-                `}
-              >
-                {/* Red Hover Line */}
-                <div className="absolute top-0 left-0 w-1 h-full bg-red-800 opacity-0 group-hover:opacity-100 transition-opacity" />
+            {/* Options */}
+            <div className="w-full flex flex-col gap-3 px-2" role="group" aria-label={riddle}>
+              {options.map((option, idx) => {
+                const isCorrectAndSolved = isSolved && option === correctAnswer;
+                const isSelected = selectedOption === option;
+                const isErrorState = error && isSelected;
                 
-                <span className="relative z-10 text-xs md:text-sm tracking-[0.2em] uppercase font-bold font-serif">
-                  {option}
-                </span>
+                // Determine styling based on state
+                let bgStyle = "var(--primary-active-riddle, #FAF9F6)";
+                let outlineStyle = "1px solid var(--on-primary-stroke-active-riddle, #010013)";
+                let boxShadowStyle = "none";
+                
+                if (isCorrectAndSolved) {
+                  bgStyle = "#39FF14"; // Bright green
+                  outlineStyle = "2px solid #1A800A";
+                  boxShadowStyle = "0 0 20px rgba(57, 255, 20, 0.6)";
+                } else if (isErrorState) {
+                  bgStyle = "#FF0000"; // Bright red
+                  outlineStyle = "2px solid #8B0000";
+                  boxShadowStyle = "0 0 20px rgba(255, 0, 0, 0.6)";
+                }
 
-                {/* Micro-glow background on hover */}
-                <div className="absolute inset-0 bg-red-900/0 group-hover:bg-red-900/5 transition-colors" />
-              </motion.button>
-            ))}
-          </div>
+                return (
+                  <motion.button
+                    key={idx}
+                    role="option"
+                    aria-disabled={isSolved}
+                    whileHover={!isSolved && !error ? { scale: 1.02 } : undefined}
+                    whileTap={!isSolved && !error ? { scale: 0.98 } : undefined}
+                    onClick={(e) => {
+                      if (isSolved) return;
+                      e.stopPropagation();
+                      handleOptionClick(option);
+                    }}
+                    style={{
+                      width: "100%",
+                      padding: "16px 20px",
+                      background: bgStyle,
+                      borderRadius: 6,
+                      outline: outlineStyle,
+                      outlineOffset: "-1px",
+                      boxShadow: boxShadowStyle,
+                      display: "flex",
+                      justifyContent: "flex-start",
+                      alignItems: "center",
+                      cursor: isSolved ? "default" : "pointer",
+                      transition: "all 0.2s ease",
+                      position: "relative",
+                      overflow: "hidden"
+                    }}
+                    className="group"
+                  >
+                    {/* Hover Purple Line */}
+                    {!isSolved && !error && (
+                      <div className="absolute top-0 left-0 w-1 h-full bg-[#6600C5] opacity-0 group-hover:opacity-100 transition-opacity" />
+                    )}
+                    
+                    <div
+                      style={{
+                        color: "var(--on-primary-active-riddle, #010013)", // Text is always black
+                        fontSize: 14,
+                        fontFamily: "Space Grotesk",
+                        fontWeight: 400,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        position: "relative",
+                        zIndex: 10
+                      }}
+                    >
+                      {option}
+                    </div>
 
-          <AnimatePresence>
-            {error && (
-              <motion.div 
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="absolute bottom-6 text-[11px] text-red-800 font-bold tracking-[0.3em] font-serif uppercase bg-white/60 px-4 py-2 rounded-lg backdrop-blur-md border border-red-800/40 shadow-lg"
-              >
-                Accesso Negato // Riprova
-              </motion.div>
-            )}
-          </AnimatePresence>
+                    {/* Micro-glow background on hover */}
+                    {!isSolved && !error && (
+                      <div className="absolute inset-0 bg-[#29004F]/0 group-hover:bg-[#29004F]/5 transition-colors" />
+                    )}
+                  </motion.button>
+                );
+              })}
+            </div>
+
+            {/* Error message moved to top */}
           </div>
         </div>
       </motion.div>
     </div>
   );
 }
-

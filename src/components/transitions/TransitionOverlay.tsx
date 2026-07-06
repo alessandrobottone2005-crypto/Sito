@@ -95,7 +95,7 @@ export default function TransitionOverlay() {
           {/* Loading Bar */}
           <div className="w-48 h-[2px] bg-white/10 mt-6 relative overflow-hidden">
             <motion.div 
-              className="absolute inset-y-0 left-0 bg-gold shadow-[0_0_10px_#facd15]"
+              className="absolute inset-y-0 left-0 bg-gold shadow-[0_0_10px_#FFD700]"
               animate={{ left: ["-100%", "100%"] }}
               transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
               style={{ width: "40%" }}

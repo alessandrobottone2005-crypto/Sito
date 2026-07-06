@@ -2,6 +2,41 @@
 
 Tutte le funzionalità e i refactor implementati nel progetto.
 
+---
+
+## [1.1.0] — Design System Figma + Riorganizzazione Repository *(20 Giugno 2026)*
+
+### ✨ Novità — Design System Figma (Alessandro Bottone)
+
+L'intero Design System dell'autore, progettato in **Figma** seguendo la metodologia **Atomic Design**, è stato importato nella repository e organizzato nella nuova cartella `src/design-system/`.
+
+**File importati:**
+- `Atoms.tsx` + `Atoms.module.css` — Componenti base (bottoni ×5 taglie ×3 stati, timer, icone, clue cards, storytelling, checkout, win text, tutorial, showreel)
+- `Molecule.tsx` + `Molecule.module.css` — Combinazioni (Navbar ×5 stati, Clue 1–5 con flip card, Tutorial Instructions, Info Order, Checkout Molecule)
+- `Organisms.tsx` + `Organisms.module.css` — Sezioni complete (Showreel Quality, Win, Tutorial, ThankYou, Checkout)
+- `Templates.tsx` + `Templates.modules.css` — Layout completi (Win, Showreel, Storytelling, Tutorial, ThankYou, Checkout, Gamification)
+- `global.css` — Token CSS globali del Design System
+
+**Cosa copre il DS:** L'intera experience è rappresentata nel DS Figma: ogni schermata (intro, tutorial, gamification 360°, win, showreel, checkout, thankyou) ha il suo Template di riferimento, composto da Organisms, Molecules e Atoms.
+
+### 🗂️ Riorganizzazione Repository
+
+- **Spostati** i 9 file del DS dalla **root** del progetto a `src/design-system/`
+- **Spostati** i documenti di testo (`Testi_Sito_Batman_REVISED_v2.docx` e `.txt`) in `docs/`
+- La root del progetto è ora pulita: solo file di configurazione + `src/`, `docs/`, `public/`, `dist/`
+
+### 📝 Documentazione Aggiornata
+
+- **Creato** `docs/DESIGN_SYSTEM.md` — documentazione completa del DS Figma con: gerarchia atomic design, inventario atoms/molecules/organisms/templates, tabella migrazione AI → DS, checklist di stato migrazione
+- **Aggiornato** `README.md` — struttura progetto aggiornata con `src/design-system/`, nota migrazione in corso, tabella docs aggiornata
+- **Aggiornato** `docs/UI_UX_GUIDELINES.md` — confronto componente per componente tra implementazione AI e DS Figma ufficiale
+
+### 🔄 Stato Migrazione (In Corso)
+
+Il progetto sta **trasformando** l'interfaccia dall'implementazione AI-generated (TailwindCSS custom) al Design System ufficiale (CSS Modules Figma). Il DS è in repository e documentato; l'integrazione nei componenti React avverrà nelle prossime iterazioni.
+
+---
+
 ## [1.0.0] — Batman Immersive Experience Completa
 
 ### 🚀 Funzionalità Principali Implementate

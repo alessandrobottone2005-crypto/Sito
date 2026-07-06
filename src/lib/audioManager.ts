@@ -31,15 +31,7 @@ function _getInstance(): HTMLAudioElement {
   _audio.volume = 0;
   _audio.preload = "auto";
 
-  // Gestione seamless: se per qualsiasi motivo il loop nativo fallisce,
-  // lo forziamo manualmente con margine di sicurezza.
-  _audio.addEventListener("timeupdate", () => {
-    if (!_audio) return;
-    const d = _audio.duration;
-    if (d && _audio.currentTime > d - 0.05) {
-      _audio.currentTime = 0;
-    }
-  });
+  // Il loop nativo (audio.loop = true) gestisce la transizione in modo seamless nei browser moderni.
 
   return _audio;
 }
@@ -70,7 +62,8 @@ function _fadeInRAF(
     const progress = Math.min(elapsed / durationMs, 1);
     // Curva ease-out per un fade più naturale
     const eased = 1 - Math.pow(1 - progress, 3);
-    _audio.volume = Math.min(targetVolume, startVolume + delta * eased);
+    // Clamp a [0, 1]: la floating-point math può produrre valori leggermente < 0
+    _audio.volume = Math.max(0, Math.min(1, startVolume + delta * eased));
 
     if (progress < 1) {
       _fadeRafId = requestAnimationFrame(tick);

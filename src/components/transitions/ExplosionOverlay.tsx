@@ -1,5 +1,6 @@
 import { motion } from "motion/react";
 import { useState, useEffect } from "react";
+import BatmanButton from "../ui/BatmanButton";
 
 interface ExplosionOverlayProps {
   onReset: () => void;
@@ -50,7 +51,7 @@ export default function ExplosionOverlay({ onReset, onSkip }: ExplosionOverlayPr
         initial={{ opacity: 0 }}
         animate={{ opacity: [0, 1, 0.3, 0.8, 0] }}
         transition={{ delay: 0.6, duration: 2 }}
-        className="absolute inset-0 z-15 bg-red-600"
+        className="absolute inset-0 z-15 bg-[#6600C5]"
       />
 
       {/* 4. Game Over Content */}
@@ -60,7 +61,7 @@ export default function ExplosionOverlay({ onReset, onSkip }: ExplosionOverlayPr
         transition={{ delay: 2, duration: 1 }}
         className="relative z-30 flex flex-col items-center text-center px-6"
       >
-        <h2 className="text-red-600 text-6xl md:text-8xl font-black italic tracking-tighter mb-4 glitch-main uppercase">
+        <h2 className="text-[#6600C5] text-6xl md:text-8xl font-black italic tracking-tighter mb-4 glitch-main uppercase">
           MISSIONE FALLITA
         </h2>
         <p className="text-white/60 text-sm md:text-base tracking-[0.5em] uppercase font-bold mb-8">
@@ -68,29 +69,22 @@ export default function ExplosionOverlay({ onReset, onSkip }: ExplosionOverlayPr
         </p>
 
         <div className="flex flex-col sm:flex-row items-center gap-6 mt-4">
-          <button
+          <BatmanButton
+            variant="riddle-false"
             onClick={onReset}
-            className="group relative px-10 py-4 bg-red-600 text-white font-black rounded-sm overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_rgba(220,38,38,0.6)]"
           >
-            <span className="relative z-10 tracking-[0.4em] uppercase text-xs">Riprendi la Missione</span>
-            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300" />
-            
-            {/* Decorative corners */}
-            <div className="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-white" />
-            <div className="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-white" />
-            <div className="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-white" />
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-white" />
-          </button>
+            Riprendi la Missione
+          </BatmanButton>
 
-          <button
+          <BatmanButton
+            variant="ghost"
             onClick={onSkip}
-            className="text-white/40 hover:text-white transition-colors underline font-mono text-[10px] tracking-[0.2em] uppercase py-2 focus:outline-none pointer-events-auto cursor-pointer"
           >
             Salta la Missione
-          </button>
+          </BatmanButton>
         </div>
 
-        <p className="text-red-500/60 font-mono text-[9px] tracking-widest uppercase mt-8 animate-pulse">
+        <p className="text-[#6600C5]/60 font-mono text-[9px] tracking-widest uppercase mt-8 animate-pulse">
           Riavvio automatico tra {countdown} secondi…
         </p>
       </motion.div>

@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
 
 interface CinematicVideoPlayerProps {
   src: string;
@@ -17,7 +16,6 @@ export default function CinematicVideoPlayer({
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [videoEnded, setVideoEnded] = useState(false);
-  const [showSkip, setShowSkip] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
   const hasTriggeredExit = useRef(false);
 
@@ -40,9 +38,23 @@ export default function CinematicVideoPlayer({
     if (!video) return;
 
     video.addEventListener("ended", markEnded);
-    
-    // Safety auto-advance if video stalls
-    const safetyTimer = setTimeout(markEnded, 12000);
+
+    // Safety auto-advance basato sulla durata reale del video (+3s di margine)
+    // Fallback a 30s se la durata non è ancora nota
+    let safetyTimer: ReturnType<typeof setTimeout>;
+    const scheduleSafety = () => {
+      const duration = video.duration;
+      const delay = isFinite(duration) ? (duration * 1000 + 3000) : 30000;
+      safetyTimer = setTimeout(markEnded, delay);
+    };
+
+    if (video.readyState >= 1) {
+      scheduleSafety();
+    } else {
+      video.addEventListener("loadedmetadata", scheduleSafety, { once: true });
+      // Fallback se loadedmetadata non arriva
+      safetyTimer = setTimeout(markEnded, 30000);
+    }
 
     const startVideo = async () => {
       try {
@@ -56,12 +68,9 @@ export default function CinematicVideoPlayer({
 
     startVideo();
 
-    // Show safety skip after 2.5 seconds
-    const skipTimer = setTimeout(() => setShowSkip(true), 2500);
-
     return () => {
       video.removeEventListener("ended", markEnded);
-      clearTimeout(skipTimer);
+      video.removeEventListener("loadedmetadata", scheduleSafety);
       clearTimeout(safetyTimer);
     };
   }, [src]);
@@ -94,45 +103,6 @@ export default function CinematicVideoPlayer({
         muted
         src={src}
       />
-
-      {/* Cinematic HUD Overlay */}
-      {isVisible && !isExiting && (
-        <div className="absolute inset-0 pointer-events-none flex flex-col items-center justify-center bg-black/10">
-          <div className="absolute bottom-12 left-1/2 -translate-x-1/2 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-gold text-[10px] tracking-[1em] uppercase font-black mb-2 opacity-60"
-            >
-              {label}
-            </motion.div>
-            <div className="w-48 h-[1px] bg-gold/20 relative overflow-hidden mx-auto">
-              <motion.div 
-                className="absolute inset-y-0 left-0 bg-gold shadow-[0_0_10px_#facd15]"
-                animate={{ left: ["-100%", "100%"] }}
-                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-                style={{ width: "40%" }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Subtle Skip Safety */}
-      <AnimatePresence>
-        {showSkip && !isExiting && (
-          <motion.button
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            whileHover={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={markEnded}
-            className="absolute bottom-8 right-8 z-[600] pointer-events-auto text-[8px] text-white/50 tracking-[0.4em] uppercase border border-white/10 px-4 py-2 hover:bg-white/5 font-mono"
-          >
-            Salta Transizione
-          </motion.button>
-        )}
-      </AnimatePresence>
     </div>
   );
 }

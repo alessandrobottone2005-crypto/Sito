@@ -34,6 +34,13 @@ export default function JokerAudioManager({ isActive, isMuted, isPaused }: Joker
   const audioBufferRef = useRef<AudioBuffer | null>(null);
   const nextTimerRef   = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isLoadedRef    = useRef(false);
+  const isMutedRef     = useRef(isMuted);
+  const isPausedRef    = useRef(isPaused);
+
+  useEffect(() => {
+    isMutedRef.current = isMuted;
+    isPausedRef.current = isPaused;
+  }, [isMuted, isPaused]);
 
   // ── 1. Carica il buffer audio una sola volta ────────────────────────────────
   useEffect(() => {
@@ -66,7 +73,7 @@ export default function JokerAudioManager({ isActive, isMuted, isPaused }: Joker
     const buffer = audioBufferRef.current;
 
     if (!ctx || !buffer || !isLoadedRef.current) return;
-    if (isMuted || isPaused || !isActive) return;
+    if (isMutedRef.current || isPausedRef.current || !isActive) return;
 
     // Risveglia AudioContext se sospeso dal browser (autoplay policy)
     if (ctx.state === "suspended") {

@@ -3,6 +3,8 @@
 > **Esperienza cinematografica interattiva** per la statua in edizione limitata Batman 87th Anniversary.  
 > Progetto accademico IUAD — Corso UI/UX Design.
 
+> 🔄 **In trasformazione:** il progetto sta migrando dal design system AI-generated al **Design System ufficiale Figma** dell'autore. Vedi [`docs/DESIGN_SYSTEM.md`](./docs/DESIGN_SYSTEM.md).
+
 ---
 
 ## Concept
@@ -40,9 +42,10 @@ Intro Joker (briefing cinematografico)
 | Motion (Framer) | 12 | Animazioni |
 | Three.js | 0.184 | Rendering 360° |
 | React Three Fiber | 9.6 | Three.js React bridge |
-| TailwindCSS | 4.1 | Styling |
+| TailwindCSS | 4.1 | Styling (corrente, in migrazione verso DS Figma) |
 | Lucide React | 0.546 | Icone |
 | Web Audio API | nativa | Audio spaziale Joker |
+| CSS Modules | — | Nuovo DS Figma (Atomic Design) |
 
 ---
 
@@ -63,7 +66,17 @@ npm run lint    # TypeScript check
 src/
 ├── App.tsx                    # Orchestratore principale, state machine fasi
 ├── main.tsx                   # Entry point React 19
-├── index.css                  # Design system globale + animazioni
+├── index.css                  # Design system globale + animazioni (AI-generated, in migrazione)
+├── design-system/             # ✨ NUOVO — Design System Figma (Alessandro Bottone)
+│   ├── Atoms.tsx              # Atoms: bottoni, icone, timer, testi, logo, cursore
+│   ├── Atoms.module.css       # CSS Module per gli Atoms
+│   ├── Molecule.tsx           # Molecules: Navbar, Clues, Tutorial, Checkout
+│   ├── Molecule.module.css    # CSS Module per le Molecules
+│   ├── Organisms.tsx          # Organisms: Showreel, Win, Tutorial, ThankYou, Checkout
+│   ├── Organisms.module.css   # CSS Module per gli Organisms
+│   ├── Templates.tsx          # Templates: layout completi per ogni schermata
+│   ├── Templates.modules.css  # CSS Module per i Templates
+│   └── global.css             # Token globali e variabili CSS del Design System
 ├── lib/
 │   └── audioManager.ts        # Singleton BatcavernAudio (persistente tra fasi)
 ├── hooks/
@@ -79,28 +92,28 @@ src/
 │   │   ├── CinematicVideoPlayer.tsx # Transizioni video
 │   │   └── MouseLookControls.tsx    # Controllo panorama da mouse
 │   ├── joker/
-│   │   ├── JokerCard.tsx      # Card indizio con riddles a scelta multipla
+│   │   ├── JokerCard.tsx      # Card indizio (→ migrazione a Clues Molecule DS)
 │   │   ├── JokerHintSystem.tsx # Overlay visivo hint (3 fasi + audio)
 │   │   └── JokerAudioManager.tsx # Risata 3D spaziale (Web Audio API)
 │   ├── hud/
-│   │   ├── MissionTimer.tsx   # Timer con countdown drammatico ultimi 10s
-│   │   └── ProgressTracker.tsx # Barre indizi completati
+│   │   ├── MissionTimer.tsx   # Timer (→ migrazione a Timer Atom DS)
+│   │   └── ProgressTracker.tsx # Barre indizi (→ migrazione a Progression Atom DS)
 │   ├── layout/
-│   │   └── Navbar.tsx         # Nav fissa con HUD integrato
+│   │   └── Navbar.tsx         # Nav fissa (→ migrazione a Navbar Molecule DS)
 │   ├── showreel/
 │   │   ├── BatmanCamera.tsx   # Showreel scroll-driven 800 frame
 │   │   ├── FinalReveal.tsx    # Risultati missione + leaderboard
-│   │   ├── Checkout.tsx       # Form acquisto + speedrun discount
+│   │   ├── Checkout.tsx       # Form acquisto (→ migrazione a Checkout Template DS)
 │   │   ├── Features.tsx       # Features statua (non usato in routing attivo)
 │   │   ├── Pricing.tsx        # Pricing (non usato in routing attivo)
-│   │   └── ThankYouPage.tsx   # Conferma preordine
+│   │   └── ThankYouPage.tsx   # Conferma (→ migrazione a ThankYou Template DS)
 │   ├── transitions/
 │   │   ├── TransitionOverlay.tsx  # Fade nero tra fasi
 │   │   ├── ExplosionOverlay.tsx   # Game over (missione fallita)
 │   │   └── AssetPreloader.tsx     # Preload assets iniziali
 │   └── ui/
 │       ├── BatcomputerBootOverlay.tsx # Tutorial + sync movimento
-│       ├── BatmanButton.tsx    # Bottone riutilizzabile con glitch
+│       ├── BatmanButton.tsx    # Bottone (→ migrazione a Button Atom DS)
 │       ├── BatmanText.tsx      # Testo animato con delay
 │       └── TechBackground.tsx  # Background cyberpunk animato
 public/assets/
@@ -120,23 +133,46 @@ public/assets/
 │   ├── JollyJokerCard_Back.jpg # Retro carta Joker
 │   ├── Navbar.png             # Logo navbar
 │   └── batman-cursor.png      # Cursore custom
-└── showreel/
-    └── 0001–0800.png          # Sequenza frame showreel statua
+    └── showreel/
+        └── 0001–0800.png          # 800 frame 4K (3840×2160), 25 FPS, sfondo trasparente (alpha PNG)
 docs/
 ├── README.md (questo file)
+├── DESIGN_SYSTEM.md           # ✨ NUOVO — Design System Figma + stato migrazione
 ├── ARCHITECTURE.md            # Struttura tecnica e routing
 ├── GAMEPLAY_SYSTEMS.md        # Timer, hint, leaderboard, sistemi di gioco
 ├── AUDIO_SYSTEM.md            # Audio singleton e effetti Joker
-├── UI_UX_GUIDELINES.md        # Design language e componenti UI
+├── UI_UX_GUIDELINES.md        # Design language e componenti UI (AI-gen, in aggiornamento)
 ├── ASSET_STRUCTURE.md         # Asset completi e formati
-└── CHANGELOG.md               # Storia delle funzionalità
+├── CHANGELOG.md               # Storia delle funzionalità
+├── Testi_Sito_Batman_REVISED_v2.docx  # Testi definitivi (sorgente)
+└── Testi_Sito_Batman_REVISED_v2.txt   # Testi definitivi (testo puro)
 ```
+
+---
+
+## 🔄 Migrazione Design System
+
+Il progetto sta passando da un design system **AI-generated** (Antigravity) al **Design System ufficiale** progettato dall'autore in Figma, seguendo la metodologia **Atomic Design**.
+
+I file del DS Figma si trovano in `src/design-system/` e coprono l'intera interfaccia dell'experience: atoms (bottoni, timer, icone), molecules (navbar, clue cards), organisms (win screen, tutorial, checkout) e templates (layout completi per ogni schermata).
+
+Per la documentazione completa della migrazione, vedere [`docs/DESIGN_SYSTEM.md`](./docs/DESIGN_SYSTEM.md).
 
 ---
 
 ## Documentazione Tecnica
 
 Tutta la documentazione approfondita si trova nella cartella [`/docs`](./docs/).
+
+| File | Descrizione |
+|---|---|
+| [`DESIGN_SYSTEM.md`](./docs/DESIGN_SYSTEM.md) | ✨ Design System Figma — Atomic Design |
+| [`ARCHITECTURE.md`](./docs/ARCHITECTURE.md) | Architettura tecnica e state machine |
+| [`GAMEPLAY_SYSTEMS.md`](./docs/GAMEPLAY_SYSTEMS.md) | Timer, hint, indizi, leaderboard |
+| [`AUDIO_SYSTEM.md`](./docs/AUDIO_SYSTEM.md) | Audio singleton e effetti spaziali |
+| [`UI_UX_GUIDELINES.md`](./docs/UI_UX_GUIDELINES.md) | Design language (in aggiornamento) |
+| [`ASSET_STRUCTURE.md`](./docs/ASSET_STRUCTURE.md) | Asset completi e formati |
+| [`CHANGELOG.md`](./docs/CHANGELOG.md) | Storia delle funzionalità |
 
 ---
 

@@ -17,6 +17,8 @@ export default function TechBackground({ theme = "gold" }: { theme?: "gold" | "j
     if (!ctx) return;
 
     let W = 0, H = 0;
+    const rgbLight = theme === "joker" ? "102, 0, 197" : "255, 215, 0";
+    const rgbDark  = theme === "joker" ? "41, 0, 79"  : "180, 140, 0";
 
     const initElements = () => {
       W = canvas.width = window.innerWidth;
@@ -64,24 +66,32 @@ export default function TechBackground({ theme = "gold" }: { theme?: "gold" | "j
     const draw = (time: number) => {
       timeRef.current = time * 0.001;
       const t = timeRef.current;
-      const rgb = theme === "joker" ? "57, 255, 20" : "255, 215, 0";
+      const rgb     = theme === "joker" ? "102, 0, 197" : "255, 215, 0";
+      const rgbDark = theme === "joker" ? "41, 0, 79"   : "180, 140, 0";
 
       ctx.clearRect(0, 0, W, H);
 
       // Dark background gradient
       const bgGrad = ctx.createRadialGradient(W * 0.5, H * 0.5, 0, W * 0.5, H * 0.5, Math.max(W, H) * 0.7);
-      bgGrad.addColorStop(0, "rgba(4, 6, 12, 1)");
-      bgGrad.addColorStop(0.5, "rgba(2, 4, 8, 1)");
-      bgGrad.addColorStop(1, "rgba(0, 0, 0, 1)");
+      bgGrad.addColorStop(0,   theme === "joker" ? `rgba(${rgbDark}, 0.65)` : "rgba(6, 8, 16, 1)");
+      bgGrad.addColorStop(0.5, theme === "joker" ? `rgba(${rgbDark}, 0.35)` : "rgba(3, 5, 10, 1)");
+      bgGrad.addColorStop(1,   "rgba(0, 0, 0, 1)");
       ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, W, H);
+
+      // ── Secondary atmospheric glow (center) ──
+      const centerGlow = ctx.createRadialGradient(W * 0.5, H * 0.4, 0, W * 0.5, H * 0.4, Math.max(W, H) * 0.4);
+      centerGlow.addColorStop(0, `rgba(${rgb}, 0.04)`);
+      centerGlow.addColorStop(1, `rgba(${rgb}, 0)`);
+      ctx.fillStyle = centerGlow;
       ctx.fillRect(0, 0, W, H);
 
       // ── Hex grid overlay ──
       const hexSize = 60;
       const hexW = hexSize * 2;
       const hexH = Math.sqrt(3) * hexSize;
-      ctx.strokeStyle = `rgba(${rgb}, 0.025)`;
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = `rgba(${rgb}, 0.045)`;
+      ctx.lineWidth = 0.9;
       for (let row = -1; row < H / hexH + 2; row++) {
         for (let col = -1; col < W / hexW + 2; col++) {
           const xOffset = row % 2 === 0 ? 0 : hexW * 0.75;
@@ -107,14 +117,14 @@ export default function TechBackground({ theme = "gold" }: { theme?: "gold" | "j
           const other = nodes[j];
           const pulsePhase = (t * 0.5 + i * 0.3) % 1;
           const grad = ctx.createLinearGradient(node.x, node.y, other.x, other.y);
-          grad.addColorStop(0, `rgba(${rgb}, 0.04)`);
-          grad.addColorStop(Math.max(0, pulsePhase - 0.15), `rgba(${rgb}, 0.04)`);
-          grad.addColorStop(pulsePhase, `rgba(${rgb}, 0.25)`);
-          grad.addColorStop(Math.min(1, pulsePhase + 0.15), `rgba(${rgb}, 0.04)`);
-          grad.addColorStop(1, `rgba(${rgb}, 0.04)`);
+          grad.addColorStop(0, `rgba(${rgb}, 0.06)`);
+          grad.addColorStop(Math.max(0, pulsePhase - 0.15), `rgba(${rgb}, 0.06)`);
+          grad.addColorStop(pulsePhase, `rgba(${rgb}, 0.35)`);
+          grad.addColorStop(Math.min(1, pulsePhase + 0.15), `rgba(${rgb}, 0.06)`);
+          grad.addColorStop(1, `rgba(${rgb}, 0.06)`);
           ctx.beginPath();
           ctx.strokeStyle = grad;
-          ctx.lineWidth = 0.8;
+          ctx.lineWidth = 1.0;
 
           const midX = (node.x + other.x) / 2;
           ctx.moveTo(node.x, node.y);
@@ -126,15 +136,15 @@ export default function TechBackground({ theme = "gold" }: { theme?: "gold" | "j
 
         const nodePulse = Math.sin(t * 1.5 + i * 0.7) * 0.5 + 0.5;
         ctx.beginPath();
-        ctx.arc(node.x, node.y, 2 + nodePulse, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${rgb}, ${0.15 + nodePulse * 0.3})`;
+        ctx.arc(node.x, node.y, 2.5 + nodePulse, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${rgb}, ${0.25 + nodePulse * 0.45})`;
         ctx.fill();
 
         if (i % 5 === 0) {
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 6 + nodePulse * 3, 0, Math.PI * 2);
-          ctx.strokeStyle = `rgba(${rgb}, ${0.05 + nodePulse * 0.1})`;
-          ctx.lineWidth = 1;
+          ctx.arc(node.x, node.y, 8 + nodePulse * 4, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(${rgb}, ${0.08 + nodePulse * 0.12})`;
+          ctx.lineWidth = 1.2;
           ctx.stroke();
         }
       });
@@ -153,16 +163,16 @@ export default function TechBackground({ theme = "gold" }: { theme?: "gold" | "j
 
       // ── Vertical scan beam ──
       const scanX = ((t * 0.08) % 1.4 - 0.2) * W;
-      const scanGrad = ctx.createLinearGradient(scanX - 80, 0, scanX + 80, 0);
+      const scanGrad = ctx.createLinearGradient(scanX - 100, 0, scanX + 100, 0);
       scanGrad.addColorStop(0, `rgba(${rgb}, 0)`);
-      scanGrad.addColorStop(0.5, `rgba(${rgb}, 0.03)`);
+      scanGrad.addColorStop(0.5, `rgba(${rgb}, 0.05)`);
       scanGrad.addColorStop(1, `rgba(${rgb}, 0)`);
       ctx.fillStyle = scanGrad;
-      ctx.fillRect(scanX - 80, 0, 160, H);
+      ctx.fillRect(scanX - 100, 0, 200, H);
 
       // ── Horizontal scanlines ──
       for (let y = 0; y < H; y += 4) {
-        ctx.fillStyle = "rgba(0,0,0,0.08)";
+        ctx.fillStyle = "rgba(0,0,0,0.06)";
         ctx.fillRect(0, y, W, 1);
       }
 

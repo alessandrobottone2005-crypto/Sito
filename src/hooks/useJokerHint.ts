@@ -32,51 +32,47 @@ export function useJokerHint(
   const [hintCardId, setHintCardId] = useState<number | null>(null);
   const [hintPhase, setHintPhase] = useState<0 | 1 | 2 | 3>(0);
 
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const phase2Ref = useRef<NodeJS.Timeout | null>(null);
-  const phase3Ref = useRef<NodeJS.Timeout | null>(null);
   const currentCardRef = useRef<number | null>(null);
-
-  const clearAllTimers = useCallback(() => {
-    if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
-    if (phase2Ref.current) { clearTimeout(phase2Ref.current); phase2Ref.current = null; }
-    if (phase3Ref.current) { clearTimeout(phase3Ref.current); phase3Ref.current = null; }
-  }, []);
+  const elapsedRef = useRef<number>(0);
 
   const resetHint = useCallback((cardId?: number) => {
-    clearAllTimers();
     setHintActive(false);
     setHintCardId(null);
     setHintPhase(0);
     currentCardRef.current = null;
-  }, [clearAllTimers]);
+    elapsedRef.current = 0;
+  }, []);
 
   const startHintTimer = useCallback((cardId: number) => {
-    // Non avviare se già in corso per questa stessa carta
     if (currentCardRef.current === cardId) return;
-    clearAllTimers();
-    currentCardRef.current = cardId;
     setHintActive(false);
     setHintCardId(null);
     setHintPhase(0);
+    currentCardRef.current = cardId;
+    elapsedRef.current = 0;
+  }, []);
 
-    // Fase 1: dopo 60s — glitch lieve + pulsazione verde
-    timerRef.current = setTimeout(() => {
-      setHintActive(true);
-      setHintCardId(cardId);
-      setHintPhase(1);
+  // Gestione timer con setInterval per supportare pause
+  useEffect(() => {
+    if (!isMissionActive || isPaused || currentCardRef.current === null) return;
 
-      // Fase 2: dopo altri 20s — spotlight + audio distorsione
-      phase2Ref.current = setTimeout(() => {
+    const interval = setInterval(() => {
+      elapsedRef.current += 500;
+      const e = elapsedRef.current;
+
+      if (e >= HINT_DELAY_MS + 40_000) {
+        setHintPhase(3);
+      } else if (e >= HINT_DELAY_MS + 20_000) {
         setHintPhase(2);
+      } else if (e >= HINT_DELAY_MS) {
+        setHintActive(true);
+        setHintCardId(currentCardRef.current);
+        if (hintPhase < 1) setHintPhase(1);
+      }
+    }, 500);
 
-        // Fase 3: dopo altri 20s — glow massimo + flicker ambientale
-        phase3Ref.current = setTimeout(() => {
-          setHintPhase(3);
-        }, 20_000);
-      }, 20_000);
-    }, HINT_DELAY_MS);
-  }, [clearAllTimers]);
+    return () => clearInterval(interval);
+  }, [isMissionActive, isPaused, hintPhase]);
 
   // Pausa/ripresa: se in pausa, non eseguire effetti (i timer continuano ma i componenti li ignorano)
   // Se la missione non è attiva, resetta tutto

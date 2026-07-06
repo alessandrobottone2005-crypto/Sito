@@ -4,7 +4,26 @@
 
 L'applicazione è una **Single Page Application React 19** con Vite, strutturata come una **state machine lineare** governata da `App.tsx`. Non usa React Router: la navigazione tra fasi avviene tramite cambio di stato locale.
 
+> 🔄 **Nota Migrazione:** Il progetto sta adottando il **Design System Figma** (Atomic Design) dell'autore. I file del DS si trovano in `src/design-system/` e definiscono l'intera gerarchia visiva (Atoms → Molecules → Organisms → Templates). Vedere [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md).
+
 ---
+
+## Layer Architetturali
+
+```
+src/design-system/          ← Design System Figma (nuovo layer)
+├── Atoms (bottoni, timer, icone, clues, testi)
+├── Molecules (Navbar, ClueCards, Tutorial, Checkout)
+├── Organisms (Win, Showreel, Tutorial, ThankYou, Checkout)
+└── Templates (layout completo per ogni Phase)
+
+src/components/             ← Implementazione React corrente (AI-generated, in migrazione)
+src/App.tsx                 ← State Machine, orchestrazione fasi
+src/hooks/                  ← Business logic (timer, hints, audio, mobile)
+src/lib/                    ← Singleton audio
+```
+
+
 
 ## State Machine delle Fasi
 
